@@ -2,4 +2,5 @@ export { Dialog } from './Dialog/index';
 export { Button } from './Button/index';
 export { Input } from './Input/index';
 export { InputField } from './InputField/index';
-export { PageTitle } from './PageTitle/index';
+export { LoginForm } from './LoginForm/index';
+export { Link } from './Link/index';

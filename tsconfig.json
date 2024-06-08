@@ -17,7 +17,7 @@
             //     "./src/shared/assets/*"
             // ],
             "@styles/*": [
-                "./src/app/styles/*"
+                "./src/shared/styles/*"
             ],
             "@pages/*": [
                 "./src/pages/*"

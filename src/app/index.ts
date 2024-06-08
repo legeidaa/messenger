@@ -1,5 +1,5 @@
 
-import '@styles/style.scss'
+import '@/app/styles/style.scss'
 import * as Partials from '@partials/index'
 import * as Pages from '@pages/index'
 import * as Handlebars from 'handlebars'
@@ -8,7 +8,7 @@ import * as Handlebars from 'handlebars'
 const pages = {
     'main': [Pages.MainPage],
     'chat': [Pages.ChatPage],
-    'login': [Pages.LoginPage],
+    'signin': [Pages.SigninPage],
 };
 
 Object.entries(Partials).forEach(([name, partial]) => {
@@ -22,7 +22,7 @@ function navigate(page) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    navigate('main')
+    navigate('signin')
     window.location.hash = ''
 });
 

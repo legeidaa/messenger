@@ -5,6 +5,6 @@ import * as Handlebars from 'handlebars';
 Handlebars.registerHelper('links-to-pages', () => {
     return [
         { link: '#chat', pageName: 'Чат', },
-        { link: '#login', pageName: 'Логин' },
+        { link: '#signin', pageName: 'Вход' },
     ]
 });

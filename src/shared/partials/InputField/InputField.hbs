@@ -1,4 +1,15 @@
-<div class="input-field{{#if className}} {{ className }}{{/if}}">
-    <div class="input-field__title">{{ title }}</div>
-    {{> Input className="input-field__element" type=type title=title name=name }}
+<div class="input-field{{#if className}} {{ className }}{{/if}} {{#if error}}input-field_error{{/if}}">
+    {{> Input 
+        className="input-field__element" 
+        type=type 
+        title=title 
+        name=name 
+        id=id 
+        value=value 
+        placeholder=" "
+    }}
+    <label class="input-field__label" for="#{{id}}">{{label}}</label>
+    {{#if error}}
+        <div class="input-field__error">{{error}}</div>
+    {{/if}}
 </div>

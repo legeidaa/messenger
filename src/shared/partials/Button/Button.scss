@@ -1,0 +1,23 @@
+@import '@styles/vars.scss';
+@import '@styles/mixins.scss';
+
+.button {
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background: $blue;
+    transition: $trans-dur;
+    color: $white;
+    @include text-13;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    &:hover {
+        background: darken($color: $blue, $amount: 5%);
+    }
+    &:active {
+        background: darken($color: $blue, $amount: 8%);
+    }
+}

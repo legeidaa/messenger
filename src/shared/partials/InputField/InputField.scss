@@ -1,0 +1,90 @@
+@import '@styles/vars.scss';
+@import '@styles/mixins.scss';
+
+.input-field {
+    position: relative;
+    +.input-field {
+        margin-top: 22px;
+    }
+
+    &__element {
+        @include text-13;
+        color: $dark;
+        font-weight: 500;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid $blue;
+        min-height: 30px;
+        transition: 0.2s all;
+        width: 100%;
+        padding: 0;
+        
+        &:hover {
+            border-color: lighten($color: $blue, $amount: 10%);;
+
+            &+.input-field__label {
+                color: lighten($color: $gray-dark-1, $amount: 10%);
+            }
+        }
+
+        &:focus {
+            border-color: darken($color: $blue, $amount: 10%);
+            outline: none;
+
+            &+.input-field__label {
+                color: lighten($color: $gray-dark-1, $amount: 10%);
+            }
+        }
+
+        &+.input-field__label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: inline-block;
+            transform: translate(0, -50%);
+            width: 100%;
+            transition: 0.2s all, 0.01s width;
+
+            @include text-9;
+            font-weight: 500;
+            font-size: 0.75rem;
+            color: $gray-dark-1;
+            pointer-events: none;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        @supports selector(:placeholder-shown) {
+            &+.input-field__label{
+                transform: translate(0, 50%);
+                @include text-13;
+                width: auto;
+            }
+
+            &:focus+.input-field__label,
+            &:not(:placeholder-shown)+.input-field__label {
+                transform: translate(0, -50%);
+                @include text-9;
+
+            }
+        }
+    }
+    &__error {
+        @include text-8;
+        color: $red;
+        font-weight: 400;
+        margin-top: 7px;
+    }
+    &_error {
+        .input-field {
+            &__error {
+                display: block;
+            }
+            &__element {
+                &[type="password"] {
+                    color: $red;
+                }
+            }
+        }
+    }
+}

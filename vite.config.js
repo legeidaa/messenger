@@ -10,7 +10,7 @@ export default defineConfig({
     resolve: {
         alias: [
             { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
-            { find: '@styles', replacement: fileURLToPath(new URL('./src/app/styles', import.meta.url)) },
+            { find: '@styles', replacement: fileURLToPath(new URL('./src/shared/styles', import.meta.url)) },
             { find: '@pages', replacement: fileURLToPath(new URL('./src/pages', import.meta.url)) },
             { find: '@partials', replacement: fileURLToPath(new URL('./src/shared/partials', import.meta.url)) },
         ]
