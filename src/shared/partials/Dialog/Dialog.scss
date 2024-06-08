@@ -1,0 +1,10 @@
+@import '@styles/vars.scss';
+
+.dialog {
+    box-shadow: $box-shadow;
+    width: 100%;
+    max-width: 340px;
+    margin: auto;
+    border-radius: 12px;
+    padding: 30px;
+}

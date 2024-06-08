@@ -1,7 +1,9 @@
 
-import Handlebars from 'handlebars'
-import * as Partials from './partials'
-import * as Pages from './pages'
+import '@styles/style.scss'
+import * as Partials from '@partials/index'
+import * as Pages from '@pages/index'
+import * as Handlebars from 'handlebars'
+
 
 const pages = {
     'main': [Pages.MainPage],
@@ -10,7 +12,7 @@ const pages = {
 };
 
 Object.entries(Partials).forEach(([name, partial]) => {
-    Handlebars.registerPartial(name, partial)
+    Handlebars.registerPartial(name, partial as Handlebars.Template<any>)
 })
 
 function navigate(page) {
@@ -21,6 +23,7 @@ function navigate(page) {
 
 document.addEventListener('DOMContentLoaded', () => {
     navigate('main')
+    window.location.hash = ''
 });
 
 window.addEventListener("hashchange", function (e) {

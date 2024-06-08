@@ -1,6 +1,6 @@
 
 export { default as MainPage } from './MainPage.hbs?raw';
-import Handlebars from 'handlebars';
+import * as Handlebars from 'handlebars';
 
 Handlebars.registerHelper('links-to-pages', () => {
     return [

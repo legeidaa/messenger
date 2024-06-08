@@ -1,4 +1,3 @@
-import Handlebars from 'handlebars';
 // import './chat-page.scss';
 export { default as ChatPage } from './ChatPage.hbs?raw';
 
