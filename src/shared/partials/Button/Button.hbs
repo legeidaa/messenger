@@ -1,3 +1,6 @@
-<button class="button{{#if className}} {{className}}{{/if}}" page="{{ page }}" type="{{type}}">
+<button
+        class="button{{#if className}} {{className}}{{/if}}{{#ifEquals style "arrow-left"}} button_arrow button_arrow_left{{/ifEquals}}{{#ifEquals style "arrow-right"}} button_arrow button_arrow_right{{/ifEquals}}"
+        page="{{ page }}"
+        type="{{type}}">
     {{ text }}
 </button>

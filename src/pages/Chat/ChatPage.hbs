@@ -1,9 +1,13 @@
-<div class="chat-page">
-    {{!-- {{#> ChatList className="chat-page__list" }}
-    {{#each (chat-page-list)}}
-    {{> ChatItem }}
-    {{/each}}
-    {{/ ChatList }}
-    {{> Link page="LoginPage" text="Назад к логину"}} --}}
+{{!-- <div class="chat-page">
     <a href="#signin">login</a>
+    <img src="../../assets/badger_1.png" alt=""/>
+</div> --}}
+
+<div class="chat-page">
+    {{#each (chat-page-list)}} 
+        <div>
+            <img src="{{avatar}}" alt="">
+        </div>
+    {{/each}}
+  {{> Link page="LoginPage" text="Назад к логину"}}
 </div>

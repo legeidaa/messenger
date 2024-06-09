@@ -13,9 +13,9 @@
             "@/*": [
                 "./src/*"
             ],
-            // "@assets/*": [
-            //     "./src/shared/assets/*"
-            // ],
+            "@assets/*": [
+                "./src/shared/assets/*"
+            ],
             "@styles/*": [
                 "./src/shared/styles/*"
             ],

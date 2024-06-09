@@ -1,0 +1,27 @@
+@import '@styles/vars.scss';
+@import '@styles/mixins.scss';
+
+.profile__data {
+    &-row {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid $border-color;
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+    &-label {
+        @include text-13;
+        color: $dark;
+    }
+    &-input {
+        @include text-13;
+        margin-left: auto;
+        border: none;
+        outline: none;
+        text-align: right;
+        min-width: 150px;
+        color: $gray-dark-1;
+    }
+}

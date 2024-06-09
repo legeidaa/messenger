@@ -1,0 +1,47 @@
+<div class="profile-page">
+    <aside class="profile-page__aside">
+        {{> Button style="arrow-left"}}
+    </aside>
+    <main class="profile">
+        <header class="profile__header">
+            {{> Avatar src = avatarSkeletonSrc profileAvatar = true}}
+            <div class="profile__name">
+                Иван  
+            </div>
+        </header>
+        <form action="" class="profile__data">
+            {{#ifEquals canChangePassword false}}
+                {{#each profileData}}
+                    {{> ProfileDataRow }}
+                {{/each}}
+            {{/ifEquals}}
+
+            {{#if canChangePassword}}
+                {{#each profileDataPasswords}}
+                    {{> ProfileDataRow }}
+                {{/each}}
+            {{/if}}
+        </form>
+
+        <footer class="profile__footer">
+            {{#ifEquals showSaveButton false}}
+                <div class="profile__data-row profile__footer-row">
+                    {{> Link text="Изменить данные" href="#" className="profile__link profile__link-data"}}
+                </div>
+                <div class=" profile__data-row profile__footer-row">
+                    {{> Link text="Изменить пароль" href="#" className="profile__link profile__link-password"}}
+                </div>
+                <div class=" profile__data-row profile__footer-row">
+                    {{> Link text="Выйти" href="#" className="link_red profile__link profile__link-exit"}}
+                </div>
+            {{/ifEquals}}
+            
+            {{#if showSaveButton}} 
+                {{> Button 
+                    text="Сохранить" 
+                    className="profile__data-save"
+                }}
+            {{/if}}
+        </footer>
+    </main>
+</div>

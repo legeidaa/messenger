@@ -15,4 +15,14 @@
     &:active {
         color: darken($color: $blue, $amount: 8%);
     }
+    &_red {
+        color: $red;
+        &:hover {
+            color: darken($color: $red, $amount: 5%);
+        }
+    
+        &:active {
+            color: darken($color: $red, $amount: 8%);
+        }
+    }
 }
