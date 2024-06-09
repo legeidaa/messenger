@@ -1,0 +1,18 @@
+@import '@styles/vars.scss';
+@import '@styles/mixins.scss';
+
+.error-info {
+    text-align: center;
+    margin: auto;
+
+    &__code {
+        @include text-40;
+        color: $dark;
+        margin: 0 0 20px;
+    }
+    &__message {
+        @include text-20;
+        color: $dark;
+        margin: 0 0 70px;
+    }
+}

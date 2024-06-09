@@ -4,14 +4,18 @@ import * as Partials from '@partials/index'
 import * as Pages from '@pages/index'
 import * as Handlebars from 'handlebars'
 
-
 const pages = {
     'main': [Pages.MainPage],
     'chat': [Pages.ChatPage],
     'signin': [Pages.SigninPage],
+    'signup': [Pages.SignupPage],
+    'error-client': [Pages.ErrorClientPage],
+    'error-server': [Pages.ErrorServerPage],
 };
 
 Object.entries(Partials).forEach(([name, partial]) => {
+    console.log(name, partial);
+    
     Handlebars.registerPartial(name, partial as Handlebars.Template<any>)
 })
 
@@ -22,7 +26,7 @@ function navigate(page) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    navigate('signin')
+    navigate('main')
     window.location.hash = ''
 });
 
@@ -36,3 +40,5 @@ window.addEventListener("hashchange", function (e) {
         navigate(hash)
     }
 });
+
+//вынести login-form в widgets
