@@ -5,5 +5,3 @@ export { SignupPage } from './Signup/index';
 export { ErrorClientPage } from './ErrorClient/index';
 export { ErrorServerPage } from './ErrorServer/index';
 export { ProfilePage } from './Profile/index';
-
-
