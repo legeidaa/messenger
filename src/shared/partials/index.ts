@@ -9,3 +9,4 @@ export { ErrorInfo } from './ErrorInfo/index';
 export { Avatar } from './Avatar/index';
 export { ProfileDataRow } from './ProfileDataRow/index';
 
+export { Modal } from './Modal/index';
