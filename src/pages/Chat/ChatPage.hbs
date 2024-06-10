@@ -5,7 +5,7 @@
         <div class="dialogs__header">
             {{> Link href="#profile" className="dialogs__header-link" text="Профиль"}}
             <div class="dialogs__search">
-                <input type="text" id="dialogs-search" name="dialogs_search" class="dialogs__search-input" placeholder="Поиск">
+                <input type="text" id="dialogs_search" name="dialogs_search" class="dialogs__search-input" placeholder="Поиск">
             </div>
         </div>
 
@@ -98,7 +98,7 @@
         </div>
         <footer class="chat__footer">
             <form action="" class="chat__footer-form">
-                {{> InputField type="file" id="chat-attach-file" name="chat_attach_file" className="input-field__file input-field__file-icon chat__attach-file" label='' }}
+                {{> InputField type="file" id="chat_attach_file" name="chat_attach_file" className="input-field__file input-field__file-icon chat__attach-file" label='' }}
                 <textarea  class="chat__footer-textarea" name="message" id="message"  placeholder="Сообщение"></textarea>
                 {{> Button className="button_icon button_arrow button_arrow_right" type="submit" }}
             </form>

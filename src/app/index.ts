@@ -28,6 +28,10 @@ function navigate(page) {
 
     const handlebarsFunct = Handlebars.compile(source);
     document.querySelector('#app').innerHTML = handlebarsFunct(args);
+
+    if (page === 'profile') {
+        activateModals()
+    }
 }
 
 
@@ -39,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navigate(window.location.hash.split('#')[1])
     }
 
-    activateModals()
+    // activateModals()
 
     document.addEventListener('click', (e) => {
         if (e.target instanceof HTMLElement && e.target.classList.contains('login-form__submit-btn')) {

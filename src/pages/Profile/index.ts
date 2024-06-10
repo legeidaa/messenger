@@ -12,42 +12,42 @@ export const ProfilePageArgs = {
     showSaveButton: false,
     profileData: [
         {
-            id: 'profile-email',
+            id: 'profile_email',
             label: 'Почта',
             type: 'email',
             name: 'email',
             value: 'pochta@yandex.ru',
         },
         {
-            id: 'profile-login',
+            id: 'profile_login',
             label: 'Логин',
             type: 'text',
             name: 'login',
             value: 'ivanivanov',
         },
         {
-            id: 'profile-first-name',
+            id: 'profile_first_name',
             label: 'Имя',
             type: 'text',
             name: 'first_name',
             value: 'Иван',
         },
         {
-            id: 'profile-second-name',
+            id: 'profile_second_name',
             label: 'Фамилия',
             type: 'text',
             name: 'second_name',
             value: 'Иванов',
         },
         {
-            id: 'profile-display-name',
+            id: 'profile_display_name',
             label: 'Имя в чате',
             type: 'text',
             name: 'display_name',
             value: 'Иван',
         },
         {
-            id: 'profile-phone',
+            id: 'profile_phone',
             label: 'Телефон',
             type: 'tel',
             name: 'phone',
@@ -56,21 +56,21 @@ export const ProfilePageArgs = {
     ],
     profileDataPasswords: [
         {
-            id: 'profile-old-password',
+            id: 'profile_old_password',
             label: 'Старый пароль',
             type: 'password',
             name: 'oldPassword',
             value: '***',
         },
         {
-            id: 'profile-new-password',
+            id: 'profile_new_password',
             label: 'Новый пароль',
             type: 'password',
             name: 'newPassword',
             value: '****',
         },
         {
-            id: 'profile-repeat-password',
+            id: 'profile_repeat_password',
             label: 'Повторите новый пароль',
             type: 'password',
             name: 'newPassword',
@@ -78,4 +78,3 @@ export const ProfilePageArgs = {
         },
     ]
 }
-
