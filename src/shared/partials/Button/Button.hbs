@@ -1,6 +1,13 @@
+{{#if href}}
+<a href="{{href}}"
+   class="button{{#if className}} {{className}}{{/if}}"
+   type="{{type}}">
+    {{ text }}
+</a>
+{{else}}
 <button
         class="button{{#if className}} {{className}}{{/if}}"
-        {{!-- page="{{ page }}" --}}
         type="{{type}}">
     {{ text }}
 </button>
+{{/if}}

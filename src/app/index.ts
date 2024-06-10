@@ -5,6 +5,8 @@ import * as Pages from '@pages/index'
 import * as Handlebars from 'handlebars'
 import { registerHelpers } from '../shared/helpers/index';
 import { ProfilePageArgs } from '@pages/Profile';
+import { activateModals } from '../shared/utils';
+
 registerHelpers()
 
 const pages = {
@@ -21,8 +23,6 @@ Object.entries(Partials).forEach(([name, partial]) => {
     Handlebars.registerPartial(name, partial as Handlebars.Template<any>)
 })
 
-console.log(pages);
-
 function navigate(page) {
     const [source, args] = pages[page];
 
@@ -35,61 +35,10 @@ function navigate(page) {
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.hash === '#' || window.location.hash === '') {
         navigate('main')
-    }
-    navigate(window.location.hash.split('#')[1])
-
-    function fadeIn(el, display, timeout, activeClass) {
-
-        el.style.opacity = 0;
-        el.style.display = display || 'block';
-        el.style.transition = `opacity ${timeout}ms`;
-        requestAnimationFrame(() => {
-            el.style.opacity = 1;
-            el.classList.add(activeClass)
-        })
+    } else {
+        navigate(window.location.hash.split('#')[1])
     }
 
-    function fadeOut(el, timeout, activeClass) {
-        el.style.opacity = 1;
-        el.style.transition = `opacity ${timeout}ms`;
-        el.style.opacity = 0;
-
-        setTimeout(() => {
-            el.style.display = 'none';
-            el.classList.remove(activeClass)
-        }, timeout);
-    }
-
-    function activateModals() {
-        const modals = document.querySelectorAll('.modal')
-        const modalTriggers = document.querySelectorAll('[data-modal]')
-        const modalActiveClass = 'modal_opened'
-        console.log(modalTriggers, modals);
-
-
-        modalTriggers.forEach(trigger => {
-
-            const modalType = trigger.getAttribute('data-modal')
-            const modal = document.querySelector(`[data-modal-type="${modalType}"`)
-
-            trigger.addEventListener('click', (e) => {
-                e.preventDefault()
-
-                fadeIn(modal, 'block', 250, modalActiveClass)
-            })
-        })
-
-        modals.forEach(modal => {
-
-            modal.addEventListener('click', e => {
-                if (e.target === modal) {
-                    e.stopPropagation()
-                    e.preventDefault()
-                    fadeOut(modal, 250, modalActiveClass)
-                }
-            })
-        })
-    }
     activateModals()
 
     document.addEventListener('click', (e) => {
@@ -104,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             changedProfilePageArgs.canChangeData = true
             changedProfilePageArgs.showSaveButton = true
-            
+
             const handlebarsFunct = Handlebars.compile(Pages.ProfilePage)
             document.querySelector('#app').innerHTML = handlebarsFunct(changedProfilePageArgs)
 
@@ -145,5 +94,3 @@ window.addEventListener("hashchange", function (e) {
         navigate(hash)
     }
 });
-
-//вынести login-form в widgets
