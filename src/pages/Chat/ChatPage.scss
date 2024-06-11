@@ -1,0 +1,265 @@
+@import '@styles/vars.scss';
+@import '@styles/mixins.scss';
+
+
+.chat-page {
+    display: flex;
+    height: 100%;
+}
+
+.dialogs {
+    background: $gray-light-3;
+    border-right: 1px solid $border-color;
+    width: $dialogs-width;
+    flex-shrink: 0;
+
+    &__header {
+        padding: 15px 10px;
+        text-align: right;
+        border-bottom: 1px solid $border-color;
+
+        &-link {
+            @include text-12;
+            color: $gray-dark-1;
+            margin-bottom: 25px;
+
+            &:after {
+                content: url("data:image/svg+xml,%3Csvg width='6' height='10' viewBox='0 0 6 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 9L5 5L1 1' stroke='%23999999'/%3E%3C/svg%3E");
+                height: 10px;
+            }
+        }
+    }
+
+    &__search {
+        position: relative;
+
+        &::before {
+            content: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11.5924 11.4138C10.1605 12.8457 7.83886 12.8457 6.40694 11.4138C4.97502 9.98187 4.97502 7.66027 6.40694 6.22834C7.83886 4.79642 10.1605 4.79642 11.5924 6.22834C13.0243 7.66027 13.0243 9.98187 11.5924 11.4138ZM12.0328 12.7968C10.0725 14.2961 7.25696 14.1494 5.46413 12.3566C3.51151 10.404 3.51151 7.23816 5.46413 5.28553C7.41675 3.33291 10.5826 3.33291 12.5352 5.28553C14.3279 7.07828 14.4747 9.8937 12.9755 11.8539L16.5423 15.4206L15.5994 16.3634L12.0328 12.7968Z' fill='%23999999' /%3E%3C/svg%3E");
+            height: 20px;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        &-input {
+            width: 100%;
+            height: 32px;
+            background: $gray-light-2;
+            font-weight: 500;
+            font-size: 12px;
+            color: $dark;
+            border: none;
+            border-radius: 5px;
+            padding-left: 35px;
+
+            &::placeholder {
+                color: $gray-dark-1;
+                font-weight: 500;
+
+            }
+        }
+    }
+}
+
+.dialog-item {
+    padding: 12px 10px;
+    display: flex;
+    border-bottom: 1px solid $border-color;
+    cursor: pointer;
+    transition: $trans-dur background;
+
+    &:hover:not(.dialog-item_current) {
+        background: $gray-light-2;
+    }
+
+    &__avatar {
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+
+    &__preview {}
+
+    &__name {
+        @include text-13;
+        color: $dark;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    &__message {
+        @include text-12;
+        color: $gray-dark-1;
+
+        &-by-you {
+            color: $dark;
+            font-weight: 600;
+            display: inline-block;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    &__time {
+        @include text-9;
+        color: $gray-dark-1;
+    }
+
+    &__count {
+        margin-top: auto;
+        @include text-11;
+        width: 20px;
+        height: 20px;
+        border-radius: 20px;
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+        background: $blue;
+    }
+
+    &_current {
+        background: $blue-light;
+    }
+}
+
+.chat {
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    // height: 100%;
+    max-width: calc(100% - $dialogs-width);
+
+    &__placeholder {
+        display: none;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        border-bottom: 1px solid $border-color;
+
+        &-avatar {
+            margin-right: 10px;
+        }
+    }
+
+    &__name {
+        @include text-13;
+        font-weight: 600;
+        color: $dark;
+
+    }
+
+    &__settings {
+        margin-left: auto;
+    }
+
+    &__messages {
+        flex: 1 1 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+
+        &-wrapper {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+
+            &>* {
+                &:first-child {
+                    margin-top: auto;
+                }
+            }
+        }
+
+    }
+
+    &__date {
+        text-align: center;
+        @include text-13;
+        color: $gray-dark-1;
+        margin-bottom: 30px;
+    }
+
+    &__message {
+        background: $gray-light-5;
+        border-radius: 0 12px 12px 12px;
+        padding: 11px 11px 18px;
+        position: relative;
+        max-width: 45%;
+        margin-bottom: 10px;
+
+        &-info {
+            position: absolute;
+            right: 9px;
+            bottom: 9px;
+            display: flex;
+            align-items: center;
+        }
+
+        &-time {
+            @include text-9;
+
+        }
+
+        &-status {
+            width: 10px;
+            height: 5px;
+            margin-right: 3px;
+
+            &_sent {
+                background: url("data:image/svg+xml,%3Csvg width='10' height='5' viewBox='0 0 10 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cline y1='-0.5' x2='3.765' y2='-0.5' transform='matrix(0.705933 0.708278 -0.705933 0.708278 0.700195 2.33313)' stroke='%233369F3'/%3E%3Cline y1='-0.5' x2='5.6475' y2='-0.5' transform='matrix(0.705933 -0.708278 0.705933 0.708278 3.35828 5)' stroke='%233369F3'/%3E%3Cline y1='-0.5' x2='5.6475' y2='-0.5' transform='matrix(0.705933 -0.708278 0.705933 0.708278 6.01587 5)' stroke='%233369F3'/%3E%3C/svg%3E%0A");
+            }
+        }
+
+        &_file {
+            border: 1px solid $border-color;
+            background: $white;
+
+            img {
+                max-width: 100%;
+            }
+        }
+
+        &_out {
+            margin-left: auto;
+            border-radius: 12px 12px 0 12px;
+            background: $blue-light;
+        }
+    }
+
+    &__footer {
+        border-top: 1px solid $border-color;
+        &-form {
+            display: flex;
+            align-items: flex-start;
+            padding: 11px 20px;
+            gap: 10px;
+        }
+        &-textarea {
+            flex: 1 1 0;
+            resize: none;
+            border: none;
+            outline: none;
+            border-radius: 30px;
+            padding: 9px 20px;
+            height: 32px;
+            @include text-13;
+            color: $dark;
+            background: $gray-light-1;
+            &::placeholder {
+                color: $gray-dark-1;
+            }
+        }
+    }
+}

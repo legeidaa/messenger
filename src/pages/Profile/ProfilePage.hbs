@@ -1,0 +1,62 @@
+<div class="profile-page">
+    <aside class="profile-page__aside">
+        {{> Button className="button_icon button_arrow button_arrow_left" href="/" }}
+    </aside>
+    <main class="profile">
+        <header class="profile__header">
+            {{> Avatar src = avatarSkeletonSrc profileAvatar = true}}
+            <div class="profile__name">
+                Иван
+            </div>
+        </header>
+        <form action="" class="profile__data">
+            {{#ifEquals canChangePassword false}}
+            {{#each profileData}}
+            {{> ProfileDataRow }}
+            {{/each}}
+            {{/ifEquals}}
+
+            {{#if canChangePassword}}
+            {{#each profileDataPasswords}}
+            {{> ProfileDataRow }}
+            {{/each}}
+            {{/if}}
+        </form>
+
+        <footer class="profile__footer">
+            {{#ifEquals showSaveButton false}}
+            <div class="profile__data-row profile__footer-row">
+                {{> Link text="Изменить данные" href="#" className="profile__link profile__link-data"}}
+            </div>
+            <div class=" profile__data-row profile__footer-row">
+                {{> Link text="Изменить пароль" href="#" className="profile__link profile__link-password"}}
+            </div>
+            <div class=" profile__data-row profile__footer-row">
+                {{> Link text="Выйти" href="#" className="link_red profile__link profile__link-exit"}}
+            </div>
+            {{/ifEquals}}
+
+            {{#if showSaveButton}}
+            {{> Button
+            text="Сохранить"
+            className="profile__data-save"
+            }}
+            {{/if}}
+        </footer>
+    </main>
+
+    {{#> Modal size = "small" dataModalType = "change-avatar"}}
+    <h2 class="modal__title modal__title_error">Ошибка, попробуйте ещё раз</h2>
+    <div class="modal__content">
+        <form action="" class="modal__form">
+
+            {{> InputField type="file" id="profile-change-avatar" name="change_avatar" className="input-field__file modal__input-file" label="Выбрать файл на компьютере" }}
+
+            {{> Button text = "Поменять" className = "modal__form-submit-btn" }}
+
+            <div class="modal__form-error">Нужно выбрать файл</div>
+        </form>
+    </div>
+
+    {{/ Modal}}
+</div>

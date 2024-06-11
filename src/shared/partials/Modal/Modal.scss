@@ -1,0 +1,63 @@
+@import '@styles/vars.scss';
+@import '@styles/mixins.scss';
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: opacity $trans-dur ease;
+    background-color: rgba($color: $black, $alpha: 0.5);
+    padding: 0 1rem;
+
+
+    &__wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: calc(100% - 2rem);
+        max-width: 550px;
+        background: $white;
+        border-radius: 12px;
+        padding: 40px 30px;
+    }
+
+    &_small {
+        .modal {
+            &__wrapper {
+                max-width: 340px;
+                box-shadow: $box-shadow;
+            }
+        }
+    }
+    &__title {
+        @include text-16;
+        color: $dark;
+        margin: 0 ;
+        text-align: center;
+        &_error {
+            color: $red;
+        }
+    }
+
+    &__form {
+        text-align: center;
+        &-submit-btn {
+            width: 100%;
+        }
+        &-error {
+            margin-top: 14px;
+            @include text-11;
+            color: $red;
+            
+        }
+    }
+    &__input-file {
+        padding: 40px 0;
+    }
+   
+}

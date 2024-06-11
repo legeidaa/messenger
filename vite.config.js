@@ -1,0 +1,23 @@
+import { defineConfig } from 'vite';
+import { resolve } from 'path'
+import { URL, fileURLToPath } from 'url';
+
+export default defineConfig({
+    root: resolve(__dirname, 'src/app'),
+    base: '/',
+    build: {
+        outDir: resolve(__dirname, 'dist'),
+    },
+    resolve: {
+        alias: [
+            { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+            { find: '@styles', replacement: fileURLToPath(new URL('./src/shared/styles', import.meta.url)) },
+            { find: '@pages', replacement: fileURLToPath(new URL('./src/pages', import.meta.url)) },
+            { find: '@partials', replacement: fileURLToPath(new URL('./src/shared/partials', import.meta.url)) },
+            { find: '@assets', replacement: fileURLToPath(new URL('./src/shared/assets', import.meta.url)) },
+        ]
+    },
+    server: {
+        port: 3000,
+    }
+})

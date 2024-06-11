@@ -1,0 +1,48 @@
+@import '@styles/vars.scss';
+@import '@styles/mixins.scss';
+
+.profile-page {
+    display: flex;
+    height: 100%;
+
+    &__aside {
+        position: absolute;
+        height: 100%;
+        width: 64px;
+        background: $gray-light-3;
+        border-right: 1px solid $border-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.profile {
+    width: 100%;
+    max-width: 510px;
+    margin: 0 auto;
+    padding-top: 20vh;
+
+    &__header {
+        min-height: 220px;
+        text-align: center;
+    }
+
+    &__data {
+        min-height: 250px;
+
+        &-save {
+            width: 280px;
+            margin: 0 auto;
+        }
+    }
+
+    &__name {
+        @include text-16;
+        color: $dark;
+    }
+
+    &__footer {
+        text-align: center;
+    }
+}

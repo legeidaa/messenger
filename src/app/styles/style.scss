@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400..600&display=swap');
+@import './reset';
+@import './common';
+
+@import '@styles/vars';
+
+
+body {
+    background-color: $white;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

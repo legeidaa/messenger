@@ -1,0 +1,42 @@
+@import '@styles/vars';
+@import '@styles/mixins';
+.avatar {
+    width: 47px;
+    height: 47px;
+    border-radius: 1000px;
+    overflow: hidden;
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    &-profile {
+        width: 130px;
+        height: 130px;
+        margin: 0 auto 20px;
+        overflow: hidden;
+        position: relative;
+        &__action {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba($color: $black, $alpha: 0.5);
+            z-index: 1;
+            top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            @include text-13;
+            color: $white;
+            cursor: pointer;
+            opacity: 0;
+            transition: $trans-dur opacity;
+        }
+        &:hover {
+            .avatar-profile__action {
+                opacity: 1;
+            }
+        }
+    }
+}

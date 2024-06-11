@@ -1,0 +1,11 @@
+<main>
+    <nav>
+        <ol>
+            {{#each (links-to-pages)}}
+            <li>
+                <a href="{{link}}">{{pageName}}</a>
+            </li>
+            {{/each}}
+        </ol>
+    </nav>
+</main>

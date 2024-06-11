@@ -1,0 +1,33 @@
+@import '@styles/vars.scss';
+@import '@styles/mixins.scss';
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    &__header {
+        margin-bottom: 50px;
+    }
+
+    &__title {
+        @include text-20;
+        color: $dark;
+        text-align: center;
+        margin: 0;
+    }
+
+    &__footer {
+        padding-top: 40px;
+        margin-top: auto;
+    }
+
+    &__submit-btn {
+        width: 100%;
+        margin-bottom: 14px;
+    }
+
+    &__link {
+        width: 100%;
+    }
+}
