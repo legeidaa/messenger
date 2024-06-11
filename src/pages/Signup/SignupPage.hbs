@@ -1,77 +1,79 @@
-{{#> Dialog }}
-{{#> LoginForm className="login-form__signup"}}
+<div class="login-page">
+    {{#> Dialog }}
+    {{#> LoginForm className="login-form__signup"}}
     <header class="login-form__header">
         <h1 class="login-form__title">Регистрация</h1>
     </header>
 
-    <div class="login-form__content">
+    <main class="login-form__content">
 
-        {{> InputField 
-            className="login-page__input" 
-            title="Почта" 
-            name="email" 
-            id="email"
-            type="email"
-            label="Почта"
-            value="pochta@yandex.ru"
+        {{> InputField
+        className="login-page__input"
+        title="Почта"
+        name="email"
+        id="email"
+        type="email"
+        label="Почта"
+        value="pochta@yandex.ru"
         }}
-        {{> InputField 
-            className="login-page__input" 
-            title="Логин" 
-            name="login" 
-            id="login"
-            label="Логин"
+        {{> InputField
+        className="login-page__input"
+        title="Логин"
+        name="login"
+        id="login"
+        label="Логин"
         }}
-        {{> InputField 
-            className="login-page__input" 
-            title="Имя" 
-            name="first_name" 
-            id="first_name"
-            label="Имя"
+        {{> InputField
+        className="login-page__input"
+        title="Имя"
+        name="first_name"
+        id="first_name"
+        label="Имя"
         }}
-        {{> InputField 
-            className="login-page__input" 
-            title="Фамилия" 
-            name="second_name" 
-            id="second_name"
-            label="Фамилия"
+        {{> InputField
+        className="login-page__input"
+        title="Фамилия"
+        name="second_name"
+        id="second_name"
+        label="Фамилия"
         }}
-         {{> InputField 
-            className="login-page__input" 
-            title="Телефон" 
-            name="phone" 
-            id="phone"
-            label="Телефон"
-            type="tel"
+        {{> InputField
+        className="login-page__input"
+        title="Телефон"
+        name="phone"
+        id="phone"
+        label="Телефон"
+        type="tel"
         }}
-        {{> InputField 
-            className="login-page__input" 
-            title="Пароль" 
-            name="password" 
-            type="password" 
-            id="password"
-            label="Пароль"
-            value="12345678"
-            error=" "
+        {{> InputField
+        className="login-page__input"
+        title="Пароль"
+        name="password"
+        type="password"
+        id="password"
+        label="Пароль"
+        value="12345678"
+        error=" "
         }}
-        {{> InputField 
-            className="login-page__input" 
-            title="Пароль (ещё раз)" 
-            name="password_repeat" 
-            type="password" 
-            id="password_repeat"
-            label="Пароль (ещё раз)"
-            value="12345678"
-            error="Пароли не совпадают"
+        {{> InputField
+        className="login-page__input"
+        title="Пароль (ещё раз)"
+        name="password_repeat"
+        type="password"
+        id="password_repeat"
+        label="Пароль (ещё раз)"
+        value="12345678"
+        error="Пароли не совпадают"
         }}
-    </div>
+    </main>
     <footer class="login-form__footer">
-        {{> Button 
-            text="Зарегистрироваться" 
-            type="submit" 
-            className="login-form__submit-btn"
+        {{> Button
+        text="Зарегистрироваться"
+        type="submit"
+        className="login-form__submit-btn"
         }}
         {{>Link href="#signin" className="login-form__link" text="Войти"}}
     </footer>
-{{/ LoginForm }}
-{{/ Dialog }}
+    {{/ LoginForm }}
+    {{/ Dialog }}
+</div>
