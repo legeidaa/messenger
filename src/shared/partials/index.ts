@@ -1,4 +1,3 @@
-import { Link } from './Link/index';
 export { Dialog } from './Dialog/index';
 export { Button } from './Button/index';
 export { Input } from './Input/index';
@@ -8,5 +7,4 @@ export { Link } from './Link/index';
 export { ErrorInfo } from './ErrorInfo/index';
 export { Avatar } from './Avatar/index';
 export { ProfileDataRow } from './ProfileDataRow/index';
-
 export { Modal } from './Modal/index';

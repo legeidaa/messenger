@@ -9,25 +9,43 @@ import { activateModals } from '../shared/utils';
 
 registerHelpers()
 
-const pages = {
-    'main': [Pages.MainPage],
-    'chat': [Pages.ChatPage],
-    'signin': [Pages.SigninPage],
-    'signup': [Pages.SignupPage],
-    'error-client': [Pages.ErrorClientPage],
-    'error-server': [Pages.ErrorServerPage],
-    'profile': [Pages.ProfilePage, ProfilePageArgs],
+const app = document.querySelector('#app')
+
+enum PagesNames {
+    MAIN = 'main',
+    CHAT = 'chat',
+    SIGNIN = 'signin',
+    SIGNUP = 'signup',
+    ERROR_CLIENT = 'error-client',
+    ERROR_SERVER = 'error-server',
+    PROFILE = 'profile',
+}
+
+type Pages = {
+    [key in PagesNames]: any
+}
+
+const pages: Pages = {
+    [PagesNames.MAIN]: [Pages.MainPage],
+    [PagesNames.CHAT]: [Pages.ChatPage],
+    [PagesNames.SIGNIN]: [Pages.SigninPage],
+    [PagesNames.SIGNUP]: [Pages.SignupPage],
+    [PagesNames.ERROR_CLIENT]: [Pages.ErrorClientPage],
+    [PagesNames.ERROR_SERVER]: [Pages.ErrorServerPage],
+    [PagesNames.PROFILE]: [Pages.ProfilePage, ProfilePageArgs],
 };
 
 Object.entries(Partials).forEach(([name, partial]) => {
     Handlebars.registerPartial(name, partial as Handlebars.Template<any>)
 })
 
-function navigate(page) {
+function navigate(page: PagesNames) {
     const [source, args] = pages[page];
-
     const handlebarsFunct = Handlebars.compile(source);
-    document.querySelector('#app').innerHTML = handlebarsFunct(args);
+
+    if (app) {
+        app.innerHTML = handlebarsFunct(args);
+    }
 
     if (page === 'profile') {
         activateModals()
@@ -38,12 +56,14 @@ function navigate(page) {
 // для превью первого спринта, логику не настраивал
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.hash === '#' || window.location.hash === '') {
-        navigate('main')
+        navigate(PagesNames.MAIN)
     } else {
-        navigate(window.location.hash.split('#')[1])
+        const currentHash = window.location.hash.split('#')[1]
+        if (currentHash in pages) {
+            navigate(currentHash as PagesNames)
+        }
+        
     }
-
-    // activateModals()
 
     document.addEventListener('click', (e) => {
         if (e.target instanceof HTMLElement && e.target.classList.contains('login-form__submit-btn')) {
@@ -59,7 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
             changedProfilePageArgs.showSaveButton = true
 
             const handlebarsFunct = Handlebars.compile(Pages.ProfilePage)
-            document.querySelector('#app').innerHTML = handlebarsFunct(changedProfilePageArgs)
+            if (app) {
+                app.innerHTML = handlebarsFunct(changedProfilePageArgs)
+            }
 
         }
 
@@ -71,7 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
             changedProfilePageArgs.showSaveButton = true
 
             const handlebarsFunct = Handlebars.compile(Pages.ProfilePage)
-            document.querySelector('#app').innerHTML = handlebarsFunct(changedProfilePageArgs)
+            if (app) {
+                app.innerHTML = handlebarsFunct(changedProfilePageArgs)
+            }
         }
 
         if (e.target instanceof HTMLElement && e.target.classList.contains('profile__data-save')) {
@@ -82,19 +106,21 @@ document.addEventListener('DOMContentLoaded', () => {
             changedProfilePageArgs.canChangePassword = false
 
             const handlebarsFunct = Handlebars.compile(Pages.ProfilePage)
-            document.querySelector('#app').innerHTML = handlebarsFunct(changedProfilePageArgs)
+            if (app) {
+                app.innerHTML = handlebarsFunct(changedProfilePageArgs)
+            }
         }
     })
 
 });
 
 window.addEventListener("hashchange", function (e) {
-    const hash = window.location.hash.split('#')[1]
+    const currentHash = window.location.hash.split('#')[1]
     if (window.location.origin + '/' === window.location.href) {
-        navigate('main')
+        navigate(PagesNames.MAIN)
     }
 
-    if (Object.keys(pages).includes(hash)) {
-        navigate(hash)
+    if (Object.keys(pages).includes(currentHash)) {
+        navigate(currentHash  as PagesNames)
     }
-});
+})
