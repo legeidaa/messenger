@@ -1,10 +1,9 @@
-
 import '@/app/styles/style.scss'
 import * as Partials from '@partials/index'
 import * as Pages from '@pages/index'
 import * as Handlebars from 'handlebars'
-import { registerHelpers } from '../shared/helpers/index';
 import { ProfilePageArgs } from '@pages/Profile';
+import { registerHelpers } from '../shared/helpers/index';
 import { activateModals } from '../shared/utils';
 
 registerHelpers()
@@ -21,11 +20,11 @@ enum PagesNames {
     PROFILE = 'profile',
 }
 
-type Pages = {
+type PagesType = {
     [key in PagesNames]: any
 }
 
-const pages: Pages = {
+const pages: PagesType = {
     [PagesNames.MAIN]: [Pages.MainPage],
     [PagesNames.CHAT]: [Pages.ChatPage],
     [PagesNames.SIGNIN]: [Pages.SigninPage],
@@ -52,7 +51,6 @@ function navigate(page: PagesNames) {
     }
 }
 
-
 // для превью первого спринта, логику не настраивал
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.hash === '#' || window.location.hash === '') {
@@ -62,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentHash in pages) {
             navigate(currentHash as PagesNames)
         }
-        
     }
 
     document.addEventListener('click', (e) => {
@@ -73,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (e.target instanceof HTMLElement && e.target.classList.contains('profile__link-data')) {
             e.preventDefault()
-            let changedProfilePageArgs = { ...ProfilePageArgs }
+            const changedProfilePageArgs = { ...ProfilePageArgs }
 
             changedProfilePageArgs.canChangeData = true
             changedProfilePageArgs.showSaveButton = true
@@ -82,12 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (app) {
                 app.innerHTML = handlebarsFunct(changedProfilePageArgs)
             }
-
         }
 
         if (e.target instanceof HTMLElement && e.target.classList.contains('profile__link-password')) {
             e.preventDefault()
-            let changedProfilePageArgs = { ...ProfilePageArgs }
+            const changedProfilePageArgs = { ...ProfilePageArgs }
 
             changedProfilePageArgs.canChangePassword = true
             changedProfilePageArgs.showSaveButton = true
@@ -100,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (e.target instanceof HTMLElement && e.target.classList.contains('profile__data-save')) {
             e.preventDefault()
-            let changedProfilePageArgs = { ...ProfilePageArgs }
+            const changedProfilePageArgs = { ...ProfilePageArgs }
 
             changedProfilePageArgs.canChangePassword = false
             changedProfilePageArgs.canChangePassword = false
@@ -111,16 +107,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     })
-
 });
 
-window.addEventListener("hashchange", function (e) {
+window.addEventListener('hashchange', () => {
     const currentHash = window.location.hash.split('#')[1]
-    if (window.location.origin + '/' === window.location.href) {
+    if (`${window.location.origin}/` === window.location.href) {
         navigate(PagesNames.MAIN)
     }
 
     if (Object.keys(pages).includes(currentHash)) {
-        navigate(currentHash  as PagesNames)
+        navigate(currentHash as PagesNames)
     }
 })

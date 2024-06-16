@@ -1,5 +1,5 @@
-@import '@styles/vars.scss';
-@import '@styles/mixins.scss';
+@import '@styles/vars';
+@import '@styles/mixins';
 
 .login-form {
     display: flex;
@@ -12,6 +12,7 @@
 
     &__title {
         @include text-20;
+
         color: $dark;
         text-align: center;
         margin: 0;

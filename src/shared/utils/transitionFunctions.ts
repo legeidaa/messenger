@@ -1,5 +1,4 @@
 export function fadeIn(el: HTMLElement, display: string, timeout: number, activeClass: string) {
-
     el.style.opacity = '0';
     el.style.display = display || 'block';
     el.style.transition = `opacity ${timeout}ms`;

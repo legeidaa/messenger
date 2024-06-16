@@ -1,28 +1,26 @@
-import { fadeIn, fadeOut } from "./transitionFunctions";
+import { fadeIn, fadeOut } from './transitionFunctions';
 
 export function activateModals() {
     const modals = document.querySelectorAll('.modal')
     const modalTriggers = document.querySelectorAll('[data-modal]')
     const modalActiveClass = 'modal_opened'
 
-    modalTriggers.forEach(trigger => {
+    modalTriggers.forEach((trigger) => {
         const modalType = trigger.getAttribute('data-modal')
         const modal = document.querySelector(`[data-modal-type="${modalType}"`)
-        console.log(modalType, modal);
 
         trigger.addEventListener('click', (e) => {
             e.preventDefault()
-
-            fadeIn(modal, 'block', 250, modalActiveClass)
+            fadeIn(modal as HTMLElement, 'block', 250, modalActiveClass)
         })
     })
 
-    modals.forEach(modal => {
-        modal.addEventListener('click', e => {
+    modals.forEach((modal) => {
+        modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 e.stopPropagation()
                 e.preventDefault()
-                fadeOut(modal, 250, modalActiveClass)
+                fadeOut(modal as HTMLElement, 250, modalActiveClass)
             }
         })
     })

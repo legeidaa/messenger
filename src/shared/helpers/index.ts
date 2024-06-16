@@ -1,5 +1,3 @@
-import { ifEquals } from "./ifEquals";
+import { ifEquals } from './ifEquals';
 
-export const registerHelpers = () => {
-    return [ifEquals]
-}
+export const registerHelpers = () => [ifEquals]

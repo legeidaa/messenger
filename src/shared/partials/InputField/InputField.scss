@@ -1,5 +1,5 @@
-@import '@styles/vars.scss';
-@import '@styles/mixins.scss';
+@import '@styles/vars';
+@import '@styles/mixins';
 
 .input-field {
     position: relative;
@@ -10,6 +10,7 @@
 
     &__element:not(.input-field__file .input-field__element) {
         @include text-13;
+
         color: $dark;
         font-weight: 500;
         border-radius: 0;
@@ -38,6 +39,7 @@
             }
         }
 
+        /* stylelint-disable */
         &+.input-field__label {
             position: absolute;
             top: 0;
@@ -48,6 +50,7 @@
             transition: 0.2s all, 0.01s width;
 
             @include text-9;
+
             font-weight: 500;
             font-size: 0.75rem;
             color: $gray-dark-1;
@@ -59,13 +62,16 @@
         @supports selector(:placeholder-shown) {
             &+.input-field__label {
                 transform: translate(0, 50%);
+
                 @include text-13;
+
                 width: auto;
             }
 
             &:focus+.input-field__label,
             &:not(:placeholder-shown)+.input-field__label {
                 transform: translate(0, -50%);
+
                 @include text-9;
 
             }
@@ -74,6 +80,7 @@
 
     &__error {
         @include text-8;
+
         color: $red;
         font-weight: 400;
         margin-top: 7px;
@@ -102,6 +109,7 @@
 
                 &+label {
                     @include text-12;
+
                     text-decoration: underline;
                     color: $blue;
                     max-width: 120px;

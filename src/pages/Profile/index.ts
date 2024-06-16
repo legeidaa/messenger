@@ -1,9 +1,8 @@
-
-export { default as ProfilePage } from './ProfilePage.hbs?raw';
 import './ProfilePage.scss'
 
 import avatarSkeletonSrc from '@assets/avatar-skeleton.svg'
 
+export { default as ProfilePage } from './ProfilePage.hbs?raw';
 
 export const ProfilePageArgs = {
     avatarSkeletonSrc,
@@ -76,5 +75,5 @@ export const ProfilePageArgs = {
             name: 'newPassword',
             value: '****',
         },
-    ]
+    ],
 }

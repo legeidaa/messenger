@@ -1,0 +1,67 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "airbnb"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "args": "all",
+                "argsIgnorePattern": "^_",
+                "caughtErrors": "all",
+                "caughtErrorsIgnorePattern": "^_",
+                "destructuredArrayIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "ignoreRestSiblings": true
+            }
+        ],
+        "@typescript-eslint/semi": "off",
+        "indent": [
+            "error",
+            4
+        ],
+        "import/no-unresolved": "off",
+        "import/prefer-default-export": "off",
+        "no-unused-vars": "off",
+        "no-shadow": "off",
+        "import/extensions": "off",
+        "import/no-extraneous-dependencies": "off",
+        "no-underscore-dangle": "off",
+        "linebreak-style": 0,
+        "semi": "off",
+        "object-curly-newline": [
+            "error",
+            {
+                "consistent": true
+            }
+        ],
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "max-len": [
+            "warn",
+            {
+                "ignoreComments": true,
+                "code": 200
+            }
+        ],
+        "no-param-reassign": "warn",
+        "no-undef": "warn"
+    }
+}
