@@ -18,6 +18,7 @@
         "noImplicitReturns": true,
         "skipLibCheck": true,
         "moduleResolution": "node",
+        "strictPropertyInitialization": false,
         "paths": {
             "*": [
                 "./src/*"

@@ -5,6 +5,7 @@ import * as Handlebars from 'handlebars'
 import { ProfilePageArgs } from '@pages/Profile';
 import { registerHelpers } from '../shared/helpers/index';
 import { activateModals } from '../shared/utils';
+import '../shared/partials/ButtonBlock/index.ts'
 
 registerHelpers()
 
