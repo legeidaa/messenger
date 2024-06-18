@@ -8,6 +8,9 @@ interface IButtonProps {
     type: string;
     className?: string;
     href?: string;
+    events?: {
+        [key: string]: (event: Event) => void
+    }
 }
 
 // TODO передавать в класс темплейт (вместо элемента)
@@ -33,22 +36,36 @@ class Button extends Block {
 export const button = new Button({
     text: 'Click',
     type: 'button',
+    events: {
+        click: () => console.log('click'),
+    },
 })
 
 function render(query: string, block: Block) {
     const root = document.querySelector(query)
     root?.appendChild(block.getContent())
+    button.dispatchComponentDidMount()
     return root;
 }
 
-render('.app', button);
 setTimeout(() => {
     render('#app', button);
-    button.dispatchComponentDidMount()
 }, 1000)
 
 setTimeout(() => {
     button.setProps({
         text: 'Click me, please',
+        events: {
+            click: () => console.log('click 2'),
+        },
     })
 }, 2000)
+
+setTimeout(() => {
+    button.setProps({
+        text: 'Click me, pleaseeeee',
+        events: {
+            click: () => console.log('click 3'),
+        },
+    })
+}, 3000)

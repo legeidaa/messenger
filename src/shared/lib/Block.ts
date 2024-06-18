@@ -1,5 +1,12 @@
 import EventBus from './EventBus';
 
+interface IProps {
+    events?: {
+        [key: string]: (event: Event) => void
+    },
+    [key: string]: unknown
+}
+
 export default class Block {
     public static EVENTS = {
         INIT: 'init',
@@ -8,7 +15,11 @@ export default class Block {
         FLOW_RENDER: 'flow:render',
     }
 
-    public props: object = {};
+    public props: IProps = {
+        events: {},
+    }
+
+    private isMounted = false
 
     private _element: HTMLElement
 
@@ -52,11 +63,19 @@ export default class Block {
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
 
-    private _componentDidMount(props: object) {
+    _addEvents() {
+        const { events = {} } = this.props;
+
+        Object.keys(events).forEach((eventName) => {
+            this._element.addEventListener(eventName, events[eventName]);
+        });
+    }
+
+    private _componentDidMount(props: IProps) {
         this.componentDidMount(props)
     }
 
-    componentDidMount(props: object): void {
+    componentDidMount(props: IProps): void {
     }
 
     dispatchComponentDidMount() {
@@ -64,7 +83,14 @@ export default class Block {
     }
 
     // вызывается из-за переопределения свойства set в прокси
-    private _componentDidUpdate(oldProps: object, newProps: object) {
+    private _componentDidUpdate(oldProps: IProps, newProps: IProps) {
+        if (oldProps.events) {
+            const { events } = oldProps
+            Object.keys(events).forEach((eventName) => {
+                this._element.removeEventListener(eventName, events[eventName])
+            });
+        }
+
         const response = this.componentDidUpdate(oldProps, newProps)
         if (!response) {
             return
@@ -72,7 +98,7 @@ export default class Block {
         this._render();
     }
 
-    componentDidUpdate(oldProps: object, newProps: object): boolean {
+    componentDidUpdate(oldProps: IProps, newProps: IProps): boolean {
         return true;
     }
 
@@ -81,7 +107,7 @@ export default class Block {
         this.eventBus().emit(Block.EVENTS.FLOW_CDU);
     }
 
-    setProps(nextProps: object) {
+    setProps(nextProps: IProps) {
         if (!nextProps) {
             return;
         }
@@ -94,28 +120,33 @@ export default class Block {
     }
 
     private _render() {
-        const block = this.render();
+        const block = this.render()
+        if (!this.isMounted) {
+            this.isMounted = true
+        }
+        this._addEvents()
+
         // Этот небезопасный метод для упрощения логики
         // Используйте шаблонизатор из npm или напишите свой безопасный
         // Нужно не в строку компилировать (или делать это правильно),
         // либо сразу в DOM-элементы возвращать из compile DOM-ноду
-        this._element!.innerHTML = block;
+        this._element!.innerHTML = block
     }
 
     // Может переопределять пользователь, необязательно трогать
-    render() {
-        return '';
+    render(): string {
+        return ''
     }
 
     getContent(): HTMLElement {
-        return this.element;
+        return this.element
     }
 
     private _makePropsProxy(props: Partial<Record<keyof object, unknown>>) {
         return new Proxy(props, {
             get: (target: Partial<Record<string, unknown>>, prop: string | symbol) => {
                 const value = target[prop as string];
-                return typeof value === 'function' ? value.bind(target) : value;
+                return typeof value === 'function' ? value.bind(target) : value
             },
             set: (target: Partial<Record<string, unknown>>, prop: string | symbol, value: unknown) => {
                 // TODO заменить спред на deepclone
@@ -123,7 +154,7 @@ export default class Block {
 
                 target[prop as string] = value;
 
-                this.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...oldProps }, { ...target });
+                this.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...oldProps }, { ...target })
                 return true
             },
             deleteProperty: (target: Partial<Record<string, unknown>>, prop: string | symbol) => {
@@ -133,10 +164,10 @@ export default class Block {
     }
 
     show() {
-        this.getContent().style.display = 'block';
+        this.getContent().style.display = 'block'
     }
 
     hide() {
-        this.getContent().style.display = 'none';
+        this.getContent().style.display = 'none'
     }
 }
