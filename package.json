@@ -17,6 +17,7 @@
     "lint:scss:fix": "npx stylelint \"**/*.scss\" --fix"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.13.0",
     "@typescript-eslint/parser": "^7.13.0",
     "eslint": "^8.2.0",
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "express": "^4.19.2",
-    "handlebars": "^4.7.8"
+    "handlebars": "^4.7.8",
+    "uuid": "^10.0.0"
   }
 }

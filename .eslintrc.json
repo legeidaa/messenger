@@ -35,6 +35,11 @@
             "error",
             4
         ],
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": [
+            "error"
+        ],
+        "class-methods-use-this": "warn",
         "import/no-unresolved": "off",
         "import/prefer-default-export": "off",
         "no-unused-vars": "off",

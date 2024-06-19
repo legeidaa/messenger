@@ -6,6 +6,7 @@ import { ProfilePageArgs } from '@pages/Profile';
 import { registerHelpers } from '../shared/helpers/index';
 import { activateModals } from '../shared/utils';
 import '../shared/partials/ButtonBlock/index.ts'
+import '../shared/partials/TestBlock/index.ts'
 
 registerHelpers()
 
