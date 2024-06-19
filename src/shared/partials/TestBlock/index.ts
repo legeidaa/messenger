@@ -27,19 +27,16 @@ class TestBlock extends Block {
         return true;
     }
 }
-
+const btn = new Button({
+    text: 'Click test block',
+    type: 'button',
+    events: {
+        click: () => console.log('Click test block btn'),
+    },
+})
 const testBlock = new TestBlock({
-    userName: 'Test Block text',
-    button: new Button({
-        text: 'Click test block',
-        type: 'button',
-        events: {
-            click: () => console.log('clickkkkkk'),
-        },
-    }),
-    // events: {
-    //     // click: () => console.log('Test click'),
-    // },
+    userName: 'Данные',
+    button: btn,
 })
 
 function render(query: string, block: Block) {
@@ -55,9 +52,12 @@ setTimeout(() => {
 
 setTimeout(() => {
     testBlock.setProps({
-        userName: 'Test Block text 2',
-        // events: {
-        //     click: () => console.log('Test click 2'),
-        // },
+        userName: 'Данные изменились',
+        button: btn.setProps({
+            text: 'Click test block 2',
+            events: {
+                click: () => console.log('Click test block btn 2'),
+            },
+        }),
     })
 }, 2000)

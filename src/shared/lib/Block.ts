@@ -75,13 +75,6 @@ export default class Block {
     }
 
     compile(template: string, props: IProps) {
-        // const propsAndStubs = { ...props };
-
-        // Object.entries(this.children).forEach(([key, child]) => {
-        //     propsAndStubs[key] = `<div data-id="${child._id}"></div>`
-        // })
-
-        // return Handlebars.compile(template)(propsAndStubs)
         const propsAndStubs = { ...props };
 
         Object.entries(this.children).forEach(([key, child]) => {
@@ -89,20 +82,15 @@ export default class Block {
         });
 
         const fragment = this._createDocumentElement('template');
-        // const compiledTemplate = Handlebars.compile(template)(propsAndStubs)
-        // console.log(compiledTemplate);
 
-        fragment.innerHTML = Handlebars.compile(template)(propsAndStubs)
+        fragment.innerHTML = Handlebars.compile(template)(propsAndStubs).trim()
 
         Object.values(this.children).forEach(child => {
             const stub = fragment.content.querySelector(`[data-id="${child.props.__id}"]`);
-            console.log(stub);
-            stub.replaceWith(child.getContent());
-        });
 
-        // const section = document.createElement('section');
-        // section.appendChild(fragment.content)
-        // console.log(fragment.content, section.firstChild);
+            stub.replaceWith(child.getContent())
+            console.log(stub);
+        })
 
         return fragment.content
     }
@@ -141,7 +129,6 @@ export default class Block {
 
     init() {
         this._createResources();
-        console.log(this._element);
 
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
@@ -191,33 +178,14 @@ export default class Block {
     }
 
     private _render() {
-        // const block = this.render()
-        // if (!this._isMounted) {
-        //     this._isMounted = true
-        // }
-
-        // this._addEvents()
-        // // Этот небезопасный метод для упрощения логики
-        // // Используйте шаблонизатор из npm или напишите свой безопасный
-        // // Нужно не в строку компилировать (или делать это правильно),
-        // // либо сразу в DOM-элементы возвращать из compile DOM-ноду
-        // Handlebars.compile(block)(this.props)
-        // this._element.innerHTML = Handlebars.compile(block)(this.props)
-        // console.log(this._element, Handlebars.compile(block)(this.props))
-
-        // // this._element = this._element.firstChild as HTMLElement
-
-
-
-
-        const block = this.render(); // render теперь возвращает DocumentFragment
+        const block = this.render()
         if (!this._isMounted) {
             this._isMounted = true
         }
-        // this._removeEvents();
-        this._element.innerHTML = ''; // удаляем предыдущее содержимое
+        this._element.innerHTML = ''
 
         this._element.appendChild(block)
+
         this._addEvents()
     }
 
@@ -227,11 +195,13 @@ export default class Block {
     }
 
     get element(): HTMLElement {
-        console.log(this._element, this.props.__id);
-        
-        const elem = this._element
-        // elem.setAttribute('data-id', this._id);
-        return elem
+        // const elem = this._element.firstChild as HTMLElement
+        // console.log(this._element, elem);
+        // if (elem) {
+        //     elem.setAttribute('data-id', this.props.__id)
+        //     return elem
+        // }
+        return this._element
     }
 
     getContent() {
