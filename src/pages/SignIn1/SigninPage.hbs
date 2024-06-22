@@ -1,0 +1,42 @@
+<div class="login-page">
+    <div class="dialog">
+        <form action="" class="login-form login-form_signin">
+            <header class="login-form__header">
+                <h1 class="login-form__title">Вход</h1>
+            </header>
+
+            <main class="login-form__content">
+                {{{inputLogin}}}
+                {{{inputPassword}}}
+
+                {{!-- {{> InputField
+                className="login-page__input"
+                title="Логин"
+                name="login"
+                id="login"
+                label="Логин"
+                value="somelogin"
+                error="Неверный логин"
+                }}
+                {{> InputField
+                className="login-page__input"
+                title="Пароль"
+                name="password"
+                type="password"
+                id="password"
+                label="Пароль"
+                }} --}}
+            </main>
+            <footer class="login-form__footer">
+                {{{footerButtonSubmit}}}
+                {{!-- {{{footerLinkSignup}}} --}}
+                {{!-- {{> Button
+                text="Вход"
+                type="submit"
+                className="login-form__submit-btn"
+                }}
+                {{>Link href="#signup" className="login-form__link" text="Нет аккаунта?"}} --}}
+            </footer>
+        </form>
+    </div>
+</div>

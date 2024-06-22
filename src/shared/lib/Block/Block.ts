@@ -14,11 +14,14 @@ export class Block {
     public props: IBlockProps = {
         __id: '',
         events: {},
+        attr: {},
     }
 
     public children: {
         [key: string]: Block
     }
+
+    public lists
 
     private _isMounted = false
 
@@ -29,11 +32,12 @@ export class Block {
     eventBus: () => EventBus
 
     constructor(propsAndChildren: IBlockProps) {
-        const { children, props } = this._getChildren(propsAndChildren)
+        const { children, props, lists } = this._getChildren(propsAndChildren)
 
-        this._id = makeUUID();
+        this._id = makeUUID()
 
         this.children = children
+        this.lists = lists
         this.props = this._makePropsProxy({ ...props, __id: this._id })
 
         const eventBus = new EventBus()
@@ -49,6 +53,11 @@ export class Block {
 
         Object.entries(this.children).forEach(([key, child]) => {
             propsAndStubs[key] = `<div data-id="${child.props.__id}"></div>`
+        })
+
+        const _tmpId = makeUUID()
+        Object.entries(this.lists).forEach(([key, child]) => {
+            propsAndStubs[key] = `<div data-id="__l_${_tmpId}"></div>`;
         });
 
         const fragment = document.createElement('template') as HTMLTemplateElement
@@ -59,6 +68,19 @@ export class Block {
         Object.values(this.children).forEach((child) => {
             const stub = fragment.content.querySelector(`[data-id="${child.props.__id}"]`);
             stub?.replaceWith(child.getContent())
+        })
+
+        Object.entries(this.lists).forEach(([key, child]) => {
+            const listCont = document.createElement('template') as HTMLTemplateElement
+            child.forEach((item) => {
+                if (item instanceof Block) {
+                    listCont.content.append(item.getContent());
+                } else {
+                    listCont.content.append(`${item}`);
+                }
+            })
+            const stub = fragment.content.querySelector(`[data-id="__l_${_tmpId}"]`);
+            stub?.replaceWith(listCont.content)
         })
 
         return fragment.content.firstElementChild as HTMLElement
@@ -74,6 +96,7 @@ export class Block {
         }
         this._element = (block)
         this._addEvents()
+        this.addAttributes()
     }
 
     // Может переопределять пользователь
@@ -153,16 +176,27 @@ export class Block {
     private _getChildren(propsAndChildren: IBlockProps) {
         const children: { [key: string]: Block } = {}
         const props: IBlockProps = {}
+        const lists: { [key: string]: Block[] } = {}
 
         Object.entries(propsAndChildren).forEach(([key, value]) => {
             if (value instanceof Block) {
                 children[key] = value
+            } else if (Array.isArray(value)) {
+                lists[key] = value;
             } else {
-                props[key] = value
+                props[key] = value;
             }
         })
 
-        return { children, props }
+        return { children, props, lists }
+    }
+
+    addAttributes() {
+        const { attr = {} } = this.props;
+
+        Object.entries(attr).forEach(([key, value]) => {
+            this._element.setAttribute(key, value);
+        });
     }
 
     private _makePropsProxy(props: IBlockProps): IBlockProps {
