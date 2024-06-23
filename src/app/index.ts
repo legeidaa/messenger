@@ -9,7 +9,7 @@ const app = document.querySelector('#app') as HTMLElement
 
 enum PagesNames {
     MAIN = 'main',
-    // CHAT = 'chat',
+    CHAT = 'chat',
     SIGNIN = 'signin',
     SIGNUP = 'signup',
     ERROR_CLIENT = 'error-client',
@@ -23,7 +23,7 @@ type PagesType = {
 
 const pages: PagesType = {
     [PagesNames.MAIN]: Pages.mainPage,
-    // [PagesNames.CHAT]: Pages.chatPage,
+    [PagesNames.CHAT]: Pages.chatPage,
     [PagesNames.SIGNIN]: Pages.signinPage,
     [PagesNames.SIGNUP]: Pages.signupPage,
     [PagesNames.ERROR_CLIENT]: Pages.errorClientPage,

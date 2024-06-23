@@ -1,0 +1,114 @@
+@import '@styles/vars';
+@import '@styles/mixins';
+
+.chat {
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    width: 100%;
+    max-width: calc(100% - $dialogs-width);
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        max-height: 100%;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__placeholder {
+        color: $gray-dark-1;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        border-bottom: 1px solid $border-color;
+
+        &-avatar {
+            margin-right: 10px;
+        }
+
+        &-settings {
+            margin-left: auto;
+        }
+    }
+
+    &__name {
+        @include text-13;
+
+        font-weight: 600;
+        color: $dark;
+
+    }
+
+    &__settings {
+        margin-left: auto;
+    }
+
+    &__messages {
+        flex: 1 1 0;
+        overflow: hidden auto;
+        display: flex;
+        flex-direction: column;
+
+        &-wrapper {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+
+            &>* {
+                &:first-child {
+                    margin-top: auto;
+                }
+            }
+        }
+
+    }
+
+    &__date {
+        text-align: center;
+
+        @include text-13;
+
+        color: $gray-dark-1;
+        margin-bottom: 30px;
+    }
+
+    &__footer {
+        border-top: 1px solid $border-color;
+
+        &-form {
+            display: flex;
+            align-items: flex-start;
+            padding: 11px 20px;
+            gap: 10px;
+        }
+
+        &-textarea {
+            flex: 1 1 0;
+            resize: none;
+            border: none;
+            outline: none;
+            border-radius: 30px;
+            padding: 9px 20px;
+            height: 32px;
+
+            @include text-13;
+
+            color: $dark;
+            background: $gray-light-1;
+
+            &::placeholder {
+                color: $gray-dark-1;
+            }
+        }
+    }
+}

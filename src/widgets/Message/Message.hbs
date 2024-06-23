@@ -1,0 +1,10 @@
+<div class="chat__message {{#if attachedImgSrc}}chat__message_file{{/if}} {{#if isOut}}chat__message_out{{/if}}">
+    {{#if attachedImgSrc}}
+    <img src="{{attachedImgSrc}}" alt="Вложение в сообщении.">
+    {{/if}} 
+    <div class="chat__message-text">{{{text}}}</div>
+    <div class="chat__message-info">
+        <div class="chat__message-status {{#if status}}chat__message-status_{{status}}{{/if}}"></div>
+        <div class="chat__message-time">{{time}}</div>
+    </div>
+</div>
