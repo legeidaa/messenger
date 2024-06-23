@@ -1,1 +1,2 @@
-export { default as ErrorServerPage } from './ErrorServerPage.hbs?raw';
+export { ErrorServerPage, errorServerPage } from './ErrorServerPage'
+export type { IErrorServerPageProps } from './model'

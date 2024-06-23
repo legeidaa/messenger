@@ -1,3 +1,3 @@
-import './ProfileDataRow.scss';
+import './ProfileDataRow.scss'
 
-export { default as ProfileDataRow } from './ProfileDataRow.hbs?raw';
+export { ProfileDataRow } from './ProfileDataRow'

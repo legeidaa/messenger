@@ -1,4 +1,7 @@
-<div class="profile__data-row">
+<div class="profile__data-row {{#if className}} {{className}}{{/if}}">
+    {{#if link}}
+    {{{link}}}
+    {{else}}
     <label
            class="profile__data-label"
            for="{{id}}">
@@ -10,5 +13,7 @@
            name="{{name}}"
            id="{{id}}"
            value="{{value}}"
-           >
+           {{#if readonly}}readonly{{/if}}
+           placeholder="{{placeholder}}">
+    {{/if}}
 </div>

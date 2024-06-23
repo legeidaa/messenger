@@ -21,9 +21,11 @@ export class Block {
         [key: string]: Block
     }
 
-    public lists
+    public lists: {
+        [key: string]: Block[]
+    }
 
-    private _isMounted = false
+    public firstRender = false
 
     private _element: HTMLElement = document.createElement('div')
 
@@ -37,7 +39,7 @@ export class Block {
         this._id = makeUUID()
 
         this.children = children
-        this.lists = lists
+        this.lists = this._makePropsProxy({ ...lists }) as typeof this.lists
         this.props = this._makePropsProxy({ ...props, __id: this._id })
 
         const eventBus = new EventBus()
@@ -88,9 +90,7 @@ export class Block {
 
     private _render() {
         const block = this.render()
-        if (!this._isMounted) {
-            this._isMounted = true
-        }
+
         if (this._element) {
             this._element.replaceWith(block)
         }
@@ -107,12 +107,19 @@ export class Block {
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
 
-    setProps(nextProps: IBlockProps) {
+    setProps(nextProps: typeof this.props) {
         if (!nextProps) {
             return;
         }
+        // console.log(this.lists.profileData[0].props.type)
+        const { props, lists } = this._getChildren(nextProps)
 
-        Object.assign(this.props, nextProps);
+        Object.assign(this.props, props)
+        Object.assign(this.lists, lists)
+        // Object.assign(this.children, children)
+        // console.log(this.lists.profileData[0].props.type)
+
+        // console.log(this.props)
     }
 
     getContent() {
@@ -124,6 +131,9 @@ export class Block {
         Object.values(this.children).forEach((child) => {
             child.dispatchComponentDidMount()
         })
+        if (!this.firstRender) {
+            this.firstRender = true
+        }
     }
 
     dispatchComponentDidMount() {
@@ -199,13 +209,13 @@ export class Block {
         });
     }
 
-    private _makePropsProxy(props: IBlockProps): IBlockProps {
+    private _makePropsProxy(props: IBlockProps) {
         return new Proxy(props, {
-            get: (target: IBlockProps, prop: string | symbol) => {
+            get: (target, prop: string | symbol) => {
                 const value = target[prop as string];
                 return typeof value === 'function' ? value.bind(target) : value
             },
-            set: (target: IBlockProps, prop: string | symbol, value: unknown) => {
+            set: (target, prop: string | symbol, value: unknown) => {
                 // TODO заменить спред на deepclone
                 const oldProps = { ...target }
 
@@ -214,7 +224,7 @@ export class Block {
                 this.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...oldProps }, { ...target })
                 return true
             },
-            deleteProperty: (target: IBlockProps, prop: string | symbol) => {
+            deleteProperty: (target, prop: string | symbol) => {
                 throw new Error('Нет доступа')
             },
         });

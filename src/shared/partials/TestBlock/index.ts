@@ -2,9 +2,9 @@
 import { Block, IBlockProps } from '../../lib/Block';
 import Test from './TestBlock.hbs?raw';
 import ChatTemplate from './ChatItem.hbs?raw';
-import { Button } from '../ButtonBlock';
-import { Input } from '../InputBlock';
-import { InputField } from '../InputFieldBlock';
+import { Button } from '../Button';
+import { Input } from '../Input';
+import { InputField } from '../InputField';
 
 interface ITestBlockProps extends IBlockProps {
     userName: string;

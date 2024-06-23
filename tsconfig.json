@@ -38,6 +38,12 @@
             "@partials/*": [
                 "./src/shared/partials/*"
             ],
+            "@shared/*": [
+                "./src/shared/*"
+            ],
+            "@widgets/*": [
+                "./src/widgets/*"
+            ],
         }
     }
 }

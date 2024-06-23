@@ -1,3 +1,4 @@
 import './ErrorInfo.scss'
 
-export { default as ErrorInfo } from './ErrorInfo.hbs?raw';
+export { ErrorInfo } from './ErrorInfo'
+export type { IErrorInfoProps } from './model'

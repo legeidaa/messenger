@@ -1,1 +1,2 @@
-export { default as SignupPage } from './SignupPage.hbs?raw';
+export { signupPage, SignupPage } from './SignupPage';
+export type { ISignupPageProps } from './model'
