@@ -17,7 +17,6 @@ export class InputField extends Block {
     }
 
     componentDidUpdate(oldProps: object, newProps: object): boolean {
-        console.log('InputField updated', oldProps, newProps);
         return true;
     }
 }

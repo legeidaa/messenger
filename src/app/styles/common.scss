@@ -40,6 +40,13 @@
     }
 }
 
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+
 .dialog {
     box-shadow: $box-shadow;
     width: 100%;

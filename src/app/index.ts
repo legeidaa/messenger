@@ -18,7 +18,7 @@ enum PagesNames {
 }
 
 type PagesType = {
-    [key in PagesNames]: any
+    [key in PagesNames]: Block
 }
 
 const pages: PagesType = {

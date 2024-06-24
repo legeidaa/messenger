@@ -1,5 +1,6 @@
 export default class EventBus {
     public listeners: Record<string, Array<(...args: any[]) => void>>;
+    // public listeners: Record<string, Array<(...args: any[]) => void>>;
 
     constructor() {
         this.listeners = {};

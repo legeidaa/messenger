@@ -1,11 +1,6 @@
 import { IBlockProps } from '@shared/lib/Block';
-import { InputField } from '@shared/partials/InputField';
-import { Button } from '@shared/partials/Button';
-import { Link } from '@shared/partials';
+import { SigninForm } from 'widgets/SigninForm';
 
 export interface ISigninPageProps extends IBlockProps {
-    inputLogin: InputField;
-    inputPassword: InputField;
-    footerButtonSubmit: Button;
-    footerLinkSignup: Link
+    form: SigninForm
 }
