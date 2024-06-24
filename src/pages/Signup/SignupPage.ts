@@ -3,6 +3,9 @@ import { InputField } from '@shared/partials/InputField';
 import { Input } from '@shared/partials/Input';
 import { Button } from '@shared/partials/Button';
 import { Link } from '@shared/partials';
+import { SignupForm } from '@widgets/SignupForm';
+import { Form } from '@shared/partials/Form';
+import { validator } from '@shared/lib/Validator';
 import SigninPageTemplate from './SignupPage.hbs?raw';
 import { ISignupPageProps } from './model';
 
@@ -26,6 +29,9 @@ const inputEmail = new InputField({
         name: 'email',
         className: 'input-field__element',
         value: 'pochta@yandex.ru',
+        events: {
+            blur: validateEmail,
+        },
     }),
 })
 
@@ -39,6 +45,9 @@ const inputLogin = new InputField({
         name: 'login',
         className: 'input-field__element',
         value: 'somelogin',
+        events: {
+            blur: validateLogin,
+        },
     }),
 })
 
@@ -52,6 +61,9 @@ const inputFirstName = new InputField({
         name: 'first_name',
         className: 'input-field__element',
         value: '',
+        events: {
+            blur: validateName,
+        },
     }),
 })
 
@@ -65,6 +77,9 @@ const inputSecondName = new InputField({
         name: 'second_name',
         className: 'input-field__element',
         value: '',
+        events: {
+            blur: validateSecondName,
+        },
     }),
 })
 
@@ -78,6 +93,9 @@ const inputPhone = new InputField({
         name: 'phone',
         className: 'input-field__element',
         value: '',
+        events: {
+            blur: validatePhone,
+        },
     }),
 })
 
@@ -92,6 +110,9 @@ const inputPassword = new InputField({
         name: 'password',
         className: 'input-field__element',
         value: '123',
+        events: {
+            blur: validatePassword,
+        },
     }),
 })
 
@@ -106,6 +127,9 @@ const inputPasswordRepeat = new InputField({
         name: 'password_repeat',
         className: 'input-field__element',
         value: '123',
+        events: {
+            blur: validateComparePassword,
+        },
     }),
 })
 
@@ -113,12 +137,6 @@ const footerButtonSubmit = new Button({
     text: 'Зарегистрироваться',
     type: 'submit',
     className: 'login-form__submit-btn',
-    events: {
-        click: (e) => {
-            e.preventDefault()
-            window.location.hash = 'signin'
-        },
-    },
 })
 
 const footerLinkSignin = new Link({
@@ -127,7 +145,7 @@ const footerLinkSignin = new Link({
     className: 'login-form__link',
 })
 
-export const signupPage = new SignupPage({
+const signupForm = new SignupForm({
     inputEmail,
     inputLogin,
     inputFirstName,
@@ -139,13 +157,125 @@ export const signupPage = new SignupPage({
     footerLinkSignin,
 })
 
-// function render(query: string, block: Block) {
-//     const root = document.querySelector(query)
-//     root?.appendChild(block.getContent())
-//     block.dispatchComponentDidMount()
-//     return root;
-// }
+const form = new Form({
+    formContent: signupForm,
+    className: 'login-form login-form_signup',
+    events: {
+        submit: (e) => {
+            validateSubmit(e)
+        },
+    },
+})
 
-// setTimeout(() => {
-//     render('#app', signupPage)
-// }, 1)
+function validateEmail(e: Event) {
+    e.preventDefault()
+    const input = inputEmail.children.input.getContent() as HTMLInputElement
+    const result = validator.checkEmail(input.value)
+
+    if (typeof result === 'string') {
+        inputEmail.setProps({ error: result })
+        return false
+    }
+    inputEmail.setProps({ error: '' })
+    return true
+}
+
+function validateLogin(e: Event) {
+    e.preventDefault()
+    const input = inputLogin.children.input.getContent() as HTMLInputElement
+    const result = validator.checkLogin(input.value)
+
+    if (typeof result === 'string') {
+        inputLogin.setProps({ error: result })
+        return false
+    }
+    inputLogin.setProps({ error: '' })
+    return true
+}
+
+function validateName(e: Event) {
+    e.preventDefault()
+    const input = inputFirstName.children.input.getContent() as HTMLInputElement
+    const result = validator.checkName(input.value)
+
+    if (typeof result === 'string') {
+        inputFirstName.setProps({ error: result })
+        return false
+    }
+    inputFirstName.setProps({ error: '' })
+    return true
+}
+
+function validateSecondName(e: Event) {
+    e.preventDefault()
+    const input = inputSecondName.children.input.getContent() as HTMLInputElement
+    const result = validator.checkName(input.value)
+
+    if (typeof result === 'string') {
+        inputSecondName.setProps({ error: result })
+        return false
+    }
+    inputSecondName.setProps({ error: '' })
+    return true
+}
+
+function validatePhone(e: Event) {
+    e.preventDefault()
+    const input = inputPhone.children.input.getContent() as HTMLInputElement
+    const result = validator.checkPhone(input.value)
+
+    if (typeof result === 'string') {
+        inputPhone.setProps({ error: result })
+        return false
+    }
+    inputPhone.setProps({ error: '' })
+    return true
+}
+function validatePassword(e: Event) {
+    e.preventDefault()
+    const input = inputPassword.children.input.getContent() as HTMLInputElement
+    const result = validator.checkPassword(input.value)
+
+    if (typeof result === 'string') {
+        inputPassword.setProps({ error: result })
+        return false
+    }
+    inputPassword.setProps({ error: '' })
+
+    return true
+}
+
+function validateComparePassword(e: Event) {
+    const passInput = inputPassword.children.input.getContent() as HTMLInputElement
+    const passInputRepeat = inputPasswordRepeat.children.input.getContent() as HTMLInputElement
+
+    const result = validator.comparePasswords(passInput.value, passInputRepeat.value)
+
+    if (typeof result === 'string') {
+        inputPasswordRepeat.setProps({ error: result })
+        return false
+    }
+    inputPasswordRepeat.setProps({ error: '' })
+
+    return true
+}
+
+function validateSubmit(e: Event) {
+    e.preventDefault()
+
+    if (
+        validateEmail(e)
+        && validateLogin(e)
+        && validateName(e)
+        && validateSecondName(e)
+        && validatePhone(e)
+        && validatePassword(e)
+        && validateComparePassword(e)
+    ) {
+        window.location.hash = 'chat'
+    }
+}
+
+export const signupPage = new SignupPage({
+    form,
+})

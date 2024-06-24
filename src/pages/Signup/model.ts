@@ -1,16 +1,6 @@
 import { IBlockProps } from '@shared/lib/Block';
-import { InputField } from '@shared/partials/InputField';
-import { Button } from '@shared/partials/Button';
-import { Link } from '@shared/partials';
+import { SignupForm } from '@widgets/SignupForm';
 
 export interface ISignupPageProps extends IBlockProps {
-    inputEmail: InputField;
-    inputLogin: InputField;
-    inputFirstName: InputField;
-    inputSecondName: InputField;
-    inputPhone: InputField;
-    inputPassword: InputField;
-    inputPasswordRepeat: InputField;
-    footerButtonSubmit: Button;
-    footerLinkSignin: Link
+    form: SignupForm
 }
