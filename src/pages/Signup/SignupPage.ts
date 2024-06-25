@@ -6,6 +6,7 @@ import { Link } from '@shared/partials';
 import { SignupForm } from '@widgets/SignupForm';
 import { Form } from '@shared/partials/Form';
 import { validator } from '@shared/lib/Validator';
+import { validateHelper } from '@shared/utils/validateHelper';
 import SigninPageTemplate from './SignupPage.hbs?raw';
 import { ISignupPageProps } from './model';
 
@@ -111,7 +112,10 @@ const inputPassword = new InputField({
         className: 'input-field__element',
         value: '123',
         events: {
-            blur: validatePassword,
+            blur: (e) => {
+                validatePassword(e)
+                validateComparePassword(e)
+            },
         },
     }),
 })
@@ -172,12 +176,7 @@ function validateEmail(e: Event) {
     const input = inputEmail.children.input.getContent() as HTMLInputElement
     const result = validator.checkEmail(input.value)
 
-    if (typeof result === 'string') {
-        inputEmail.setProps({ error: result })
-        return false
-    }
-    inputEmail.setProps({ error: '' })
-    return true
+    return validateHelper(inputEmail, result)
 }
 
 function validateLogin(e: Event) {
@@ -185,25 +184,18 @@ function validateLogin(e: Event) {
     const input = inputLogin.children.input.getContent() as HTMLInputElement
     const result = validator.checkLogin(input.value)
 
-    if (typeof result === 'string') {
-        inputLogin.setProps({ error: result })
-        return false
-    }
-    inputLogin.setProps({ error: '' })
-    return true
+    return validateHelper(inputLogin, result)
 }
 
-function validateName(e: Event) {
-    e.preventDefault()
+function validateName(e?: Event) {
+    if (e) {
+        e.preventDefault()
+    }
+
     const input = inputFirstName.children.input.getContent() as HTMLInputElement
     const result = validator.checkName(input.value)
 
-    if (typeof result === 'string') {
-        inputFirstName.setProps({ error: result })
-        return false
-    }
-    inputFirstName.setProps({ error: '' })
-    return true
+    return validateHelper(inputFirstName, result)
 }
 
 function validateSecondName(e: Event) {
@@ -211,12 +203,7 @@ function validateSecondName(e: Event) {
     const input = inputSecondName.children.input.getContent() as HTMLInputElement
     const result = validator.checkName(input.value)
 
-    if (typeof result === 'string') {
-        inputSecondName.setProps({ error: result })
-        return false
-    }
-    inputSecondName.setProps({ error: '' })
-    return true
+    return validateHelper(inputSecondName, result)
 }
 
 function validatePhone(e: Event) {
@@ -224,25 +211,14 @@ function validatePhone(e: Event) {
     const input = inputPhone.children.input.getContent() as HTMLInputElement
     const result = validator.checkPhone(input.value)
 
-    if (typeof result === 'string') {
-        inputPhone.setProps({ error: result })
-        return false
-    }
-    inputPhone.setProps({ error: '' })
-    return true
+    return validateHelper(inputPhone, result)
 }
 function validatePassword(e: Event) {
     e.preventDefault()
     const input = inputPassword.children.input.getContent() as HTMLInputElement
     const result = validator.checkPassword(input.value)
 
-    if (typeof result === 'string') {
-        inputPassword.setProps({ error: result })
-        return false
-    }
-    inputPassword.setProps({ error: '' })
-
-    return true
+    return validateHelper(inputPassword, result)
 }
 
 function validateComparePassword(e: Event) {
@@ -251,27 +227,29 @@ function validateComparePassword(e: Event) {
 
     const result = validator.comparePasswords(passInput.value, passInputRepeat.value)
 
-    if (typeof result === 'string') {
-        inputPasswordRepeat.setProps({ error: result })
-        return false
-    }
-    inputPasswordRepeat.setProps({ error: '' })
-
-    return true
+    return validateHelper(inputPasswordRepeat, result)
 }
 
 function validateSubmit(e: Event) {
     e.preventDefault()
 
-    if (
-        validateEmail(e)
+    validateEmail(e)
+    validateLogin(e)
+    validateName()
+    validateSecondName(e)
+    validatePhone(e)
+    validatePassword(e)
+    validateComparePassword(e)
+
+    const isValid = validateEmail(e)
         && validateLogin(e)
-        && validateName(e)
+        && validateName()
         && validateSecondName(e)
         && validatePhone(e)
         && validatePassword(e)
         && validateComparePassword(e)
-    ) {
+
+    if (isValid) {
         window.location.hash = 'chat'
     }
 }

@@ -3,6 +3,10 @@ import { Avatar, Button, Input, InputField, Link } from '@shared/partials';
 import { ChatMessages } from '@widgets/ChatMessages';
 import { Message } from '@widgets/Message';
 import { ChatDate } from '@shared/partials/ChatDate';
+import { Textarea } from '@shared/partials/Textarea';
+import { validator } from '@shared/lib/Validator';
+import { Form } from '@shared/partials/Form';
+import { MessagesForm } from '@widgets/MessagesForm';
 import { DialogItem } from '../../widgets/DialogItem';
 import ChatPageTemplate from './ChatPage.hbs?raw';
 import { IChatPageProps } from './model';
@@ -37,6 +41,38 @@ const messages = [
     }),
 ]
 
+const footerForm = new Form({
+    className: 'chat__footer-form',
+    formContent: new MessagesForm({
+        footerAttachInput: new InputField({
+            id: 'chat_attach_file',
+            className: 'input-field__file input-field__file-icon chat__attach-file',
+            label: '',
+            input: new Input({
+                type: 'file',
+                name: 'chat_attach_file',
+                className: 'input-field__element',
+            }),
+        }),
+        footerTextarea: new Textarea({
+            className: 'chat__footer-textarea',
+            name: 'message',
+            id: 'message',
+            placeholder: 'Сообщение',
+            events: {
+                blur: validateMessage,
+            },
+        }),
+        footerSentBtn: new Button({
+            className: 'button_icon button_arrow button_arrow_right',
+            type: 'submit',
+        }),
+    }),
+    events: {
+        submit: validateMessage,
+    },
+})
+
 const chatMessages = new ChatMessages({
     headerAvatar: new Avatar({
         src: 'https://via.placeholder.com/50x50',
@@ -47,22 +83,29 @@ const chatMessages = new ChatMessages({
         className: 'button_icon button_clear button_settings chat__header-settings',
         type: 'button',
     }),
-    footerAttachInput: new InputField({
-        id: 'chat_attach_file',
-        className: 'input-field__file input-field__file-icon chat__attach-file',
-        label: '',
-        input: new Input({
-            type: 'file',
-            name: 'chat_attach_file',
-            className: 'input-field__element',
-        }),
-    }),
-    footerSentBtn: new Button({
-        className: 'button_icon button_arrow button_arrow_right',
-        type: 'submit',
-    }),
     messages,
+    footerForm,
+
 })
+function validateMessage(e: Event) {
+    e.preventDefault()
+    const textareaComponent = footerForm.children.formContent.children.footerTextarea
+    const textarea = textareaComponent.getContent() as HTMLTextAreaElement
+    const result = validator.checkMessage(textarea.value)
+
+    if (typeof result === 'string') {
+        textareaComponent.setProps({
+            placeholder: 'Сообщение не должно быть пустым',
+            value: '',
+        })
+        return false
+    }
+    textareaComponent.setProps({
+        placeholder: 'Сообщение',
+        value: textarea.value,
+    })
+    return true
+}
 
 export const chatPage = new ChatPage({
     dialogsHeaderLink: new Link({
@@ -115,7 +158,3 @@ export const chatPage = new ChatPage({
     ],
     chat: chatMessages,
 })
-
-function openChat() {
-
-}
