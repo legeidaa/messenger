@@ -1,3 +1,4 @@
+/^([a-z0-9_.-]+)@([a-z0-9_.-]+)\.([a-z.])$/.test('pochta@yandex.ru')
 class Validator {
     private patterns: {
         [key: string]: RegExp
@@ -8,7 +9,7 @@ class Validator {
             notOnlyDigits: /(?!^\d+$)^.+$/,
             name: /^[A-Z | А-Я][a-zA-Zа-яА-Я-]+$/,
             login: /^[a-z0-9_-]{3,20}$/,
-            email: /^([a-z0-9_.-]+)@([a-z0-9_.-]+)\.([a-z.])$/,
+            email: /^([a-z0-9_.-]+)@([a-z0-9_.-]+)\.([a-z.]+)$/,
             password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,40}$/,
             phone: /^\+?[0-9]{10,15}$/,
             message: /^(?!\s*$).+/,

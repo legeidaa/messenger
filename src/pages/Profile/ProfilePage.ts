@@ -1,9 +1,12 @@
 import { Block } from '@shared/lib/Block'
-import { Avatar, Button, Link, Modal, ProfileDataRow } from '@shared/partials'
+import { Avatar, Button, Input, Link, Modal, ProfileDataRow } from '@shared/partials'
 import avatarSkeletonSrc from '@assets/avatar-skeleton.svg'
 import { changeAvatarModal } from '@widgets/ChangeAvatarModal'
+import { Form } from '@shared/partials/Form'
+import type { IFormProps } from '@shared/partials/Form'
 import ProfileTemplate from './ProfilePage.hbs?raw'
 import { IProfilePageProps } from './model'
+import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName } from './validation'
 
 export class ProfilePage extends Block {
     constructor(props: IProfilePageProps) {
@@ -15,66 +18,107 @@ export class ProfilePage extends Block {
     }
 
     componentDidUpdate(oldProps: IProfilePageProps, newProps: IProfilePageProps): boolean {
-        if (newProps.canChangeData) {
-            // profileDataInfo.
-            console.log('can change data')
-        }
         return true;
     }
 }
 
-const mailRow = new ProfileDataRow({
+export const mailRow = new ProfileDataRow({
     id: 'profile_email',
-    value: 'pochta@yandex.ru',
-    name: 'email',
-    type: 'email',
     label: 'Почта',
-    readonly: true,
+    input: new Input({
+        className: 'profile__data-input',
+        id: 'profile_email',
+        value: 'pochta@yandex.ru',
+        placeholder: 'Ваша почта',
+        name: 'email',
+        type: 'email',
+        readonly: true,
+        events: {
+            blur: validateEmail,
+        },
+    }),
 })
 
-const loginRow = new ProfileDataRow({
+export const loginRow = new ProfileDataRow({
     id: 'profile_login',
-    value: 'ivanivanov',
-    name: 'login',
-    type: 'text',
     label: 'Логин',
-    readonly: true,
+    input: new Input({
+        className: 'profile__data-input',
+        id: 'profile_login',
+        value: 'ivanivanov',
+        placeholder: 'Ваш логин',
+        name: 'login',
+        type: 'text',
+        readonly: true,
+        events: {
+            blur: validateLogin,
+        },
+    }),
 })
 
-const nameRow = new ProfileDataRow({
+export const nameRow = new ProfileDataRow({
     id: 'profile_first_name',
-    value: 'Иван',
-    name: 'first_name',
-    type: 'text',
     label: 'Имя',
-    readonly: true,
+    input: new Input({
+        className: 'profile__data-input',
+        id: 'profile_first_name',
+        value: 'Иван',
+        placeholder: 'Ваше имя',
+        name: 'first_name',
+        type: 'text',
+        readonly: true,
+        events: {
+            blur: validateName,
+        },
+    }),
 })
 
-const secondNameRow = new ProfileDataRow({
+export const secondNameRow = new ProfileDataRow({
     id: 'profile_second_name',
-    value: 'Иванов',
-    name: 'second_name',
-    type: 'text',
     label: 'Фамилия',
-    readonly: true,
+    input: new Input({
+        className: 'profile__data-input',
+        id: 'profile_second_name',
+        value: 'Иванов',
+        placeholder: 'Ваше имя',
+        name: 'second_name',
+        type: 'text',
+        readonly: true,
+        events: {
+            blur: validateSecondName,
+        },
+    }),
 })
 
-const displayNameRow = new ProfileDataRow({
+export const displayNameRow = new ProfileDataRow({
     id: 'profile_display_name',
-    value: 'Иван',
-    name: 'display_name',
-    type: 'text',
     label: 'Имя в чате',
-    readonly: true,
+    input: new Input({
+        className: 'profile__data-input',
+        id: 'profile_display_name',
+        value: 'Иван',
+        placeholder: 'Имя в чате',
+        name: 'display_name',
+        type: 'text',
+        readonly: true,
+    }),
 })
 
-const phoneRow = new ProfileDataRow({
+export const phoneRow = new ProfileDataRow({
     id: 'profile_phone',
-    value: '+7 (909) 967 30 30',
-    name: 'phone',
-    type: 'tel',
     label: 'Телефон',
-    readonly: true,
+    input: new Input({
+        className: 'profile__data-input',
+        id: 'profile_phone',
+        value: '+7 (909) 967 30 30',
+        placeholder: 'Ваш телефон',
+        name: 'phone',
+        type: 'tel',
+        readonly: true,
+        events: {
+            blur: validatePhone,
+        },
+    }),
 })
 
 const profileDataInfo = [
@@ -86,31 +130,60 @@ const profileDataInfo = [
     phoneRow,
 ]
 
-const oldPasswordRow = new ProfileDataRow({
+export const oldPasswordRow = new ProfileDataRow({
     id: 'profile_old_password',
-    name: 'oldPassword',
-    type: 'password',
     label: 'Старый пароль',
-    placeholder: '***',
-    readonly: false,
+    input: new Input({
+        className: 'profile__data-input',
+        id: 'profile_old_password',
+        value: '***',
+        placeholder: 'Старый пароль',
+        name: 'oldPassword',
+        type: 'password',
+        readonly: false,
+        events: {
+            blur: (e) => {
+                validatePassword(e, oldPasswordRow, 'Старый пароль')
+            },
+        },
+    }),
 })
 
-const newPasswordRow = new ProfileDataRow({
+export const newPasswordRow = new ProfileDataRow({
     id: 'profile_new_password',
-    name: 'newPassword',
-    type: 'password',
     label: 'Новый пароль',
-    placeholder: '***',
-    readonly: false,
+    input: new Input({
+        className: 'profile__data-input',
+        id: 'profile_new_password',
+        value: '1234',
+        placeholder: 'Новый пароль',
+        name: 'newPassword',
+        type: 'password',
+        readonly: false,
+        events: {
+            blur: (e) => {
+                validatePassword(e, newPasswordRow, 'Новый пароль')
+                validateComparePassword(e)
+            },
+        },
+    }),
 })
 
-const repeatNewPasswordRow = new ProfileDataRow({
+export const repeatNewPasswordRow = new ProfileDataRow({
     id: 'profile_repeat_password',
-    name: 'repeatNewPassword',
-    type: 'password',
     label: 'Повторите новый пароль',
-    placeholder: '***',
-    readonly: false,
+    input: new Input({
+        className: 'profile__data-input',
+        id: 'profile_repeat_password',
+        value: '12345',
+        placeholder: 'Повторите новый пароль',
+        name: 'repeatNewPassword',
+        type: 'password',
+        readonly: false,
+        events: {
+            blur: validateComparePassword,
+        },
+    }),
 })
 
 const profileDataPass = [
@@ -167,10 +240,12 @@ const exitRow = new ProfileDataRow({
 const saveButton = new Button({
     className: 'profile__data-save',
     text: 'Сохранить',
+    type: 'submit',
     events: {
         click: (e: Event) => {
             e.preventDefault()
-            saveData()
+            const profileForm = form.getContent() as HTMLFormElement
+            profileForm.requestSubmit()
         },
     },
 })
@@ -181,6 +256,30 @@ const profileFooterContent = [
     exitRow,
 ]
 
+interface IProfilePageFormProps extends IFormProps {
+    canChangeData: false,
+    canChangePassword: false,
+}
+
+const formProps: IProfilePageFormProps = {
+    className: 'profile__form profile__data',
+    id: 'profile_form',
+    formContent: profileDataInfo,
+    canChangeData: false,
+    canChangePassword: false,
+    events: {
+        submit: (e) => {
+            e.preventDefault()
+            const data = new FormData(e.target as HTMLFormElement)
+            const formDataObj = Object.fromEntries(data.entries())
+            console.log(formDataObj)
+
+            saveData()
+        },
+    },
+}
+const form = new Form(formProps)
+
 export const profilePage = new ProfilePage({
     asideButton: new Button({
         className: 'button_icon button_arrow button_arrow_left',
@@ -190,10 +289,8 @@ export const profilePage = new ProfilePage({
         profileAvatar: true,
         src: avatarSkeletonSrc,
     }),
-    canChangeData: false,
-    canChangePassword: false,
     profileName: 'Иван',
-    profileData: profileDataInfo,
+    form,
     profileFooter: profileFooterContent,
     modal: new Modal({
         className: 'modal_small',
@@ -203,12 +300,11 @@ export const profilePage = new ProfilePage({
 })
 
 function changeProfileData() {
-    console.log('change profile data')
-
     profileDataInfo.forEach((row) => {
-        console.log(row.props.readonly);
-
-        row.setProps({
+        // row.setProps({
+        //     readonly: false,
+        // })
+        row.children.input.setProps({
             readonly: false,
         })
     })
@@ -228,10 +324,11 @@ function changePassword() {
     const newProfileFooterContent = [
         saveButton,
     ]
-
-    profilePage.setProps({
-        profileData: profileDataPass,
+    form.setProps({
+        formContent: profileDataPass,
         canChangePassword: true,
+    })
+    profilePage.setProps({
         profileFooter: newProfileFooterContent,
     })
 }
@@ -240,12 +337,10 @@ function exit() {
     console.log('exit')
 }
 function saveData() {
-    console.log('save data')
-
     // сохраняем данные в стор, потом меняем состояние
 
     profileDataInfo.forEach((row) => {
-        row.setProps({
+        row.children.input.setProps({
             readonly: true,
         })
     })
@@ -254,10 +349,13 @@ function saveData() {
         changePasswordRow,
         exitRow,
     ]
-    profilePage.setProps({
-        profileData: profileDataInfo,
+
+    form.setProps({
+        formContent: profileDataInfo,
         canChangePassword: false,
         canChangeData: false,
+    })
+    profilePage.setProps({
         profileFooter: newProfileFooterContent,
     })
 }

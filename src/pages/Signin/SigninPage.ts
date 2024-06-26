@@ -5,10 +5,9 @@ import { Button } from '@shared/partials/Button';
 import { Link } from '@shared/partials';
 import { SigninForm } from '@widgets/SigninForm';
 import { Form } from '@shared/partials/Form';
-import { validator } from '@shared/lib/Validator';
-import { validateHelper } from '@shared/utils/validateHelper';
 import SigninPageTemplate from './SigninPage.hbs?raw';
 import { ISigninPageProps } from './model';
+import { validateLogin, validatePassword, validateSubmit } from './validation';
 
 export class SigninPage extends Block {
     constructor(props: ISigninPageProps) {
@@ -20,7 +19,7 @@ export class SigninPage extends Block {
     }
 }
 
-const inputLogin = new InputField({
+export const inputLogin = new InputField({
     className: 'login-page__input',
     id: 'login',
     label: 'Логин',
@@ -35,7 +34,7 @@ const inputLogin = new InputField({
         },
     }),
 })
-const inputPassword = new InputField({
+export const inputPassword = new InputField({
     className: 'login-page__input',
     id: 'password',
     label: 'Пароль',
@@ -77,33 +76,6 @@ const form = new Form({
         },
     },
 })
-
-function validateLogin(e: Event) {
-    e.preventDefault()
-    const input = inputLogin.children.input.getContent() as HTMLInputElement
-    const result = validator.checkLogin(input.value)
-
-    return validateHelper(inputLogin, result)
-}
-
-function validatePassword(e: Event) {
-    e.preventDefault()
-    const input = inputPassword.children.input.getContent() as HTMLInputElement
-    const result = validator.checkPassword(input.value)
-
-    return validateHelper(inputPassword, result)
-}
-
-function validateSubmit(e: Event) {
-    e.preventDefault()
-
-    validateLogin(e)
-    validatePassword(e)
-
-    if (validateLogin(e) && validatePassword(e)) {
-        window.location.hash = 'chat'
-    }
-}
 
 export const signinPage = new SigninPage({
     form,

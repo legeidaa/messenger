@@ -5,10 +5,9 @@ import { Button } from '@shared/partials/Button';
 import { Link } from '@shared/partials';
 import { SignupForm } from '@widgets/SignupForm';
 import { Form } from '@shared/partials/Form';
-import { validator } from '@shared/lib/Validator';
-import { validateHelper } from '@shared/utils/validateHelper';
 import SigninPageTemplate from './SignupPage.hbs?raw';
 import { ISignupPageProps } from './model';
+import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName, validateSubmit } from './validation';
 
 export class SignupPage extends Block {
     constructor(props: ISignupPageProps) {
@@ -20,7 +19,7 @@ export class SignupPage extends Block {
     }
 }
 
-const inputEmail = new InputField({
+export const inputEmail = new InputField({
     className: 'login-page__input',
     id: 'email',
     label: 'Почта',
@@ -36,7 +35,7 @@ const inputEmail = new InputField({
     }),
 })
 
-const inputLogin = new InputField({
+export const inputLogin = new InputField({
     className: 'login-page__input',
     id: 'login',
     label: 'Логин',
@@ -52,7 +51,7 @@ const inputLogin = new InputField({
     }),
 })
 
-const inputFirstName = new InputField({
+export const inputFirstName = new InputField({
     className: 'login-page__input',
     id: 'first_name',
     label: 'Имя',
@@ -68,7 +67,7 @@ const inputFirstName = new InputField({
     }),
 })
 
-const inputSecondName = new InputField({
+export const inputSecondName = new InputField({
     className: 'login-page__input',
     id: 'second_name',
     label: 'Фамилия',
@@ -84,7 +83,7 @@ const inputSecondName = new InputField({
     }),
 })
 
-const inputPhone = new InputField({
+export const inputPhone = new InputField({
     className: 'login-page__input',
     id: 'phone',
     label: 'Телефон',
@@ -100,7 +99,7 @@ const inputPhone = new InputField({
     }),
 })
 
-const inputPassword = new InputField({
+export const inputPassword = new InputField({
     className: 'login-page__input',
     id: 'password',
     error: ' ',
@@ -120,7 +119,7 @@ const inputPassword = new InputField({
     }),
 })
 
-const inputPasswordRepeat = new InputField({
+export const inputPasswordRepeat = new InputField({
     className: 'login-page__input',
     id: 'password_repeat',
     error: 'Пароли не совпадают',
@@ -170,89 +169,6 @@ const form = new Form({
         },
     },
 })
-
-function validateEmail(e: Event) {
-    e.preventDefault()
-    const input = inputEmail.children.input.getContent() as HTMLInputElement
-    const result = validator.checkEmail(input.value)
-
-    return validateHelper(inputEmail, result)
-}
-
-function validateLogin(e: Event) {
-    e.preventDefault()
-    const input = inputLogin.children.input.getContent() as HTMLInputElement
-    const result = validator.checkLogin(input.value)
-
-    return validateHelper(inputLogin, result)
-}
-
-function validateName(e?: Event) {
-    if (e) {
-        e.preventDefault()
-    }
-
-    const input = inputFirstName.children.input.getContent() as HTMLInputElement
-    const result = validator.checkName(input.value)
-
-    return validateHelper(inputFirstName, result)
-}
-
-function validateSecondName(e: Event) {
-    e.preventDefault()
-    const input = inputSecondName.children.input.getContent() as HTMLInputElement
-    const result = validator.checkName(input.value)
-
-    return validateHelper(inputSecondName, result)
-}
-
-function validatePhone(e: Event) {
-    e.preventDefault()
-    const input = inputPhone.children.input.getContent() as HTMLInputElement
-    const result = validator.checkPhone(input.value)
-
-    return validateHelper(inputPhone, result)
-}
-function validatePassword(e: Event) {
-    e.preventDefault()
-    const input = inputPassword.children.input.getContent() as HTMLInputElement
-    const result = validator.checkPassword(input.value)
-
-    return validateHelper(inputPassword, result)
-}
-
-function validateComparePassword(e: Event) {
-    const passInput = inputPassword.children.input.getContent() as HTMLInputElement
-    const passInputRepeat = inputPasswordRepeat.children.input.getContent() as HTMLInputElement
-
-    const result = validator.comparePasswords(passInput.value, passInputRepeat.value)
-
-    return validateHelper(inputPasswordRepeat, result)
-}
-
-function validateSubmit(e: Event) {
-    e.preventDefault()
-
-    validateEmail(e)
-    validateLogin(e)
-    validateName()
-    validateSecondName(e)
-    validatePhone(e)
-    validatePassword(e)
-    validateComparePassword(e)
-
-    const isValid = validateEmail(e)
-        && validateLogin(e)
-        && validateName()
-        && validateSecondName(e)
-        && validatePhone(e)
-        && validatePassword(e)
-        && validateComparePassword(e)
-
-    if (isValid) {
-        window.location.hash = 'chat'
-    }
-}
 
 export const signupPage = new SignupPage({
     form,

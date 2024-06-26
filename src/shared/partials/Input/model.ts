@@ -8,4 +8,5 @@ export interface IInputProps extends IBlockProps {
     className?: string;
     value?: string;
     placeholder?: string;
+    readonly?: boolean;
 }

@@ -69,7 +69,13 @@ const footerForm = new Form({
         }),
     }),
     events: {
-        submit: validateMessage,
+        submit: (e) => {
+            validateMessage(e)
+
+            const data = new FormData(e.target as HTMLFormElement)
+            const formDataObj = Object.fromEntries(data.entries())
+            console.log(formDataObj)
+        },
     },
 })
 
