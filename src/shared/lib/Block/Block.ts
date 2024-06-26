@@ -111,15 +111,10 @@ export class Block {
         if (!nextProps) {
             return;
         }
-        // console.log(this.lists.profileData[0].props.type)
         const { props, lists } = this._getChildren(nextProps)
 
         Object.assign(this.props, props)
         Object.assign(this.lists, lists)
-        // Object.assign(this.children, children)
-        // console.log(this.lists.profileData[0].props.type)
-
-        // console.log(this.props)
     }
 
     getContent() {

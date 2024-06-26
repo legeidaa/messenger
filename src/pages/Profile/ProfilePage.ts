@@ -110,7 +110,7 @@ export const phoneRow = new ProfileDataRow({
     input: new Input({
         className: 'profile__data-input',
         id: 'profile_phone',
-        value: '+7 (909) 967 30 30',
+        value: '+79099673030',
         placeholder: 'Ваш телефон',
         name: 'phone',
         type: 'tel',
@@ -274,7 +274,7 @@ const formProps: IProfilePageFormProps = {
             const formDataObj = Object.fromEntries(data.entries())
             console.log(formDataObj)
 
-            saveData()
+            saveData(e)
         },
     },
 }
@@ -283,7 +283,7 @@ const form = new Form(formProps)
 export const profilePage = new ProfilePage({
     asideButton: new Button({
         className: 'button_icon button_arrow button_arrow_left',
-        href: '/',
+        href: '#',
     }),
     avatar: new Avatar({
         profileAvatar: true,
@@ -301,9 +301,6 @@ export const profilePage = new ProfilePage({
 
 function changeProfileData() {
     profileDataInfo.forEach((row) => {
-        // row.setProps({
-        //     readonly: false,
-        // })
         row.children.input.setProps({
             readonly: false,
         })
@@ -311,16 +308,15 @@ function changeProfileData() {
     const newProfileFooterContent = [
         saveButton,
     ]
-
-    profilePage.setProps({
+    form.setProps({
         canChangeData: true,
+    })
+    profilePage.setProps({
         profileFooter: newProfileFooterContent,
     })
 }
 
 function changePassword() {
-    console.log('change password')
-
     const newProfileFooterContent = [
         saveButton,
     ]
@@ -336,8 +332,43 @@ function changePassword() {
 function exit() {
     console.log('exit')
 }
-function saveData() {
+function saveData(e: Event) {
     // сохраняем данные в стор, потом меняем состояние
+    if (form.props.canChangePassword) {
+        if (
+            (
+                validatePassword(e, newPasswordRow, 'Новый пароль')
+                && validatePassword(e, oldPasswordRow, 'Старый пароль')
+                && validateComparePassword(e)
+            ) === false
+        ) {
+            validatePassword(e, newPasswordRow, 'Новый пароль')
+            validatePassword(e, oldPasswordRow, 'Старый пароль')
+            validateComparePassword(e)
+
+            return
+        }
+    }
+
+    if (form.props.canChangeData) {
+        if (
+            (
+                validateEmail(e)
+                && validateName(e)
+                && validatePhone(e)
+                && validateLogin(e)
+                && validateSecondName(e)
+            ) === false
+        ) {
+            validateEmail(e)
+            validateName(e)
+            validatePhone(e)
+            validateLogin(e)
+            validateSecondName(e)
+
+            return
+        }
+    }
 
     profileDataInfo.forEach((row) => {
         row.children.input.setProps({

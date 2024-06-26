@@ -24,14 +24,3 @@ export const errorClientPage = new ErrorClientPage({
         message: 'Не туда попали',
     }),
 })
-
-// function render(query: string, block: Block) {
-//     const root = document.querySelector(query)
-//     root?.appendChild(block.getContent())
-//     block.dispatchComponentDidMount()
-//     return root;
-// }
-
-// setTimeout(() => {
-//     render('#app', errorClientPage)
-// }, 1)

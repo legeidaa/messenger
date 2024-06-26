@@ -1,6 +1,6 @@
 import { validator } from '@shared/lib/Validator'
 import { ProfileDataRow } from '@shared/partials'
-import { displayNameRow, loginRow, mailRow, nameRow, newPasswordRow, oldPasswordRow, phoneRow, repeatNewPasswordRow, secondNameRow } from './ProfilePage'
+import { loginRow, mailRow, nameRow, newPasswordRow, phoneRow, repeatNewPasswordRow, secondNameRow } from './ProfilePage'
 
 function validateHelper(inputField: ProfileDataRow, result: boolean | string, standartLabel: string) {
     if (typeof result === 'string') {
@@ -68,27 +68,3 @@ export function validateComparePassword(e: Event) {
 
     return validateHelper(repeatNewPasswordRow, result, 'Повторите пароль')
 }
-
-// export function validateSubmit(e: Event) {
-//     e.preventDefault()
-
-//     validateEmail(e)
-//     validateLogin(e)
-//     validateName()
-//     validateSecondName(e)
-//     validatePhone(e)
-//     validatePassword(e)
-//     validateComparePassword(e)
-
-//     const isValid = validateEmail(e)
-//         && validateLogin(e)
-//         && validateName()
-//         && validateSecondName(e)
-//         && validatePhone(e)
-//         && validatePassword(e)
-//         && validateComparePassword(e)
-
-//     if (isValid) {
-//         window.location.hash = 'chat'
-//     }
-// }

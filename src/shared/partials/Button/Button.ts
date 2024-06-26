@@ -13,11 +13,9 @@ export class Button extends Block {
     }
 
     componentDidMount(props?: object | undefined): void {
-        // console.log('button mounted', props);
     }
 
     componentDidUpdate(oldProps: object, newProps: object): boolean {
-        // console.log('button updated', oldProps, newProps);
         return true;
     }
 }

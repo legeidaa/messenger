@@ -1,4 +1,3 @@
-/^([a-z0-9_.-]+)@([a-z0-9_.-]+)\.([a-z.])$/.test('pochta@yandex.ru')
 class Validator {
     private patterns: {
         [key: string]: RegExp

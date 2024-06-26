@@ -1,9 +1,6 @@
 import '@/app/styles/style.scss'
 import * as Pages from '@pages/index'
-import { Block } from 'shared/lib/Block';
-import { registerHelpers } from '../shared/helpers/index';
-
-registerHelpers()
+import { Block } from '@shared/lib/Block';
 
 const app = document.querySelector('#app') as HTMLElement
 
@@ -45,7 +42,7 @@ function navigate(page: PagesNames) {
 
 function changePage() {
     const currentHash = window.location.hash.split('#')[1]
-    if (`${window.location.origin}/` === window.location.href) {
+    if (`${window.location.origin}/` === window.location.href || window.location.hash === '') {
         navigate(PagesNames.MAIN)
     }
 

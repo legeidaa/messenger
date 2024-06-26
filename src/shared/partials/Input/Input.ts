@@ -13,11 +13,9 @@ export class Input extends Block {
     }
 
     componentDidMount(props?: object | undefined): void {
-        // console.log('button mounted', props);
     }
 
     componentDidUpdate(oldProps: object, newProps: object): boolean {
-        // console.log('input updated', oldProps, newProps);
         return true;
     }
 }

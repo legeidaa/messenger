@@ -13,7 +13,6 @@ export class InputField extends Block {
     }
 
     componentDidMount(props?: object | undefined): void {
-        // console.log('button mounted', props);
     }
 
     componentDidUpdate(oldProps: object, newProps: object): boolean {
