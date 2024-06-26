@@ -1,17 +1,10 @@
 {
-    "include": [
-        "./src/**/*.ts",
-    ],
     "compilerOptions": {
         "outDir": "./dist/",
         "target": "ESNext",
         "useDefineForClassFields": true,
         "module": "ESNext",
-        "lib": [
-            "ESNext",
-            "DOM",
-            "dom.iterable"
-        ],
+        "lib": ["ESNext","DOM","dom.iterable"],
         "strict": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
@@ -27,30 +20,14 @@
         "moduleResolution": "node",
         "strictPropertyInitialization": false,
         "paths": {
-            "*": [
-                "./src/*"
-            ],
-            "@/*": [
-                "./src/*"
-            ],
-            "@assets/*": [
-                "./src/shared/assets/*"
-            ],
-            "@styles/*": [
-                "./src/shared/styles/*"
-            ],
-            "@pages/*": [
-                "./src/pages/*"
-            ],
-            "@partials/*": [
-                "./src/shared/partials/*"
-            ],
-            "@shared/*": [
-                "./src/shared/*"
-            ],
-            "@widgets/*": [
-                "./src/widgets/*"
-            ],
+            "*": ["./src/*"],
+            "@/*": ["./src/*"],
+            "@assets/*": ["./src/shared/assets/*"],
+            "@styles/*": ["./src/shared/styles/*"],
+            "@pages/*": ["./src/pages/*"],
+            "@partials/*": ["./src/shared/partials/*"],
+            "@shared/*": ["./src/shared/*"],
+            "@widgets/*": ["./src/widgets/*"],
         }
     }
 }
