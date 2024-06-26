@@ -1,4 +1,4 @@
-import { Block, IBlockProps } from '../../lib/Block';
+import { Block, IBlockProps } from '../../lib/Block/index.ts';
 
 export interface IFormProps extends IBlockProps {
     className?: string

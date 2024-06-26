@@ -1,15 +1,15 @@
-import { Block } from '@shared/lib/Block'
-import { Avatar, Button, Input, InputField, Link } from '@shared/partials';
-import { ChatMessages } from '@widgets/ChatMessages';
-import { Message } from '@widgets/Message';
-import { ChatDate } from '@shared/partials/ChatDate';
-import { Textarea } from '@shared/partials/Textarea';
-import { validator } from '@shared/lib/Validator';
-import { Form } from '@shared/partials/Form';
-import { MessagesForm } from '@widgets/MessagesForm';
-import { DialogItem } from '../../widgets/DialogItem';
+import { Block } from '@shared/lib/Block/index.ts'
+import { Avatar, Button, Input, InputField, Link } from '@shared/partials/index.ts';
+import { ChatMessages } from '@widgets/ChatMessages/index.ts';
+import { Message } from '@widgets/Message/index.ts';
+import { ChatDate } from '@shared/partials/ChatDate/index.ts';
+import { Textarea } from '@shared/partials/Textarea/index.ts';
+import { validator } from '@shared/lib/Validator.ts';
+import { Form } from '@shared/partials/Form/index.ts';
+import { MessagesForm } from '@widgets/MessagesForm/index.ts';
+import { DialogItem } from '../../widgets/DialogItem/index.ts';
 import ChatPageTemplate from './ChatPage.hbs?raw';
-import { IChatPageProps } from './model';
+import { IChatPageProps } from './model.ts';
 
 export class ChatPage extends Block {
     constructor(props: IChatPageProps) {
@@ -69,7 +69,7 @@ const footerForm = new Form({
         }),
     }),
     events: {
-        submit: (e) => {
+        submit: (e: Event) => {
             validateMessage(e)
 
             const data = new FormData(e.target as HTMLFormElement)

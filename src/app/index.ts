@@ -1,6 +1,6 @@
 import '@/app/styles/style.scss'
-import * as Pages from '@pages/index'
-import { Block } from '@shared/lib/Block';
+import * as Pages from '@pages/index.ts'
+import { Block } from '@shared/lib/Block/index.ts';
 
 const app = document.querySelector('#app') as HTMLElement
 

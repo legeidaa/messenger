@@ -1,8 +1,8 @@
-import { Block } from '@shared/lib/Block'
-import { ErrorInfo } from '@shared/partials/ErrorInfo';
-import { Link } from '@shared/partials/Link';
+import { Block } from '@shared/lib/Block/index.ts'
+import { ErrorInfo } from '@shared/partials/ErrorInfo/index.ts';
+import { Link } from '@shared/partials/Link/index.ts';
 import ErrorClientPageTemplate from './ErrorClientPage.hbs?raw';
-import { IErrorClientPageProps } from './model';
+import { IErrorClientPageProps } from './model.ts';
 
 export class ErrorClientPage extends Block {
     constructor(props: IErrorClientPageProps) {

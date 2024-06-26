@@ -1,4 +1,4 @@
 import './ProfilePage.scss'
 
-export { ProfilePage, profilePage } from './ProfilePage'
-export type { IProfilePageProps } from './model'
+export { ProfilePage, profilePage } from './ProfilePage.ts'
+export type { IProfilePageProps } from './model.ts'

@@ -1,12 +1,12 @@
-import { Block } from '@shared/lib/Block'
-import { Avatar, Button, Input, Link, Modal, ProfileDataRow } from '@shared/partials'
+import { Avatar, Button, Input, Link, Modal, ProfileDataRow } from '@shared/partials/index.ts'
 import avatarSkeletonSrc from '@assets/avatar-skeleton.svg'
-import { changeAvatarModal } from '@widgets/ChangeAvatarModal'
-import { Form } from '@shared/partials/Form'
-import type { IFormProps } from '@shared/partials/Form'
+import { changeAvatarModal } from '@widgets/ChangeAvatarModal/index.ts'
+import { Form } from '@shared/partials/Form/index.ts'
+import type { IFormProps } from '@shared/partials/Form/index.ts'
+import { Block } from '@shared/lib/Block/index.ts'
 import ProfileTemplate from './ProfilePage.hbs?raw'
-import { IProfilePageProps } from './model'
-import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName } from './validation'
+import { IProfilePageProps } from './model.ts'
+import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName } from './validation.ts'
 
 export class ProfilePage extends Block {
     constructor(props: IProfilePageProps) {
@@ -142,7 +142,7 @@ export const oldPasswordRow = new ProfileDataRow({
         type: 'password',
         readonly: false,
         events: {
-            blur: (e) => {
+            blur: (e: Event) => {
                 validatePassword(e, oldPasswordRow, 'Старый пароль')
             },
         },
@@ -161,7 +161,7 @@ export const newPasswordRow = new ProfileDataRow({
         type: 'password',
         readonly: false,
         events: {
-            blur: (e) => {
+            blur: (e: Event) => {
                 validatePassword(e, newPasswordRow, 'Новый пароль')
                 validateComparePassword(e)
             },

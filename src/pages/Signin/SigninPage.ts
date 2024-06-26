@@ -1,13 +1,13 @@
-import { Block } from '@shared/lib/Block'
-import { InputField } from '@shared/partials/InputField';
-import { Input } from '@shared/partials/Input';
-import { Button } from '@shared/partials/Button';
-import { Link } from '@shared/partials';
-import { SigninForm } from '@widgets/SigninForm';
-import { Form } from '@shared/partials/Form';
+import { Block } from '@shared/lib/Block/index.ts'
+import { InputField } from '@shared/partials/InputField/index.ts';
+import { Input } from '@shared/partials/Input/index.ts';
+import { Button } from '@shared/partials/Button/index.ts';
+import { Link } from '@shared/partials/index.ts';
+import { SigninForm } from '@widgets/SigninForm/index.ts';
+import { Form } from '@shared/partials/Form/index.ts';
 import SigninPageTemplate from './SigninPage.hbs?raw';
-import { ISigninPageProps } from './model';
-import { validateLogin, validatePassword, validateSubmit } from './validation';
+import { ISigninPageProps } from './model.ts';
+import { validateLogin, validatePassword, validateSubmit } from './validation.ts';
 
 export class SigninPage extends Block {
     constructor(props: ISigninPageProps) {

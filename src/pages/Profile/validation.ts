@@ -1,6 +1,6 @@
-import { validator } from '@shared/lib/Validator'
-import { ProfileDataRow } from '@shared/partials'
-import { loginRow, mailRow, nameRow, newPasswordRow, phoneRow, repeatNewPasswordRow, secondNameRow } from './ProfilePage'
+import { validator } from '@shared/lib/Validator.ts'
+import { ProfileDataRow } from '@shared/partials/index.ts'
+import { loginRow, mailRow, nameRow, newPasswordRow, phoneRow, repeatNewPasswordRow, secondNameRow } from './ProfilePage.ts'
 
 function validateHelper(inputField: ProfileDataRow, result: boolean | string, standartLabel: string) {
     if (typeof result === 'string') {

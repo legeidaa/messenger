@@ -1,7 +1,7 @@
 import * as Handlebars from 'handlebars'
 import { v4 as makeUUID } from 'uuid';
-import EventBus from '../EventBus';
-import { IBlockProps } from './model';
+import EventBus from '../EventBus.ts';
+import { IBlockProps } from './model.ts';
 
 export class Block {
     public static EVENTS = {
@@ -50,7 +50,7 @@ export class Block {
     }
 
     // вызывается в методе render
-    compile(template: string, props: IBlockProps) {
+    public compile(template: string, props: IBlockProps) {
         const propsAndStubs = { ...props };
 
         Object.entries(this.children).forEach(([key, child]) => {

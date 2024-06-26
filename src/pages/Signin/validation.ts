@@ -1,6 +1,6 @@
-import { validator } from '@shared/lib/Validator'
-import { validateHelper } from '@shared/utils/validateHelper'
-import { inputLogin, inputPassword } from './SigninPage'
+import { validator } from '@shared/lib/Validator.ts'
+import { validateHelper } from '@shared/utils/validateHelper.ts'
+import { inputLogin, inputPassword } from './SigninPage.ts'
 
 export function validateLogin(e: Event) {
     e.preventDefault()

@@ -1,5 +1,5 @@
-import { Block, IBlockProps } from '@shared/lib/Block'
-import { Link } from '@shared/partials/Link';
+import { Block, IBlockProps } from '@shared/lib/Block/index.ts'
+import { Link } from '@shared/partials/Link/index.ts';
 import MainPageTemplate from './MainPage.hbs?raw';
 
 export class MainPage extends Block {

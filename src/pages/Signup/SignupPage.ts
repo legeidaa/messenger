@@ -1,13 +1,13 @@
-import { Block } from '@shared/lib/Block'
-import { InputField } from '@shared/partials/InputField';
-import { Input } from '@shared/partials/Input';
-import { Button } from '@shared/partials/Button';
-import { Link } from '@shared/partials';
-import { SignupForm } from '@widgets/SignupForm';
-import { Form } from '@shared/partials/Form';
+import { Block } from '@shared/lib/Block/index.ts'
+import { InputField } from '@shared/partials/InputField/index.ts';
+import { Input } from '@shared/partials/Input/index.ts';
+import { Button } from '@shared/partials/Button/index.ts';
+import { Link } from '@shared/partials/index.ts';
+import { SignupForm } from '@widgets/SignupForm/index.ts';
+import { Form } from '@shared/partials/Form/index.ts';
 import SigninPageTemplate from './SignupPage.hbs?raw';
-import { ISignupPageProps } from './model';
-import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName, validateSubmit } from './validation';
+import { ISignupPageProps } from './model.ts';
+import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName, validateSubmit } from './validation.ts';
 
 export class SignupPage extends Block {
     constructor(props: ISignupPageProps) {
@@ -111,7 +111,7 @@ export const inputPassword = new InputField({
         className: 'input-field__element',
         value: '123',
         events: {
-            blur: (e) => {
+            blur: (e: Event) => {
                 validatePassword(e)
                 validateComparePassword(e)
             },
