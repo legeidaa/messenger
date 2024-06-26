@@ -3,7 +3,6 @@
         "outDir": "./dist/",
         "target": "ESNext",
         "useDefineForClassFields": true,
-        "module": "ESNext",
         "lib": ["ESNext","DOM","dom.iterable"],
         "strict": true,
         "resolveJsonModule": true,
@@ -17,7 +16,7 @@
         "noUnusedParameters": true,
         "noImplicitReturns": true,
         "skipLibCheck": true,
-        "moduleResolution": "node",
+        "moduleResolution": "Bundler",
         "strictPropertyInitialization": false,
         "paths": {
             "*": ["./src/*"],
