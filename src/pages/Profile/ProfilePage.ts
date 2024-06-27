@@ -17,7 +17,7 @@ export class ProfilePage extends Block {
         return this.compile(ProfileTemplate, this.props);
     }
 
-    componentDidUpdate(oldProps: IProfilePageProps, newProps: IProfilePageProps): boolean {
+    componentDidUpdate(): boolean {
         return true;
     }
 }

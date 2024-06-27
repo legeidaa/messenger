@@ -58,7 +58,7 @@ export class Block {
         })
 
         const _tmpId = makeUUID()
-        Object.entries(this.lists).forEach(([key, child]) => {
+        Object.entries(this.lists).forEach(([key]) => {
             propsAndStubs[key] = `<div data-id="__l_${_tmpId}"></div>`;
         });
 
@@ -72,7 +72,8 @@ export class Block {
             stub?.replaceWith(child.getContent())
         })
 
-        Object.entries(this.lists).forEach(([key, child]) => {
+        Object.entries(this.lists).forEach(([key]) => {
+            const child = this.lists[key]
             const listCont = document.createElement('template') as HTMLTemplateElement
             child.forEach((item) => {
                 if (item instanceof Block) {
@@ -135,7 +136,10 @@ export class Block {
         this.eventBus().emit(Block.EVENTS.FLOW_CDM, this.props);
     }
 
-    componentDidMount(props: IBlockProps): void {
+    // componentDidMount(props: IBlockProps)
+    componentDidMount(props: IBlockProps) {
+        if (!props) { return false }
+        return true
     }
 
     // вызывается из-за переопределения свойства set в прокси
@@ -160,6 +164,9 @@ export class Block {
     }
 
     componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps): boolean {
+        if (!oldProps || !newProps) {
+            return false
+        }
         return true;
     }
 
@@ -219,7 +226,7 @@ export class Block {
                 this.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...oldProps }, { ...target })
                 return true
             },
-            deleteProperty: (target, prop: string | symbol) => {
+            deleteProperty: () => {
                 throw new Error('Нет доступа')
             },
         });

@@ -11,11 +11,4 @@ export class Button extends Block {
     render() {
         return this.compile(ButtonTemplate, this.props);
     }
-
-    componentDidMount(props?: object | undefined): void {
-    }
-
-    componentDidUpdate(oldProps: object, newProps: object): boolean {
-        return true;
-    }
 }

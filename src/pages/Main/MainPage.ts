@@ -1,4 +1,4 @@
-import { Block, IBlockProps } from '@shared/lib/Block'
+import { Block } from '@shared/lib/Block'
 import { Link } from '@shared/partials/Link';
 import MainPageTemplate from './MainPage.hbs?raw';
 
@@ -7,7 +7,7 @@ export class MainPage extends Block {
         return this.compile(MainPageTemplate, this.props);
     }
 
-    componentDidMount(props: IBlockProps): void {
+    componentDidMount() {
         if (!this.firstRender) {
             const ol = document.querySelector('.mainpage-links')
             const links = ol?.querySelectorAll('a')
@@ -17,6 +17,7 @@ export class MainPage extends Block {
                 ol?.append(wrapper)
             })
         }
+        return true
     }
 }
 

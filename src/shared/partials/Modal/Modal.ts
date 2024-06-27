@@ -1,4 +1,4 @@
-import { Block, IBlockProps } from '@shared/lib/Block'
+import { Block } from '@shared/lib/Block'
 import { activateModals } from '@shared/utils';
 import ModalTemplate from './Modal.hbs?raw';
 import { IModalProps } from './model';
@@ -12,7 +12,8 @@ export class Modal extends Block {
         return this.compile(ModalTemplate, this.props);
     }
 
-    componentDidMount(props: IBlockProps): void {
+    componentDidMount() {
         activateModals()
+        return true
     }
 }

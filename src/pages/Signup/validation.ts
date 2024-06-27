@@ -52,7 +52,7 @@ export function validatePassword(e: Event) {
     return validateHelper(inputPassword, result)
 }
 
-export function validateComparePassword(e: Event) {
+export function validateComparePassword() {
     const passInput = inputPassword.children.input.getContent() as HTMLInputElement
     const passInputRepeat = inputPasswordRepeat.children.input.getContent() as HTMLInputElement
 
@@ -74,7 +74,7 @@ export function validateSubmit(e: Event) {
     validateSecondName(e)
     validatePhone(e)
     validatePassword(e)
-    validateComparePassword(e)
+    validateComparePassword()
 
     const isValid = validateEmail(e)
         && validateLogin(e)
@@ -82,7 +82,7 @@ export function validateSubmit(e: Event) {
         && validateSecondName(e)
         && validatePhone(e)
         && validatePassword(e)
-        && validateComparePassword(e)
+        && validateComparePassword()
 
     if (isValid) {
         window.location.hash = 'chat'

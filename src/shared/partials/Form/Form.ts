@@ -10,11 +10,4 @@ export class Form extends Block {
     render() {
         return this.compile(FormTemplate, this.props);
     }
-
-    componentDidMount(props?: object | undefined): void {
-    }
-
-    componentDidUpdate(oldProps: object, newProps: object): boolean {
-        return true;
-    }
 }
