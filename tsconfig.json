@@ -1,32 +1,52 @@
 {
     "compilerOptions": {
-        "outDir": "./dist/",
+        "strictPropertyInitialization": false,
         "target": "ESNext",
         "useDefineForClassFields": true,
-        "lib": ["ESNext","DOM","dom.iterable"],
+        "module": "ESNext",
+        "lib": [
+            "ESNext",
+            "DOM",
+            "dom.iterable"
+        ],
+        "moduleResolution": "Node",
         "strict": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "esModuleInterop": true,
         "noEmit": true,
-        "noImplicitAny": true,
-        "sourceMap": true,
-        "strictNullChecks": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
         "skipLibCheck": true,
-        "moduleResolution": "Node",
-        "strictPropertyInitialization": false,
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "strictNullChecks": true,
         "paths": {
-            "*": ["./src/*"],
-            "@/*": ["./src/*"],
-            "@assets/*": ["./src/shared/assets/*"],
-            "@styles/*": ["./src/shared/styles/*"],
-            "@pages/*": ["./src/pages/*"],
-            "@partials/*": ["./src/shared/partials/*"],
-            "@shared/*": ["./src/shared/*"],
-            "@widgets/*": ["./src/widgets/*"],
+            "*": [
+                "./src/*"
+            ],
+            "@/*": [
+                "./src/*"
+            ],
+            "@assets/*": [
+                "./src/shared/assets/*"
+            ],
+            "@styles/*": [
+                "./src/shared/styles/*"
+            ],
+            "@pages/*": [
+                "./src/pages/*"
+            ],
+            "@partials/*": [
+                "./src/shared/partials/*"
+            ],
+            "@shared/*": [
+                "./src/shared/*"
+            ],
+            "@widgets/*": [
+                "./src/widgets/*"
+            ],
         }
     }
 }
