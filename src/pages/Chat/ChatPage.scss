@@ -1,5 +1,5 @@
-@import '@styles/vars.scss';
-@import '@styles/mixins.scss';
+@import '@styles/vars';
+@import '@styles/mixins';
 
 
 .chat-page {
@@ -20,10 +20,11 @@
 
         &-link {
             @include text-12;
+
             color: $gray-dark-1;
             margin-bottom: 25px;
 
-            &:after {
+            &::after {
                 content: url("data:image/svg+xml,%3Csvg width='6' height='10' viewBox='0 0 6 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 9L5 5L1 1' stroke='%23999999'/%3E%3C/svg%3E");
                 height: 10px;
             }
@@ -57,208 +58,6 @@
                 color: $gray-dark-1;
                 font-weight: 500;
 
-            }
-        }
-    }
-}
-
-.dialog-item {
-    padding: 12px 10px;
-    display: flex;
-    border-bottom: 1px solid $border-color;
-    cursor: pointer;
-    transition: $trans-dur background;
-
-    &:hover:not(.dialog-item_current) {
-        background: $gray-light-2;
-    }
-
-    &__avatar {
-        flex-shrink: 0;
-        margin-right: 10px;
-    }
-
-    &__preview {}
-
-    &__name {
-        @include text-13;
-        color: $dark;
-        font-weight: 600;
-        margin-bottom: 4px;
-    }
-
-    &__message {
-        @include text-12;
-        color: $gray-dark-1;
-
-        &-by-you {
-            color: $dark;
-            font-weight: 600;
-            display: inline-block;
-        }
-    }
-
-    &__info {
-        display: flex;
-        flex-direction: column;
-        flex-shrink: 0;
-        margin-left: auto;
-    }
-
-    &__time {
-        @include text-9;
-        color: $gray-dark-1;
-    }
-
-    &__count {
-        margin-top: auto;
-        @include text-11;
-        width: 20px;
-        height: 20px;
-        border-radius: 20px;
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: $white;
-        background: $blue;
-    }
-
-    &_current {
-        background: $blue-light;
-    }
-}
-
-.chat {
-    display: flex;
-    flex-direction: column;
-    max-height: 100vh;
-    // height: 100%;
-    max-width: calc(100% - $dialogs-width);
-
-    &__placeholder {
-        display: none;
-    }
-
-    &__header {
-        display: flex;
-        align-items: center;
-        padding: 10px 20px;
-        border-bottom: 1px solid $border-color;
-
-        &-avatar {
-            margin-right: 10px;
-        }
-    }
-
-    &__name {
-        @include text-13;
-        font-weight: 600;
-        color: $dark;
-
-    }
-
-    &__settings {
-        margin-left: auto;
-    }
-
-    &__messages {
-        flex: 1 1 0;
-        overflow-y: auto;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-
-        &-wrapper {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-
-            &>* {
-                &:first-child {
-                    margin-top: auto;
-                }
-            }
-        }
-
-    }
-
-    &__date {
-        text-align: center;
-        @include text-13;
-        color: $gray-dark-1;
-        margin-bottom: 30px;
-    }
-
-    &__message {
-        background: $gray-light-5;
-        border-radius: 0 12px 12px 12px;
-        padding: 11px 11px 18px;
-        position: relative;
-        max-width: 45%;
-        margin-bottom: 10px;
-
-        &-info {
-            position: absolute;
-            right: 9px;
-            bottom: 9px;
-            display: flex;
-            align-items: center;
-        }
-
-        &-time {
-            @include text-9;
-
-        }
-
-        &-status {
-            width: 10px;
-            height: 5px;
-            margin-right: 3px;
-
-            &_sent {
-                background: url("data:image/svg+xml,%3Csvg width='10' height='5' viewBox='0 0 10 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cline y1='-0.5' x2='3.765' y2='-0.5' transform='matrix(0.705933 0.708278 -0.705933 0.708278 0.700195 2.33313)' stroke='%233369F3'/%3E%3Cline y1='-0.5' x2='5.6475' y2='-0.5' transform='matrix(0.705933 -0.708278 0.705933 0.708278 3.35828 5)' stroke='%233369F3'/%3E%3Cline y1='-0.5' x2='5.6475' y2='-0.5' transform='matrix(0.705933 -0.708278 0.705933 0.708278 6.01587 5)' stroke='%233369F3'/%3E%3C/svg%3E%0A");
-            }
-        }
-
-        &_file {
-            border: 1px solid $border-color;
-            background: $white;
-
-            img {
-                max-width: 100%;
-            }
-        }
-
-        &_out {
-            margin-left: auto;
-            border-radius: 12px 12px 0 12px;
-            background: $blue-light;
-        }
-    }
-
-    &__footer {
-        border-top: 1px solid $border-color;
-        &-form {
-            display: flex;
-            align-items: flex-start;
-            padding: 11px 20px;
-            gap: 10px;
-        }
-        &-textarea {
-            flex: 1 1 0;
-            resize: none;
-            border: none;
-            outline: none;
-            border-radius: 30px;
-            padding: 9px 20px;
-            height: 32px;
-            @include text-13;
-            color: $dark;
-            background: $gray-light-1;
-            &::placeholder {
-                color: $gray-dark-1;
             }
         }
     }

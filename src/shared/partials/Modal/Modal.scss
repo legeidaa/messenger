@@ -1,16 +1,13 @@
-@import '@styles/vars.scss';
-@import '@styles/mixins.scss';
+@import '@styles/vars';
+@import '@styles/mixins';
 
 .modal {
     display: none;
     position: fixed;
     z-index: 9998;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     transition: opacity $trans-dur ease;
-    background-color: rgba($color: $black, $alpha: 0.5);
+    background-color: rgba($color: $black, $alpha: 50%);
     padding: 0 1rem;
 
 
@@ -34,11 +31,14 @@
             }
         }
     }
+
     &__title {
         @include text-16;
+
         color: $dark;
         margin: 0 ;
         text-align: center;
+
         &_error {
             color: $red;
         }
@@ -46,16 +46,21 @@
 
     &__form {
         text-align: center;
+
         &-submit-btn {
             width: 100%;
         }
+
         &-error {
             margin-top: 14px;
+
             @include text-11;
+
             color: $red;
             
         }
     }
+
     &__input-file {
         padding: 40px 0;
     }

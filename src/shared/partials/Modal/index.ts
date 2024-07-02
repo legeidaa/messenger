@@ -1,2 +1,3 @@
-export { default as Modal } from './Modal.hbs?raw';
 import './Modal.scss';
+
+export { Modal } from './Modal';

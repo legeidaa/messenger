@@ -1,1 +1,2 @@
-export { default as ErrorClientPage } from './ErrorClientPage.hbs?raw';
+export { ErrorClientPage, errorClientPage } from './ErrorClientPage'
+export type { IErrorClientPageProps } from './model'

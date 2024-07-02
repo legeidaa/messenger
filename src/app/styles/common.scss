@@ -1,5 +1,60 @@
-.error-page, .login-page {
+@import '@styles/vars';
+@import '@styles/mixins';
+
+.error-page,
+.login-page {
     display: flex;
     flex-direction: column;
     height: 100%;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    &__header {
+        margin-bottom: 50px;
+    }
+
+    &__title {
+        @include text-20;
+
+        color: $dark;
+        text-align: center;
+        margin: 0;
+    }
+
+    &__footer {
+        padding-top: 40px;
+        margin-top: auto;
+    }
+
+    &__submit-btn {
+        width: 100%;
+        margin-bottom: 14px;
+    }
+
+    &__link {
+        width: 100%;
+    }
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+
+.dialog {
+    box-shadow: $box-shadow;
+    width: 100%;
+    max-width: 340px;
+    min-height: 450px;
+    margin: auto;
+    border-radius: 12px;
+    padding: 50px 30px 30px;
+    display: flex;
+    flex-direction: column;
 }

@@ -1,2 +1,4 @@
 import './ChatPage.scss';
-export { default as ChatPage } from './ChatPage.hbs?raw';
+
+export { ChatPage, chatPage } from './ChatPage'
+export type { IChatPageProps } from './model'

@@ -1,38 +1,5 @@
 <div class="login-page">
-    {{#> Dialog }}
-    {{#> LoginForm className="login-form__signin"}}
-    <header class="login-form__header">
-        <h1 class="login-form__title">Вход</h1>
-    </header>
-
-    <main class="login-form__content">
-
-        {{> InputField
-        className="login-page__input"
-        title="Логин"
-        name="login"
-        id="login"
-        label="Логин"
-        value="somelogin"
-        error="Неверный логин"
-        }}
-        {{> InputField
-        className="login-page__input"
-        title="Пароль"
-        name="password"
-        type="password"
-        id="password"
-        label="Пароль"
-        }}
-    </main>
-    <footer class="login-form__footer">
-        {{> Button
-        text="Вход"
-        type="submit"
-        className="login-form__submit-btn"
-        }}
-        {{>Link href="#signup" className="login-form__link" text="Нет аккаунта?"}}
-    </footer>
-    {{/ LoginForm }}
-    {{/ Dialog }}
+    <div class="dialog">
+        {{{form}}}
+    </div>
 </div>

@@ -1,5 +1,5 @@
-@import '@styles/vars.scss';
-@import '@styles/mixins.scss';
+@import '@styles/vars';
+@import '@styles/mixins';
 
 .profile__data {
     &-row {
@@ -7,16 +7,21 @@
         align-items: center;
         padding: 10px 0;
         border-bottom: 1px solid $border-color;
+
         &:last-child {
             border-bottom: none;
         }
     }
+
     &-label {
         @include text-13;
+
         color: $dark;
     }
+
     &-input {
         @include text-13;
+
         margin-left: auto;
         border: none;
         outline: none;

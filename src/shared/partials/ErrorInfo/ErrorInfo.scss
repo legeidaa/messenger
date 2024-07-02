@@ -1,5 +1,5 @@
-@import '@styles/vars.scss';
-@import '@styles/mixins.scss';
+@import '@styles/vars';
+@import '@styles/mixins';
 
 .error-info {
     text-align: center;
@@ -7,11 +7,14 @@
 
     &__code {
         @include text-40;
+
         color: $dark;
         margin: 0 0 20px;
     }
+
     &__message {
         @include text-20;
+
         color: $dark;
         margin: 0 0 70px;
     }

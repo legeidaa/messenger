@@ -1,2 +1,4 @@
 import './InputField.scss'
-export { default as InputField } from './InputField.hbs?raw';
+
+export { InputField } from './InputField';
+export type { IInputFieldProps } from './model'

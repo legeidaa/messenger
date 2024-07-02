@@ -1,5 +1,5 @@
-@import '@styles/vars.scss';
-@import '@styles/mixins.scss';
+@import '@styles/vars';
+@import '@styles/mixins';
 
 .profile-page {
     display: flex;
@@ -39,6 +39,7 @@
 
     &__name {
         @include text-16;
+
         color: $dark;
     }
 

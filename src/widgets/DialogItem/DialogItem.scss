@@ -1,0 +1,72 @@
+@import '@styles/vars';
+@import '@styles/mixins';
+
+.dialog-item {
+    padding: 12px 10px;
+    display: flex;
+    border-bottom: 1px solid $border-color;
+    cursor: pointer;
+    transition: $trans-dur background;
+
+    &:hover:not(.dialog-item_current) {
+        background: $gray-light-2;
+    }
+
+    &__avatar {
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+
+    &__name {
+        @include text-13;
+
+        color: $dark;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    &__message {
+        @include text-12;
+
+        color: $gray-dark-1;
+
+        &-by-you {
+            color: $dark;
+            font-weight: 600;
+            display: inline-block;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    &__time {
+        @include text-9;
+
+        color: $gray-dark-1;
+    }
+
+    &__count {
+        margin-top: auto;
+
+        @include text-11;
+
+        width: 20px;
+        height: 20px;
+        border-radius: 20px;
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+        background: $blue;
+    }
+
+    &_current {
+        background: $blue-light;
+    }
+}

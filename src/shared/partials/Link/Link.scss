@@ -1,8 +1,9 @@
-@import '@styles/vars.scss';
-@import '@styles/mixins.scss';
+@import '@styles/vars';
+@import '@styles/mixins';
 
 .link {
     @include text-11;
+
     text-decoration: none;
     display: inline-block;
     text-align: center;
@@ -15,8 +16,10 @@
     &:active {
         color: darken($color: $blue, $amount: 8%);
     }
+
     &_red {
         color: $red;
+
         &:hover {
             color: darken($color: $red, $amount: 5%);
         }
