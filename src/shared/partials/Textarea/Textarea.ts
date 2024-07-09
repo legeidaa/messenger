@@ -11,11 +11,4 @@ export class Textarea extends Block {
     render() {
         return this.compile(TextareaTemplate, this.props);
     }
-
-    componentDidMount(props?: object | undefined): void {
-    }
-
-    componentDidUpdate(oldProps: object, newProps: object): boolean {
-        return true;
-    }
 }

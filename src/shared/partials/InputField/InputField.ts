@@ -11,11 +11,4 @@ export class InputField extends Block {
     render() {
         return this.compile(InputFieldTemplate, this.props);
     }
-
-    componentDidMount(props?: object | undefined): void {
-    }
-
-    componentDidUpdate(oldProps: object, newProps: object): boolean {
-        return true;
-    }
 }

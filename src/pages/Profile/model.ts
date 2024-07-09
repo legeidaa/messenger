@@ -6,6 +6,6 @@ export interface IProfilePageProps extends IBlockProps {
     asideButton: Button
     avatar: Avatar,
     profileName: string,
-    profileFooter: Block,
+    profileFooter: Block | Block[],
     form: Form
 }

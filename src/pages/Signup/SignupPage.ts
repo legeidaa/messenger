@@ -113,7 +113,7 @@ export const inputPassword = new InputField({
         events: {
             blur: (e: Event) => {
                 validatePassword(e)
-                validateComparePassword(e)
+                validateComparePassword()
             },
         },
     }),

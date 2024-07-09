@@ -11,11 +11,4 @@ export class Input extends Block {
     render() {
         return this.compile(InputTemplate, this.props);
     }
-
-    componentDidMount(props?: object | undefined): void {
-    }
-
-    componentDidUpdate(oldProps: object, newProps: object): boolean {
-        return true;
-    }
 }

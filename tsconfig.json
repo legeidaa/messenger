@@ -1,30 +1,32 @@
 {
     "compilerOptions": {
-        "outDir": "./dist/",
+        "strictPropertyInitialization": false,
         "target": "ESNext",
         "useDefineForClassFields": true,
+        "module": "ESNext",
         "lib": [
             "ESNext",
             "DOM",
             "dom.iterable"
         ],
+        "moduleResolution": "Node",
         "strict": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "esModuleInterop": true,
         "noEmit": true,
-        "noImplicitAny": true,
-        "sourceMap": true,
-        "strictNullChecks": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
         "allowImportingTsExtensions": true,
         "skipLibCheck": true,
-        "module": "Node16",
-        "moduleResolution": "Node16",
-        "strictPropertyInitialization": false,
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "strictNullChecks": true,
         "paths": {
+            "*": [
+                "./src/*"
+            ],
             "@/*": [
                 "./src/*"
             ],
@@ -45,7 +47,10 @@
             ],
             "@widgets/*": [
                 "./src/widgets/*"
-            ],
+            ]
         }
     },
+    "include": [
+        "./src"
+    ]
 }
