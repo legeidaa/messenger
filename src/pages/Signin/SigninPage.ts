@@ -10,6 +10,7 @@ import { PagesPaths } from '@shared/lib/Router/model';
 import SigninPageTemplate from './SigninPage.hbs?raw';
 import { ISigninPageProps } from './model.ts';
 import { validateLogin, validatePassword, validateSubmit } from './validation.ts';
+import { signinAPI } from '@shared/api/SigninApi.ts';
 
 export class SigninPage extends Block {
     constructor(props: ISigninPageProps) {
@@ -63,7 +64,11 @@ const footerLinkSignup = new Link({
     events: {
         click: (e) => {
             e.preventDefault()
-            router.go(PagesPaths.SIGNUP)
+            // router.go(PagesPaths.SIGNUP)
+
+            // signinAPI.logout()
+            // signinAPI.signin()
+            signinAPI.get()
         },
     },
 })
