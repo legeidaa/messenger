@@ -1,59 +1,14 @@
 import '@/app/styles/style.scss'
 import * as Pages from '@pages/index.ts'
-import { Block } from '@shared/lib/Block/index.ts';
+import { router } from '@shared/lib/Router';
+import { PagesPaths } from '@shared/lib/Router/model';
 
-const app = document.querySelector('#app') as HTMLElement
-
-enum PagesNames {
-    MAIN = 'main',
-    CHAT = 'chat',
-    SIGNIN = 'signin',
-    SIGNUP = 'signup',
-    ERROR_CLIENT = 'error-client',
-    ERROR_SERVER = 'error-server',
-    PROFILE = 'profile',
-}
-
-type PagesType = {
-    [key in PagesNames]: Block
-}
-
-const pages: PagesType = {
-    [PagesNames.MAIN]: Pages.mainPage,
-    [PagesNames.CHAT]: Pages.chatPage,
-    [PagesNames.SIGNIN]: Pages.signinPage,
-    [PagesNames.SIGNUP]: Pages.signupPage,
-    [PagesNames.ERROR_CLIENT]: Pages.errorClientPage,
-    [PagesNames.ERROR_SERVER]: Pages.errorServerPage,
-    [PagesNames.PROFILE]: Pages.profilePage,
-}
-
-function render(root: HTMLElement, block: Block) {
-    root?.appendChild(block.getContent())
-    block.dispatchComponentDidMount()
-    return root;
-}
-
-function navigate(page: PagesNames) {
-    const pageBlock = pages[page]
-    app.innerHTML = ''
-    render(app, pageBlock)
-}
-
-function changePage() {
-    const currentHash = window.location.hash.split('#')[1]
-    if (`${window.location.origin}/` === window.location.href || window.location.hash === '') {
-        navigate(PagesNames.MAIN)
-    }
-
-    if (Object.keys(pages).includes(currentHash)) {
-        navigate(currentHash as PagesNames)
-    }
-}
-document.addEventListener('DOMContentLoaded', () => {
-    changePage()
-})
-
-window.addEventListener('hashchange', () => {
-    changePage()
-})
+router
+    .use(PagesPaths.SIGNIN, Pages.signinPage)
+    .use(PagesPaths.MAIN, Pages.mainPage)
+    .use(PagesPaths.SIGNUP, Pages.signupPage)
+    .use(PagesPaths.PROFILE, Pages.profilePage)
+    .use(PagesPaths.ERROR_CLIENT, Pages.errorClientPage)
+    .use(PagesPaths.ERROR_SERVER, Pages.errorServerPage)
+    .use(PagesPaths.CHAT, Pages.chatPage)
+    .start()

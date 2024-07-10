@@ -1,5 +1,7 @@
 import { validator } from '@shared/lib/Validator.ts'
 import { validateHelper } from '@shared/utils/validateHelper.ts'
+import { router } from '@shared/lib/Router/Router.ts'
+import { PagesPaths } from '@shared/lib/Router/model';
 import { inputLogin, inputPassword } from './SigninPage.ts'
 
 export function validateLogin(e: Event) {
@@ -29,6 +31,7 @@ export function validateSubmit(e: Event) {
     validatePassword(e)
 
     if (validateLogin(e) && validatePassword(e)) {
-        window.location.hash = 'chat'
+        // window.location.hash = 'chat'
+        router.go(PagesPaths.CHAT)
     }
 }

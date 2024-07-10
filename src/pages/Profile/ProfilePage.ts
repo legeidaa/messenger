@@ -4,6 +4,8 @@ import { changeAvatarModal } from '@widgets/ChangeAvatarModal/index.ts'
 import { Form } from '@shared/partials/Form/index.ts'
 import type { IFormProps } from '@shared/partials/Form/index.ts'
 import { Block } from '@shared/lib/Block/index.ts'
+import { router } from '@shared/lib/Router/Router.ts'
+import { PagesPaths } from '@shared/lib/Router/model';
 import ProfileTemplate from './ProfilePage.hbs?raw'
 import { IProfilePageProps } from './model.ts'
 import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName } from './validation.ts'
@@ -231,7 +233,7 @@ const exitRow = new ProfileDataRow({
         events: {
             click: (e: Event) => {
                 e.preventDefault()
-                exit()
+                router.go(PagesPaths.SIGNIN)
             },
         },
     }),
@@ -284,6 +286,12 @@ export const profilePage = new ProfilePage({
     asideButton: new Button({
         className: 'button_icon button_arrow button_arrow_left',
         href: '#',
+        events: {
+            click: (e) => {
+                e.preventDefault()
+                router.go(PagesPaths.CHAT)
+            },
+        },
     }),
     avatar: new Avatar({
         profileAvatar: true,
@@ -329,9 +337,6 @@ function changePassword() {
     })
 }
 
-function exit() {
-    console.log('exit')
-}
 function saveData(e: Event) {
     // сохраняем данные в стор, потом меняем состояние
     if (form.props.canChangePassword) {

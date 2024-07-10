@@ -5,6 +5,8 @@ import { Button } from '@shared/partials/Button/index.ts';
 import { Link } from '@shared/partials/index.ts';
 import { SignupForm } from '@widgets/SignupForm/index.ts';
 import { Form } from '@shared/partials/Form/index.ts';
+import { router } from '@shared/lib/Router/Router.ts';
+import { PagesPaths } from '@shared/lib/Router/model';
 import SigninPageTemplate from './SignupPage.hbs?raw';
 import { ISignupPageProps } from './model.ts';
 import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName, validateSubmit } from './validation.ts';
@@ -144,8 +146,14 @@ const footerButtonSubmit = new Button({
 
 const footerLinkSignin = new Link({
     text: 'Войти',
-    href: '#signin',
+    href: PagesPaths.SIGNIN,
     className: 'login-form__link',
+    events: {
+        click: (e) => {
+            e.preventDefault()
+            router.go(PagesPaths.SIGNIN)
+        },
+    },
 })
 
 const signupForm = new SignupForm({

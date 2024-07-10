@@ -7,6 +7,8 @@ import { Textarea } from '@shared/partials/Textarea/index.ts';
 import { validator } from '@shared/lib/Validator.ts';
 import { Form } from '@shared/partials/Form/index.ts';
 import { MessagesForm } from '@widgets/MessagesForm/index.ts';
+import { router } from '@shared/lib/Router/Router.ts';
+import { PagesPaths } from '@shared/lib/Router/model';
 import { DialogItem } from '../../widgets/DialogItem/index.ts';
 import ChatPageTemplate from './ChatPage.hbs?raw';
 import { IChatPageProps } from './model.ts';
@@ -16,7 +18,7 @@ export class ChatPage extends Block {
         super(props)
     }
 
-    render() {
+    override render() {
         return this.compile(ChatPageTemplate, this.props);
     }
 }
@@ -115,9 +117,15 @@ function validateMessage(e: Event) {
 
 export const chatPage = new ChatPage({
     dialogsHeaderLink: new Link({
-        href: '#profile',
+        href: PagesPaths.PROFILE,
         text: 'Профиль',
         className: 'dialogs__header-link',
+        events: {
+            click: (e) => {
+                e.preventDefault()
+                router.go(PagesPaths.PROFILE)
+            },
+        },
     }),
     dialogsSearchInput: new Input({
         type: 'text',

@@ -5,6 +5,8 @@ import { Button } from '@shared/partials/Button/index.ts';
 import { Link } from '@shared/partials/index.ts';
 import { SigninForm } from '@widgets/SigninForm/index.ts';
 import { Form } from '@shared/partials/Form/index.ts';
+import { router } from '@shared/lib/Router/Router.ts';
+import { PagesPaths } from '@shared/lib/Router/model';
 import SigninPageTemplate from './SigninPage.hbs?raw';
 import { ISigninPageProps } from './model.ts';
 import { validateLogin, validatePassword, validateSubmit } from './validation.ts';
@@ -43,7 +45,7 @@ export const inputPassword = new InputField({
         id: 'password',
         name: 'password',
         className: 'input-field__element',
-        value: '123',
+        value: 'Abcde123A',
         events: {
             blur: validatePassword,
         },
@@ -56,8 +58,14 @@ const footerButtonSubmit = new Button({
 })
 const footerLinkSignup = new Link({
     text: 'Нет аккаунта?',
-    href: '#signup',
+    href: PagesPaths.SIGNUP,
     className: 'login-form__link',
+    events: {
+        click: (e) => {
+            e.preventDefault()
+            router.go(PagesPaths.SIGNUP)
+        },
+    },
 })
 
 const signinForm = new SigninForm({

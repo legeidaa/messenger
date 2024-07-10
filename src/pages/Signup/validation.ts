@@ -1,5 +1,7 @@
 import { validator } from '@shared/lib/Validator.ts'
 import { validateHelper } from '@shared/utils/validateHelper.ts'
+import { router } from '@shared/lib/Router/Router.ts'
+import { PagesPaths } from '@shared/lib/Router/model';
 import { inputEmail, inputFirstName, inputLogin, inputPassword, inputPasswordRepeat, inputPhone, inputSecondName } from './SignupPage.ts'
 
 export function validateEmail(e: Event) {
@@ -85,6 +87,6 @@ export function validateSubmit(e: Event) {
         && validateComparePassword()
 
     if (isValid) {
-        window.location.hash = 'chat'
+        router.go(PagesPaths.SIGNIN)
     }
 }

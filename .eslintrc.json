@@ -66,6 +66,7 @@
         ],
         "no-param-reassign": "warn",
         "no-undef": "warn",
-        "no-useless-constructor": "off"
+        "no-useless-constructor": "off",
+        "no-constructor-return": false
     }
 }
