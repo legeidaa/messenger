@@ -1,16 +1,24 @@
+import EventBus from "@shared/lib/EventBus";
+import { Block } from "@shared/lib/Block";
+import { set } from "@shared/utils/set";
+import { isEqual } from "shared/utils/isEqual";
+
 export enum StoreEvents {
     Updated = 'updated',
 }
+type Indexed<T = unknown> = {
+    [key in string]: T;
+};
 
 class Store extends EventBus {
-    private state: Indexed = {};
+    private _state: Indexed = {};
 
     public getState() {
-        return state;
+        return this._state;
     }
 
     public set(path: string, value: unknown) {
-        set(this.state, path, value);
+        set(this._state, path, value);
 
         // метод EventBus
         this.emit(StoreEvents.Updated);
@@ -18,32 +26,32 @@ class Store extends EventBus {
 
 }
 
-class UserController {
-    public getUser() {
-        UserAPI.getUser()
-            .then(data => store.set('user', data);
-    }
-}
+export const store = new Store();
 
+// class UserController {
+//     public getUser() {
+//         UserAPI.getUser()
+//             .then(data => store.set('user', data);
+//     }
+// }
+// class UserProfile extends Block {
+//     constructor(...args) {
+//         super(...args);
 
-class UserProfile extends Block {
-    constructor(...args) {
-        super(...args);
+//         // запрашиваем данные у контроллера
+//         UserController.getUser();
 
-        // запрашиваем данные у контроллера
-        UserController.getUser();
+//         // подписываемся на событие
+//         store.on(StoreEvents.Updated, () => {
+//             // вызываем обновление компонента, передав данные из хранилища
+//             this.setProps(store.getState());
+//         });
+//     }
 
-        // подписываемся на событие
-        store.on(StoreEvents.Updated, () => {
-            // вызываем обновление компонента, передав данные из хранилища
-            this.setProps(store.getState());
-        });
-    }
-
-    render() {
-        // внутри рендер в this.props будут достпны данные из хранилища
-    }
-}
+//     render() {
+//         // внутри рендер в this.props будут достпны данные из хранилища
+//     }
+// }
 
 
 
@@ -83,4 +91,4 @@ function mapUserToProps(state) {
     };
 }
 
-connect(UserProfile, mapUserToProps); 
+connect( mapUserToProps)(UserProfile)
