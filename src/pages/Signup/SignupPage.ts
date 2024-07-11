@@ -1,4 +1,4 @@
-import { Block } from '@shared/lib/Block/index.ts'
+import { Block, IBlockProps } from '@shared/lib/Block/index.ts'
 import { InputField } from '@shared/partials/InputField/index.ts';
 import { Input } from '@shared/partials/Input/index.ts';
 import { Button } from '@shared/partials/Button/index.ts';
@@ -11,8 +11,10 @@ import SigninPageTemplate from './SignupPage.hbs?raw';
 import { ISignupPageProps } from './model.ts';
 import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName, validateSubmit } from './validation.ts';
 import { signupController } from './SignupController.ts';
+import { connect } from '@shared/Store/Hoc.ts';
+import store from '@shared/Store/Store.ts';
 
-export class SignupPage extends Block {
+class SignupPage extends Block {
     constructor(props: ISignupPageProps) {
         super(props)
     }
@@ -20,7 +22,19 @@ export class SignupPage extends Block {
     render() {
         return this.compile(SigninPageTemplate, this.props);
     }
+
+    componentDidMount(props: IBlockProps): boolean {
+        console.log("componentDidMount", props, store.getState());
+        return true
+    }
+
+    componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps): boolean {
+        console.log("signup componentDidUpdate",this, newProps.buttonText, store.getState());
+        return true
+    }
 }
+
+const connectedSignunPage = connect(SignupPage)
 
 export const inputEmail = new InputField({
     className: 'login-page__input',
@@ -200,6 +214,6 @@ const form = new Form({
     },
 })
 
-export const signupPage = new SignupPage({
+export const signupPage = new connectedSignunPage({
     form,
 })

@@ -1,2 +1,2 @@
-export { signupPage, SignupPage } from './SignupPage.ts';
+export { signupPage } from './SignupPage.ts';
 export type { ISignupPageProps } from './model.ts'

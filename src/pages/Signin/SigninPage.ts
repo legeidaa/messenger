@@ -1,4 +1,4 @@
-import { Block } from '@shared/lib/Block/index.ts'
+import { Block, IBlockProps } from '@shared/lib/Block/index.ts'
 import { InputField } from '@shared/partials/InputField/index.ts';
 import { Input } from '@shared/partials/Input/index.ts';
 import { Button } from '@shared/partials/Button/index.ts';
@@ -13,8 +13,10 @@ import { validateLogin, validatePassword, validateSubmit } from './validation.ts
 // import { signinAPI } from '@shared/api/SigninApi.ts';
 import { authAPI } from '@shared/api/AuthApi.ts';
 import { signinController } from './SigninController.ts';
+import store from '@shared/Store/Store.ts';
+import { connect } from '@shared/Store/Hoc.ts';
 
-export class SigninPage extends Block {
+class SigninPage extends Block {
     constructor(props: ISigninPageProps) {
         super(props)
     }
@@ -22,7 +24,18 @@ export class SigninPage extends Block {
     render() {
         return this.compile(SigninPageTemplate, this.props);
     }
+
+    componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps): boolean {
+        if (oldProps.buttonText !== newProps.buttonText) {
+            console.log("componentDidUpdate", newProps.buttonText, store.getState());
+
+            footerButtonSubmit.setProps({ text: newProps.buttonText })
+        }
+        return true
+    }
 }
+
+const connectedSigninPage = connect(SigninPage)
 
 export const inputLogin = new InputField({
     className: 'login-page__input',
@@ -51,9 +64,15 @@ export const inputPassword = new InputField({
         value: 'Aa123456',
         events: {
             blur: validatePassword,
+            change: (e) => {
+                console.log(e.target.value);
+                store.dispatch({ type: 'SET_TEXT', buttonText: e.target.value })
+            }
         },
     }),
 })
+
+
 const footerButtonSubmit = new Button({
     text: 'Вход',
     type: 'submit',
@@ -88,11 +107,11 @@ const form = new Form({
                 signinForm.props.error = ''
                 const signinResult = await signinController.signin({
                     login: 'ligiza',
-                    password: "P@ssw0rdddd"
+                    password: "P@ssw0rd"
                     //     login: inputLogin.children.input.getContent().value,
                     //     password: inputPassword.children.input.getContent().value
                 })
-                
+
                 console.log(signinResult);
                 if (typeof signinResult === 'string') {
                     signinForm.props.error = signinResult
@@ -104,6 +123,6 @@ const form = new Form({
     },
 })
 
-export const signinPage = new SigninPage({
+export const signinPage = new connectedSigninPage({
     form,
 })
