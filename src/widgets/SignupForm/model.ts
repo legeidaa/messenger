@@ -4,6 +4,7 @@ import { Button } from '@shared/partials/Button';
 import { Link } from '@shared/partials';
 
 export interface ISignupFormProps extends IBlockProps {
+    error: string,
     inputEmail: InputField;
     inputLogin: InputField;
     inputFirstName: InputField;

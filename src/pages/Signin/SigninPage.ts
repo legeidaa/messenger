@@ -10,7 +10,9 @@ import { PagesPaths } from '@shared/lib/Router/model';
 import SigninPageTemplate from './SigninPage.hbs?raw';
 import { ISigninPageProps } from './model.ts';
 import { validateLogin, validatePassword, validateSubmit } from './validation.ts';
-import { signinAPI } from '@shared/api/SigninApi.ts';
+// import { signinAPI } from '@shared/api/SigninApi.ts';
+import { authAPI } from '@shared/api/AuthApi.ts';
+import { signinController } from './SigninController.ts';
 
 export class SigninPage extends Block {
     constructor(props: ISigninPageProps) {
@@ -31,7 +33,7 @@ export const inputLogin = new InputField({
         id: 'login',
         name: 'login',
         className: 'input-field__element',
-        value: 'somelogin',
+        value: 'ligiza',
         events: {
             blur: validateLogin,
         },
@@ -46,7 +48,7 @@ export const inputPassword = new InputField({
         id: 'password',
         name: 'password',
         className: 'input-field__element',
-        value: 'Abcde123A',
+        value: 'Aa123456',
         events: {
             blur: validatePassword,
         },
@@ -64,16 +66,13 @@ const footerLinkSignup = new Link({
     events: {
         click: (e) => {
             e.preventDefault()
-            // router.go(PagesPaths.SIGNUP)
-
-            // signinAPI.logout()
-            // signinAPI.signin()
-            signinAPI.get()
+            router.go(PagesPaths.SIGNUP)
         },
     },
 })
 
 const signinForm = new SigninForm({
+    error: '',
     inputLogin,
     inputPassword,
     footerButtonSubmit,
@@ -84,8 +83,23 @@ const form = new Form({
     formContent: signinForm,
     className: 'login-form login-form_signin',
     events: {
-        submit: (e) => {
-            validateSubmit(e)
+        submit: async (e) => {
+            if (validateSubmit(e)) {
+                signinForm.props.error = ''
+                const signinResult = await signinController.signin({
+                    login: 'ligiza',
+                    password: "P@ssw0rdddd"
+                    //     login: inputLogin.children.input.getContent().value,
+                    //     password: inputPassword.children.input.getContent().value
+                })
+                
+                console.log(signinResult);
+                if (typeof signinResult === 'string') {
+                    signinForm.props.error = signinResult
+                } else {
+                    router.go(PagesPaths.CHAT)
+                }
+            }
         },
     },
 })

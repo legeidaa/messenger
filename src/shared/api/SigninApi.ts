@@ -1,11 +1,10 @@
 
 import { HTTPTransport } from '@shared/lib/HTTPTransport';
-import { BaseAPI } from './BaseApi';
 
 const chatAPIInstance = new HTTPTransport('https://ya-praktikum.tech/api/v2');
 // const chatAPIInstance = new HTTPTransport('https://jsonplaceholder.typicode.com');
 
-class SigninAPI extends BaseAPI {
+class SigninAPI {
     // post() {
     //     return chatAPIInstance.post('/posts', {
     //         data: {

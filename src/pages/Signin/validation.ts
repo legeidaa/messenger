@@ -31,7 +31,8 @@ export function validateSubmit(e: Event) {
     validatePassword(e)
 
     if (validateLogin(e) && validatePassword(e)) {
-        // window.location.hash = 'chat'
-        router.go(PagesPaths.CHAT)
+        // router.go(PagesPaths.CHAT)
+        return true
     }
+    return false
 }

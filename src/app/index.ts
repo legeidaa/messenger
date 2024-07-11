@@ -2,6 +2,7 @@ import '@/app/styles/style.scss'
 import * as Pages from '@pages/index.ts'
 import { router } from '@shared/lib/Router';
 import { PagesPaths } from '@shared/lib/Router/model';
+import { signinAPI } from '@shared/api/SigninApi';
 
 router
     .use(PagesPaths.SIGNIN, Pages.signinPage)
@@ -12,3 +13,11 @@ router
     .use(PagesPaths.ERROR_SERVER, Pages.errorServerPage)
     .use(PagesPaths.CHAT, Pages.chatPage)
     .start()
+
+
+const button = document.createElement('button')
+button.innerText = 'Logout'
+button.addEventListener('click', () => {
+    signinAPI.logout()
+})
+document.body.prepend(button)

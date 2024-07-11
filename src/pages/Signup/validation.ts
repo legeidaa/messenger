@@ -87,6 +87,8 @@ export function validateSubmit(e: Event) {
         && validateComparePassword()
 
     if (isValid) {
-        router.go(PagesPaths.SIGNIN)
+        // router.go(PagesPaths.SIGNIN)
+        return true
     }
+    return false
 }

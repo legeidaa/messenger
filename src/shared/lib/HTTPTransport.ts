@@ -7,24 +7,10 @@ enum METHODS {
     DELETE = "DELETE",
 }
 
-// export function queryStringify(data: Record<string, string>): string {
-//     if (typeof data !== 'object') {
-//         throw new Error('Data must be object')
-//     }
-
-//     let queryString = '?'
-
-//     Object.keys(data).forEach((key) => {
-//         queryString += `${key}=${data[key]}&`
-//     })
-
-//     return queryString.slice(0, -1)
-// }
-
-interface IMethodOptions {
+export interface IMethodOptions {
     headers?: { [key: string]: string },
     timeout?: number
-    data?: Record<string, string>,
+    data?: Record<string, unknown>,
     withCredentials?: boolean,
     responseType?: XMLHttpRequestResponseType
     // signal?: AbortSignal
@@ -67,7 +53,7 @@ export class HTTPTransport {
         } = options
 
         return new Promise((resolve, reject) => {
-
+            console.log(url);
             url = this._baseURL + url
             const xhr = new XMLHttpRequest()
             xhr.open(method as unknown as string, url)
@@ -105,13 +91,9 @@ export class HTTPTransport {
             // xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type")
             // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
 
-            console.log(method);
-
             if (method === METHODS.GET && data) {
                 url += queryStringify(data)
             }
-
-            console.log(url);
 
             xhr.timeout = timeout
             xhr.responseType = responseType

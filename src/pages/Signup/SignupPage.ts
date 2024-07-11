@@ -10,6 +10,7 @@ import { PagesPaths } from '@shared/lib/Router/model';
 import SigninPageTemplate from './SignupPage.hbs?raw';
 import { ISignupPageProps } from './model.ts';
 import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName, validateSubmit } from './validation.ts';
+import { signupController } from './SignupController.ts';
 
 export class SignupPage extends Block {
     constructor(props: ISignupPageProps) {
@@ -62,7 +63,7 @@ export const inputFirstName = new InputField({
         id: 'first_name',
         name: 'first_name',
         className: 'input-field__element',
-        value: '',
+        value: 'Иван',
         events: {
             blur: validateName,
         },
@@ -78,7 +79,7 @@ export const inputSecondName = new InputField({
         id: 'second_name',
         name: 'second_name',
         className: 'input-field__element',
-        value: '',
+        value: 'Иванов',
         events: {
             blur: validateSecondName,
         },
@@ -94,7 +95,7 @@ export const inputPhone = new InputField({
         id: 'phone',
         name: 'phone',
         className: 'input-field__element',
-        value: '',
+        value: '1234567890',
         events: {
             blur: validatePhone,
         },
@@ -104,14 +105,15 @@ export const inputPhone = new InputField({
 export const inputPassword = new InputField({
     className: 'login-page__input',
     id: 'password',
-    error: ' ',
+    error: '',
     label: 'Пароль',
     input: new Input({
         type: 'password',
         id: 'password',
         name: 'password',
         className: 'input-field__element',
-        value: '123',
+        // value: '123',
+        value: 'asdfghj1A',
         events: {
             blur: (e: Event) => {
                 validatePassword(e)
@@ -124,14 +126,15 @@ export const inputPassword = new InputField({
 export const inputPasswordRepeat = new InputField({
     className: 'login-page__input',
     id: 'password_repeat',
-    error: 'Пароли не совпадают',
+    // error: 'Пароли не совпадают',
     label: 'Пароль (ещё раз)',
     input: new Input({
         type: 'password',
         id: 'password_repeat',
         name: 'password_repeat',
         className: 'input-field__element',
-        value: '123',
+        // value: '123',
+        value: 'asdfghj1A',
         events: {
             blur: validateComparePassword,
         },
@@ -157,6 +160,7 @@ const footerLinkSignin = new Link({
 })
 
 const signupForm = new SignupForm({
+    error: '',
     inputEmail,
     inputLogin,
     inputFirstName,
@@ -172,8 +176,26 @@ const form = new Form({
     formContent: signupForm,
     className: 'login-form login-form_signup',
     events: {
-        submit: (e) => {
-            validateSubmit(e)
+        submit: async (e) => {
+            // validateSubmit(e)
+            if (validateSubmit(e)) {
+                signupForm.props.error = ''
+                const signupResult = await signupController.signup({
+                    first_name: "Артурт",
+                    second_name: "Морган",
+                    login: `ligiza1`,
+                    email: `ligiza1@mail.com`,
+                    phone: "+71234567890",
+                    password: "p@ssw0rd",
+                })
+
+                console.log(signupResult);
+                if (typeof signupResult === 'string') {
+                    signupForm.props.error = signupResult
+                } else {
+                    router.go(PagesPaths.CHAT)
+                }
+            }
         },
     },
 })
