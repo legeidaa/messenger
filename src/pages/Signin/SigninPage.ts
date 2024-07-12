@@ -115,7 +115,7 @@ const form = new Form({
                 if (typeof signinResult === 'string') {
                     signinForm.props.error = signinResult
                 } else {
-                    router.go(PagesPaths.CHAT)
+                    // router.go(PagesPaths.CHAT)
                 }
             }
         },

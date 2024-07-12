@@ -13,13 +13,10 @@ class SignupController {
         try {
             const res = await authAPI.signup({ data: signupData })
             console.log('Успешная регистрация');
-            console.log(res, typeof res);
-            // type Res = {
-            //     id: number
-            // }
-            // const data: Res = JSON.parse(res)
-            // возвращается айди, нужно ли в стор записывать?
-            store.dispatch({ type: 'SET_ID', id: res.id })
+
+            const userData = await authAPI.getUser()
+            store.dispatch({ type: 'SET_USER', user: userData })
+            
             return res
         } catch (err: unknown) {
             const error = err as LoginError

@@ -10,10 +10,13 @@ class AuthAPI {
         return authAPIInstance.post('/auth/signup', { ...options })
     }
     public signin(options: IMethodOptions) {
+        
         return authAPIInstance.post('/auth/signin', { ...options })
     }
-    public getUser(options: IMethodOptions) {
-        return authAPIInstance.get('/auth/user', { ...options });
+    public getUser() {
+        console.log('get user');
+        
+        return authAPIInstance.get('/auth/user');
     }
     public logout() {
         return authAPIInstance.post('/auth/logout');

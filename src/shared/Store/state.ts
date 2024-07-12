@@ -1,16 +1,13 @@
 export interface State {
-    id: number | null,
     user: {} | null
     [key: string]: any
 }
 
 export const state: State = {
-    id: null,
     user: null,
     buttonText: 'Сохранить',
 }
 
-// const id = {id: 1248}
 // const user = {
 //     "email": "legeida@yandex.ru",
 //     "login": "legeida",
