@@ -13,8 +13,7 @@ import { validateLogin, validatePassword, validateSubmit } from './validation.ts
 // import { signinAPI } from '@shared/api/SigninApi.ts';
 import { authAPI } from '@shared/api/AuthApi.ts';
 import { signinController } from './SigninController.ts';
-import store from '@shared/Store/Store.ts';
-import { connect } from '@shared/Store/Hoc.ts';
+import { store, connect } from '@shared/Store';
 
 class SigninPage extends Block {
     constructor(props: ISigninPageProps) {
@@ -26,16 +25,16 @@ class SigninPage extends Block {
     }
 
     componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps): boolean {
-        if (oldProps.buttonText !== newProps.buttonText) {
-            console.log("componentDidUpdate", newProps.buttonText, store.getState());
+        console.log("signin componentDidUpdate", this, store.getState());
 
+        if (oldProps.buttonText !== newProps.buttonText) {
             footerButtonSubmit.setProps({ text: newProps.buttonText })
         }
         return true
     }
 }
 
-const connectedSigninPage = connect(SigninPage)
+const connectedSigninPage = connect(SigninPage, (state) => ({ buttonText: state.buttonText }))
 
 export const inputLogin = new InputField({
     className: 'login-page__input',
@@ -46,7 +45,7 @@ export const inputLogin = new InputField({
         id: 'login',
         name: 'login',
         className: 'input-field__element',
-        value: 'ligiza',
+        value: 'legeida',
         events: {
             blur: validateLogin,
         },
@@ -65,8 +64,8 @@ export const inputPassword = new InputField({
         events: {
             blur: validatePassword,
             change: (e) => {
-                console.log(e.target.value);
-                store.dispatch({ type: 'SET_TEXT', buttonText: e.target.value })
+                // store.dispatch({ type: 'SET_TEXT', buttonText: e.target.value })
+                // store.dispatch({ type: 'SET_SAMPLE_PROPS', sampleProps: 'New sample text' })
             }
         },
     }),
@@ -106,10 +105,10 @@ const form = new Form({
             if (validateSubmit(e)) {
                 signinForm.props.error = ''
                 const signinResult = await signinController.signin({
-                    login: 'ligiza',
-                    password: "P@ssw0rd"
-                    //     login: inputLogin.children.input.getContent().value,
-                    //     password: inputPassword.children.input.getContent().value
+                    // login: 'ligiza',
+                    // password: "P@ssw0rd"
+                    login: inputLogin.children.input.getContent().value as string,
+                    password: inputPassword.children.input.getContent().value as string
                 })
 
                 console.log(signinResult);

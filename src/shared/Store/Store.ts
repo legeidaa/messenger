@@ -1,59 +1,25 @@
-// @ts-nocheck
+import { Action, Reducer, Subscriber } from "./model"
+import { reducer } from "./reducer"
+import { state, State } from "./state"
 
-import cloneDeep from "@shared/utils/cloneDeep"
+const createStore = (reducer: Reducer, initialState: State) => {
 
-const createStore = (reducer, initialState) => {
-    const subscribers = []
+    const subscribers: Subscriber<State>[] = []
     let currentState = initialState
 
     return {
         getState: () => currentState,
-        subscribe: (fn) => {
+        subscribe: (fn: Subscriber<State>) => {
             subscribers.push(fn)
-            // return () => {
-            //     subscribers = subscribers.filter(sub => sub !== fn)
-            // }
             fn(currentState)
         },
-        dispatch: (action) => {
-            console.log(currentState);
-
+        dispatch: (action: Action) => {
             currentState = reducer(currentState, action)
-            console.log(currentState);
+            console.log("Current state", currentState);
 
             subscribers.forEach(fn => fn(currentState))
         },
     }
 }
 
-const reducer = (state, action) => {
-    let newState = cloneDeep(state)
-
-    //  заменить на switch-case
-    if (action.type === 'SET_TEXT') {
-        console.log("SET_TEXT");
-        newState.buttonText = action.buttonText
-        return newState
-    }
-    if (action.type === 'SET_USER') {
-        newState.user = action.user
-        console.log("inside SET_USER", newState);
-        
-        return newState
-    } else {
-        return state
-    }
-}
-
-let state = {
-    buttonText: 'Сохранить',
-}
-
-// let setTextAction = {
-//     type: 'SET_TEXT',
-//     buttonText: '',
-// }
-
-let store = Object.freeze(createStore(reducer, state))
-
-export default store
+export const store = Object.freeze(createStore(reducer, state))

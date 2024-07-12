@@ -11,8 +11,7 @@ import SigninPageTemplate from './SignupPage.hbs?raw';
 import { ISignupPageProps } from './model.ts';
 import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName, validateSubmit } from './validation.ts';
 import { signupController } from './SignupController.ts';
-import { connect } from '@shared/Store/Hoc.ts';
-import store from '@shared/Store/Store.ts';
+import { store, connect } from '@shared/Store';
 
 class SignupPage extends Block {
     constructor(props: ISignupPageProps) {
@@ -29,12 +28,12 @@ class SignupPage extends Block {
     }
 
     componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps): boolean {
-        console.log("signup componentDidUpdate",this, newProps.buttonText, store.getState());
+        console.log("signup componentDidUpdate", this, store.getState());
         return true
     }
 }
 
-const connectedSignunPage = connect(SignupPage)
+const connectedSignunPage = connect(SignupPage, (state) => ({ sampleProps: state.sampleProps }))
 
 export const inputEmail = new InputField({
     className: 'login-page__input',
@@ -45,7 +44,7 @@ export const inputEmail = new InputField({
         id: 'email',
         name: 'email',
         className: 'input-field__element',
-        value: 'pochta@yandex.ru',
+        value: 'legeida@yandex.ru',
         events: {
             blur: validateEmail,
         },
@@ -61,7 +60,7 @@ export const inputLogin = new InputField({
         id: 'login',
         name: 'login',
         className: 'input-field__element',
-        value: 'somelogin',
+        value: 'legeida',
         events: {
             blur: validateLogin,
         },
@@ -109,7 +108,7 @@ export const inputPhone = new InputField({
         id: 'phone',
         name: 'phone',
         className: 'input-field__element',
-        value: '1234567890',
+        value: '+71234567890',
         events: {
             blur: validatePhone,
         },
@@ -126,8 +125,7 @@ export const inputPassword = new InputField({
         id: 'password',
         name: 'password',
         className: 'input-field__element',
-        // value: '123',
-        value: 'asdfghj1A',
+        value: 'Aa123456',
         events: {
             blur: (e: Event) => {
                 validatePassword(e)
@@ -147,8 +145,7 @@ export const inputPasswordRepeat = new InputField({
         id: 'password_repeat',
         name: 'password_repeat',
         className: 'input-field__element',
-        // value: '123',
-        value: 'asdfghj1A',
+        value: 'Aa123456',
         events: {
             blur: validateComparePassword,
         },
@@ -191,23 +188,23 @@ const form = new Form({
     className: 'login-form login-form_signup',
     events: {
         submit: async (e) => {
-            // validateSubmit(e)
+            validateSubmit(e)
             if (validateSubmit(e)) {
                 signupForm.props.error = ''
                 const signupResult = await signupController.signup({
-                    first_name: "Артурт",
-                    second_name: "Морган",
-                    login: `ligiza1`,
-                    email: `ligiza1@mail.com`,
-                    phone: "+71234567890",
-                    password: "p@ssw0rd",
+                    first_name: inputFirstName.children.input.getContent().value as string,
+                    second_name: inputSecondName.children.input.getContent().value as string,
+                    login: inputLogin.children.input.getContent().value as string,
+                    email: inputEmail.children.input.getContent().value as string,
+                    phone: inputPhone.children.input.getContent().value as string,
+                    password: inputPassword.children.input.getContent().value as string,
                 })
 
                 console.log(signupResult);
                 if (typeof signupResult === 'string') {
                     signupForm.props.error = signupResult
                 } else {
-                    router.go(PagesPaths.CHAT)
+                    router.go(PagesPaths.SIGNIN)
                 }
             }
         },

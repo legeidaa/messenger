@@ -1,8 +1,6 @@
-type PlainObject<T = unknown> = {
-    [k in string]: T;
-};
+import { Indexed } from "@shared/models/common";
 
-function isPlainObject(value: unknown): value is PlainObject {
+function isPlainObject(value: unknown): value is Indexed {
     return typeof value === 'object'
         && value !== null
         && value.constructor === Object
@@ -13,7 +11,7 @@ function isArray(value: unknown): value is [] {
     return Array.isArray(value);
 }
 
-function isArrayOrObject(value: unknown): value is [] | PlainObject {
+function isArrayOrObject(value: unknown): value is [] | Indexed {
     return isPlainObject(value) || isArray(value);
 }
 
@@ -21,7 +19,7 @@ function getKey(key: string, parentKey?: string) {
     return parentKey ? `${parentKey}[${key}]` : key;
 }
 
-function getParams(data: PlainObject | [], parentKey?: string) {
+function getParams(data: Indexed | [], parentKey?: string) {
     const result: [string, string][] = [];
 
     for (const [key, value] of Object.entries(data)) {
@@ -35,7 +33,7 @@ function getParams(data: PlainObject | [], parentKey?: string) {
     return result;
 }
 
-export function queryStringify(data: PlainObject) {
+export function queryStringify(data: Indexed) {
     if (!isPlainObject(data)) {
         throw new Error('input must be an object');
     }

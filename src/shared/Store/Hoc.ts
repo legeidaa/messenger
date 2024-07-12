@@ -1,19 +1,23 @@
-// @ts-nocheck
+import { Block, IBlockProps } from "@shared/lib/Block";
+import {store} from "./Store";
+import { isEqual } from "@shared/utils/isEqual";
+import { Indexed } from "@shared/models/common";
 
-import { Block } from "@shared/lib/Block";
-import store from "./Store";
-
-export function connect(Component: typeof Block) {
-    // используем class expression
+export function connect(Component: typeof Block, mapStateToProps: (state: Indexed) => Indexed) {
     return class extends Component {
-        constructor(...args) {
-            super(...args);
+        constructor(props: IBlockProps) {
+            let state = mapStateToProps(store.getState());
+            super({ ...props, ...state })
 
             store.subscribe(() => {
-                console.log('in the subscription', this, { ...store.getState() })
+                const newState = mapStateToProps(store.getState())
 
                 // добавляет в пропсы компонента данные из хранилища
-                this.setProps({ ...store.getState() })
+                if (!isEqual(state, newState)) {
+                    console.log("Prop changed, oldState: ", state, "newState: ", newState);
+                    this.setProps({ ...newState });
+                }
+                state = newState;
             })
         }
     }

@@ -1,5 +1,6 @@
 import { authAPI } from "@shared/api/AuthApi";
 import { SignupFormData } from "./model";
+import { store } from "@shared/Store";
 
 interface LoginError {
     status: number,
@@ -12,11 +13,13 @@ class SignupController {
         try {
             const res = await authAPI.signup({ data: signupData })
             console.log('Успешная регистрация');
-            // записываем данные о юзере в стор
-            // await authAPI.getUser({ data: signinData });
-            console.log(res);
-
+            console.log(res, typeof res);
+            // type Res = {
+            //     id: number
+            // }
+            // const data: Res = JSON.parse(res)
             // возвращается айди, нужно ли в стор записывать?
+            store.dispatch({ type: 'SET_ID', id: res.id })
             return res
         } catch (err: unknown) {
             const error = err as LoginError

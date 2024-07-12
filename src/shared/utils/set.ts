@@ -1,7 +1,4 @@
-
-type Indexed<T = unknown> = {
-    [key in string]: T;
-};
+import { Indexed } from "@shared/models/common";
 
 function merge(lhs: Indexed, rhs: Indexed): Indexed {
     Object.keys(rhs).forEach((p) => {

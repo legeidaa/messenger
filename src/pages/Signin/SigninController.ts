@@ -1,5 +1,5 @@
 import { authAPI } from "@shared/api/AuthApi";
-import store from "@shared/Store/Store";
+import { store } from "@shared/Store";
 
 interface LoginError {
     status: number,
@@ -26,7 +26,7 @@ class SigninController {
         try {
             await authAPI.signin({ data: signinData })
             console.log('Успешный логин');
-            // записываем данные о юзере в стор
+            
             const userData = await authAPI.getUser({ data: signinData })
             store.dispatch({ type: 'SET_USER', user: userData })
             return true
