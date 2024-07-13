@@ -1,5 +1,9 @@
 import { authAPI } from "@shared/api/AuthApi";
 import { store } from "@shared/Store";
+import { validateSubmit } from "./validation";
+import { inputLogin, inputPassword, signinForm } from "./SigninPage";
+import { router } from "@shared/lib/Router";
+import { PagesPaths } from "@shared/lib/Router/model";
 
 interface LoginError {
     status: number,
@@ -20,6 +24,24 @@ class SigninController {
         } catch (err: unknown) {
             const error = err as LoginError
             return error.reason
+        }
+    }
+
+    public async submit(e: Event) {
+        if (validateSubmit(e)) {
+            signinForm.props.error = ''
+            
+            const signinResult = await signinController.signin({
+                login: inputLogin.children.input.props.value as string,
+                password: inputPassword.children.input.props.value as string
+            })
+
+            console.log(signinResult);
+            if (typeof signinResult === 'string') {
+                signinForm.props.error = signinResult
+            } else {
+                router.go(PagesPaths.CHAT)
+            }
         }
     }
 }

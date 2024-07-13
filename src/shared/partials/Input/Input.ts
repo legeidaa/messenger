@@ -1,11 +1,25 @@
 import './Input.scss'
 import InputTemplate from './Input.hbs?raw';
-import { Block } from '../../lib/Block';
+import { Block, IBlockProps } from '../../lib/Block';
 import { IInputProps } from './model';
 
 export class Input extends Block {
     constructor(props: IInputProps) {
-        super(props)
+        super({
+            ...props,
+            events: {
+                change: (e) => {
+                    const target = e.target as HTMLInputElement
+                    this.setProps({value: target?.value })
+                },
+            }
+        })
+
+
+    }
+
+    componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps): boolean {
+        return true
     }
 
     render() {

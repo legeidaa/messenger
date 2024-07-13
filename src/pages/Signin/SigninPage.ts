@@ -72,12 +72,13 @@ export const inputPassword = new InputField({
 })
 
 
-const footerButtonSubmit = new Button({
+export const footerButtonSubmit = new Button({
     text: 'Вход',
     type: 'submit',
     className: 'login-form__submit-btn',
 })
-const footerLinkSignup = new Link({
+
+export const footerLinkSignup = new Link({
     text: 'Нет аккаунта?',
     href: PagesPaths.SIGNUP,
     className: 'login-form__link',
@@ -89,7 +90,7 @@ const footerLinkSignup = new Link({
     },
 })
 
-const signinForm = new SigninForm({
+export const signinForm = new SigninForm({
     error: '',
     inputLogin,
     inputPassword,
@@ -97,27 +98,12 @@ const signinForm = new SigninForm({
     footerLinkSignup,
 })
 
-const form = new Form({
+export const form = new Form({
     formContent: signinForm,
     className: 'login-form login-form_signin',
     events: {
         submit: async (e) => {
-            if (validateSubmit(e)) {
-                signinForm.props.error = ''
-                const signinResult = await signinController.signin({
-                    // login: 'ligiza',
-                    // password: "P@ssw0rd"
-                    login: inputLogin.children.input.getContent().value as string,
-                    password: inputPassword.children.input.getContent().value as string
-                })
-
-                console.log(signinResult);
-                if (typeof signinResult === 'string') {
-                    signinForm.props.error = signinResult
-                } else {
-                    // router.go(PagesPaths.CHAT)
-                }
-            }
+            signinController.submit(e)
         },
     },
 })

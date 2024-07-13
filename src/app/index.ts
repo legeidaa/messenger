@@ -3,6 +3,8 @@ import * as Pages from '@pages/index.ts'
 import { router } from '@shared/lib/Router';
 import { PagesPaths } from '@shared/lib/Router/model';
 import { signinAPI } from '@shared/api/SigninApi';
+import { store } from '@shared/Store';
+import { authAPI } from '@shared/api/AuthApi';
 
 router
     .use(PagesPaths.SIGNIN, Pages.signinPage)
@@ -21,3 +23,14 @@ button.addEventListener('click', () => {
     signinAPI.logout()
 })
 document.body.prepend(button)
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const userData = await authAPI.getUser()
+        console.log('Данные юзера получены');
+        store.dispatch({ type: 'SET_USER', user: userData })
+        
+    } catch (error) {
+        router.go(PagesPaths.SIGNIN)
+    }
+})

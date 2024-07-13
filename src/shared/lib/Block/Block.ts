@@ -124,6 +124,7 @@ export class Block {
 
     private _componentDidMount(props: IBlockProps) {
         this.componentDidMount(props)
+        this.dispatchComponentDidMount()
         Object.values(this.children).forEach((child) => {
             child.dispatchComponentDidMount()
         })
@@ -144,6 +145,7 @@ export class Block {
 
     // вызывается из-за переопределения свойства set в прокси
     private _componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps) {
+        
         if (oldProps?.events) {
             const { events } = oldProps
             Object.keys(events).forEach((eventName) => {

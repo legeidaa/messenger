@@ -152,13 +152,13 @@ export const inputPasswordRepeat = new InputField({
     }),
 })
 
-const footerButtonSubmit = new Button({
+export const footerButtonSubmit = new Button({
     text: 'Зарегистрироваться',
     type: 'submit',
     className: 'login-form__submit-btn',
 })
 
-const footerLinkSignin = new Link({
+export const footerLinkSignin = new Link({
     text: 'Войти',
     href: PagesPaths.SIGNIN,
     className: 'login-form__link',
@@ -170,7 +170,7 @@ const footerLinkSignin = new Link({
     },
 })
 
-const signupForm = new SignupForm({
+export const signupForm = new SignupForm({
     error: '',
     inputEmail,
     inputLogin,
@@ -183,30 +183,12 @@ const signupForm = new SignupForm({
     footerLinkSignin,
 })
 
-const form = new Form({
+export const form = new Form({
     formContent: signupForm,
     className: 'login-form login-form_signup',
     events: {
         submit: async (e) => {
-            validateSubmit(e)
-            if (validateSubmit(e)) {
-                signupForm.props.error = ''
-                const signupResult = await signupController.signup({
-                    first_name: inputFirstName.children.input.getContent().value as string,
-                    second_name: inputSecondName.children.input.getContent().value as string,
-                    login: inputLogin.children.input.getContent().value as string,
-                    email: inputEmail.children.input.getContent().value as string,
-                    phone: inputPhone.children.input.getContent().value as string,
-                    password: inputPassword.children.input.getContent().value as string,
-                })
-
-                console.log(signupResult);
-                if (typeof signupResult === 'string') {
-                    signupForm.props.error = signupResult
-                } else {
-                    router.go(PagesPaths.SIGNIN)
-                }
-            }
+            signupController.submit(e)
         },
     },
 })

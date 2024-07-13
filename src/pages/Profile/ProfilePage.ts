@@ -3,12 +3,14 @@ import avatarSkeletonSrc from '@assets/avatar-skeleton.svg'
 import { changeAvatarModal } from '@widgets/ChangeAvatarModal/index.ts'
 import { Form } from '@shared/partials/Form/index.ts'
 import type { IFormProps } from '@shared/partials/Form/index.ts'
-import { Block } from '@shared/lib/Block/index.ts'
+import { Block, IBlockProps } from '@shared/lib/Block/index.ts'
 import { router } from '@shared/lib/Router/Router.ts'
 import { PagesPaths } from '@shared/lib/Router/model';
 import ProfileTemplate from './ProfilePage.hbs?raw'
-import { IProfilePageProps } from './model.ts'
+import { IProfilePageProps, IProfilePageState } from './model.ts'
 import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName } from './validation.ts'
+import { connect } from '@shared/Store/Hoc.ts'
+import { store } from '@shared/Store/Store.ts'
 
 export class ProfilePage extends Block {
     constructor(props: IProfilePageProps) {
@@ -19,10 +21,35 @@ export class ProfilePage extends Block {
         return this.compile(ProfileTemplate, this.props);
     }
 
-    componentDidUpdate(): boolean {
-        return true;
+    componentDidUpdate(oldProps: IProfilePageState, newProps: IProfilePageState): boolean {
+        console.log("profile componentDidUpdate", oldProps, newProps, this);
+        if (newProps.user) {
+            if (oldProps.user.email !== newProps.user.email) {
+                mailRow.children.input.setProps({ value: newProps.user.email })
+            }
+            if (oldProps.user.login !== newProps.user.login) {
+                loginRow.children.input.setProps({ value: newProps.user.login })
+            }
+            if (oldProps.user.first_name !== newProps.user.first_name) {
+                nameRow.children.input.setProps({ value: newProps.user.first_name })
+                profilePage.setProps({ profileName: newProps.user.first_name })
+            }
+            if (oldProps.user.second_name !== newProps.user.second_name) {
+                secondNameRow.children.input.setProps({ value: newProps.user.second_name })
+            }
+            if (oldProps.user.display_name !== newProps.user.display_name) {
+                displayNameRow.children.input.setProps({ value: newProps.user.display_name })
+            }
+            if (oldProps.user.phone !== newProps.user.phone) {
+                phoneRow.children.input.setProps({ value: newProps.user.phone })
+            }
+        }
+
+        return true
     }
 }
+
+const connectedProfilePage = connect(ProfilePage, (state) => ({ user: state.user }))
 
 export const mailRow = new ProfileDataRow({
     id: 'profile_email',
@@ -30,7 +57,7 @@ export const mailRow = new ProfileDataRow({
     input: new Input({
         className: 'profile__data-input',
         id: 'profile_email',
-        value: 'pochta@yandex.ru',
+        value: store.getState().user?.email,
         placeholder: 'Ваша почта',
         name: 'email',
         type: 'email',
@@ -47,7 +74,7 @@ export const loginRow = new ProfileDataRow({
     input: new Input({
         className: 'profile__data-input',
         id: 'profile_login',
-        value: 'ivanivanov',
+        value: store.getState().user?.login,
         placeholder: 'Ваш логин',
         name: 'login',
         type: 'text',
@@ -64,7 +91,7 @@ export const nameRow = new ProfileDataRow({
     input: new Input({
         className: 'profile__data-input',
         id: 'profile_first_name',
-        value: 'Иван',
+        value: store.getState().user?.first_name,
         placeholder: 'Ваше имя',
         name: 'first_name',
         type: 'text',
@@ -81,7 +108,7 @@ export const secondNameRow = new ProfileDataRow({
     input: new Input({
         className: 'profile__data-input',
         id: 'profile_second_name',
-        value: 'Иванов',
+        value: store.getState().user?.second_name,
         placeholder: 'Ваше имя',
         name: 'second_name',
         type: 'text',
@@ -92,13 +119,14 @@ export const secondNameRow = new ProfileDataRow({
     }),
 })
 
+const display_name = store.getState().user?.display_name
 export const displayNameRow = new ProfileDataRow({
     id: 'profile_display_name',
     label: 'Имя в чате',
     input: new Input({
         className: 'profile__data-input',
         id: 'profile_display_name',
-        value: 'Иван',
+        value: display_name === null ? '' : display_name,
         placeholder: 'Имя в чате',
         name: 'display_name',
         type: 'text',
@@ -106,13 +134,14 @@ export const displayNameRow = new ProfileDataRow({
     }),
 })
 
+const profile_phone = store.getState().user?.phone
 export const phoneRow = new ProfileDataRow({
     id: 'profile_phone',
     label: 'Телефон',
     input: new Input({
         className: 'profile__data-input',
         id: 'profile_phone',
-        value: '+79099673030',
+        value: profile_phone,
         placeholder: 'Ваш телефон',
         name: 'phone',
         type: 'tel',
@@ -282,7 +311,7 @@ const formProps: IProfilePageFormProps = {
 }
 const form = new Form(formProps)
 
-export const profilePage = new ProfilePage({
+export const profilePage = new connectedProfilePage({
     asideButton: new Button({
         className: 'button_icon button_arrow button_arrow_left',
         href: '#',
@@ -297,7 +326,7 @@ export const profilePage = new ProfilePage({
         profileAvatar: true,
         src: avatarSkeletonSrc,
     }),
-    profileName: 'Иван',
+    profileName: display_name === null ? '' : display_name,
     form,
     profileFooter: profileFooterContent,
     modal: new Modal({

@@ -14,8 +14,6 @@ class AuthAPI {
         return authAPIInstance.post('/auth/signin', { ...options })
     }
     public getUser() {
-        console.log('get user');
-        
         return authAPIInstance.get('/auth/user');
     }
     public logout() {
