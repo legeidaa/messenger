@@ -8,6 +8,7 @@ export interface IProfilePageProps extends IBlockProps {
     avatar: Avatar,
     profileName: string,
     profileFooter: Block | Block[],
+    profileFooterError: string,
     form: Form
 }
 

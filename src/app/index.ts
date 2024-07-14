@@ -2,7 +2,7 @@ import '@/app/styles/style.scss'
 import * as Pages from '@pages/index.ts'
 import { router } from '@shared/lib/Router';
 import { PagesPaths } from '@shared/lib/Router/model';
-import { signinAPI } from '@shared/api/SigninApi';
+// import { signinAPI } from '@shared/api/SigninApi';
 import { store } from '@shared/Store';
 import { authAPI } from '@shared/api/AuthApi';
 
@@ -20,7 +20,7 @@ router
 const button = document.createElement('button')
 button.innerText = 'Logout'
 button.addEventListener('click', () => {
-    signinAPI.logout()
+    authAPI.logout()
 })
 document.body.prepend(button)
 

@@ -8,9 +8,11 @@ import { router } from '@shared/lib/Router/Router.ts'
 import { PagesPaths } from '@shared/lib/Router/model';
 import ProfileTemplate from './ProfilePage.hbs?raw'
 import { IProfilePageProps, IProfilePageState } from './model.ts'
-import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName } from './validation.ts'
+import { validateComparePassword, validateDataFields, validateEmail, validateLogin, validateName, validatePassword, validatePasswordFields, validatePhone, validateSecondName } from './validation.ts'
 import { connect } from '@shared/Store/Hoc.ts'
 import { store } from '@shared/Store/Store.ts'
+import { profileController } from './ProfileController.ts'
+import { authAPI } from '@shared/api/AuthApi.ts'
 
 export class ProfilePage extends Block {
     constructor(props: IProfilePageProps) {
@@ -23,27 +25,8 @@ export class ProfilePage extends Block {
 
     componentDidUpdate(oldProps: IProfilePageState, newProps: IProfilePageState): boolean {
         console.log("profile componentDidUpdate", oldProps, newProps, this);
-        if (newProps.user) {
-            if (oldProps.user.email !== newProps.user.email) {
-                mailRow.children.input.setProps({ value: newProps.user.email })
-            }
-            if (oldProps.user.login !== newProps.user.login) {
-                loginRow.children.input.setProps({ value: newProps.user.login })
-            }
-            if (oldProps.user.first_name !== newProps.user.first_name) {
-                nameRow.children.input.setProps({ value: newProps.user.first_name })
-                profilePage.setProps({ profileName: newProps.user.first_name })
-            }
-            if (oldProps.user.second_name !== newProps.user.second_name) {
-                secondNameRow.children.input.setProps({ value: newProps.user.second_name })
-            }
-            if (oldProps.user.display_name !== newProps.user.display_name) {
-                displayNameRow.children.input.setProps({ value: newProps.user.display_name })
-            }
-            if (oldProps.user.phone !== newProps.user.phone) {
-                phoneRow.children.input.setProps({ value: newProps.user.phone })
-            }
-        }
+
+        profileController.setProfileFields(oldProps, newProps)
 
         return true
     }
@@ -152,7 +135,7 @@ export const phoneRow = new ProfileDataRow({
     }),
 })
 
-const profileDataInfo = [
+export const profileDataInfo = [
     mailRow,
     loginRow,
     nameRow,
@@ -217,13 +200,13 @@ export const repeatNewPasswordRow = new ProfileDataRow({
     }),
 })
 
-const profileDataPass = [
+export const profileDataPass = [
     oldPasswordRow,
     newPasswordRow,
     repeatNewPasswordRow,
 ]
 
-const changeDataRow = new ProfileDataRow({
+export const changeDataRow = new ProfileDataRow({
     className: 'profile__footer-row',
     link: new Link({
         href: '#',
@@ -232,13 +215,14 @@ const changeDataRow = new ProfileDataRow({
         events: {
             click: (e: Event) => {
                 e.preventDefault()
-                changeProfileData()
+                // changeProfileData()
+                profileController.changeFieldsToProfileData()
             },
         },
     }),
 })
 
-const changePasswordRow = new ProfileDataRow({
+export const changePasswordRow = new ProfileDataRow({
     className: 'profile__footer-row',
     link: new Link({
         href: '#',
@@ -247,28 +231,37 @@ const changePasswordRow = new ProfileDataRow({
         events: {
             click: (e: Event) => {
                 e.preventDefault()
-                changePassword()
+                profileController.changeFieldsToProfilePassword()
             },
         },
     }),
 })
 
-const exitRow = new ProfileDataRow({
+export const exitRow = new ProfileDataRow({
     className: 'profile__footer-row',
     link: new Link({
         href: '#',
         text: 'Выйти',
         className: 'link_red profile__link profile__link-exit',
         events: {
-            click: (e: Event) => {
+            click: async (e: Event) => {
                 e.preventDefault()
-                router.go(PagesPaths.SIGNIN)
+
+                try {
+                    await authAPI.logout()
+
+                    router.go(PagesPaths.SIGNIN)
+                } catch (e) {
+                    console.log('Logout failed', e);
+
+                }
+
             },
         },
     }),
 })
 
-const saveButton = new Button({
+export const saveButton = new Button({
     className: 'profile__data-save',
     text: 'Сохранить',
     type: 'submit',
@@ -281,7 +274,7 @@ const saveButton = new Button({
     },
 })
 
-const profileFooterContent = [
+export const profileFooterContent = [
     changeDataRow,
     changePasswordRow,
     exitRow,
@@ -292,7 +285,7 @@ interface IProfilePageFormProps extends IFormProps {
     canChangePassword: false,
 }
 
-const formProps: IProfilePageFormProps = {
+export const formProps: IProfilePageFormProps = {
     className: 'profile__form profile__data',
     id: 'profile_form',
     formContent: profileDataInfo,
@@ -305,11 +298,11 @@ const formProps: IProfilePageFormProps = {
             const formDataObj = Object.fromEntries(data.entries())
             console.log(formDataObj)
 
-            saveData(e)
+            profileController.saveData(e)
         },
     },
 }
-const form = new Form(formProps)
+export const form = new Form(formProps)
 
 export const profilePage = new connectedProfilePage({
     asideButton: new Button({
@@ -329,98 +322,10 @@ export const profilePage = new connectedProfilePage({
     profileName: display_name === null ? '' : display_name,
     form,
     profileFooter: profileFooterContent,
+    profileFooterError: '',
     modal: new Modal({
         className: 'modal_small',
         dataModalType: 'change-avatar',
         content: changeAvatarModal,
     }),
 })
-
-function changeProfileData() {
-    profileDataInfo.forEach((row) => {
-        row.children.input.setProps({
-            readonly: false,
-        })
-    })
-    const newProfileFooterContent = [
-        saveButton,
-    ]
-    form.setProps({
-        canChangeData: true,
-    })
-    profilePage.setProps({
-        profileFooter: newProfileFooterContent,
-    })
-}
-
-function changePassword() {
-    const newProfileFooterContent = [
-        saveButton,
-    ]
-    form.setProps({
-        formContent: profileDataPass,
-        canChangePassword: true,
-    })
-    profilePage.setProps({
-        profileFooter: newProfileFooterContent,
-    })
-}
-
-function saveData(e: Event) {
-    // сохраняем данные в стор, потом меняем состояние
-    if (form.props.canChangePassword) {
-        if (
-            (
-                validatePassword(e, newPasswordRow, 'Новый пароль')
-                && validatePassword(e, oldPasswordRow, 'Старый пароль')
-                && validateComparePassword(e)
-            ) === false
-        ) {
-            validatePassword(e, newPasswordRow, 'Новый пароль')
-            validatePassword(e, oldPasswordRow, 'Старый пароль')
-            validateComparePassword(e)
-
-            return
-        }
-    }
-
-    if (form.props.canChangeData) {
-        if (
-            (
-                validateEmail(e)
-                && validateName(e)
-                && validatePhone(e)
-                && validateLogin(e)
-                && validateSecondName(e)
-            ) === false
-        ) {
-            validateEmail(e)
-            validateName(e)
-            validatePhone(e)
-            validateLogin(e)
-            validateSecondName(e)
-
-            return
-        }
-    }
-
-    profileDataInfo.forEach((row) => {
-        row.children.input.setProps({
-            readonly: true,
-        })
-    })
-    const newProfileFooterContent = [
-        changeDataRow,
-        changePasswordRow,
-        exitRow,
-    ]
-
-    form.setProps({
-        formContent: profileDataInfo,
-        canChangePassword: false,
-        canChangeData: false,
-    })
-    profilePage.setProps({
-        profileFooter: newProfileFooterContent,
-    })
-}

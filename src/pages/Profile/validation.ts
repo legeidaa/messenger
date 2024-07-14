@@ -1,6 +1,6 @@
 import { validator } from '@shared/lib/Validator.ts'
 import { ProfileDataRow } from '@shared/partials/index.ts'
-import { loginRow, mailRow, nameRow, newPasswordRow, phoneRow, repeatNewPasswordRow, secondNameRow } from './ProfilePage.ts'
+import { loginRow, mailRow, nameRow, newPasswordRow, oldPasswordRow, phoneRow, repeatNewPasswordRow, secondNameRow } from './ProfilePage.ts'
 
 function validateHelper(inputField: ProfileDataRow, result: boolean | string, standartLabel: string) {
     if (typeof result === 'string') {
@@ -67,4 +67,43 @@ export function validateComparePassword(e: Event) {
     const result = validator.comparePasswords(passInput.value, passInputRepeat.value)
 
     return validateHelper(repeatNewPasswordRow, result, 'Повторите пароль')
+}
+
+// сперва проверяем все поля, потом их подсвечивает
+export function validateDataFields(e: Event) {
+    if (
+        (
+            validateEmail(e)
+            && validateName(e)
+            && validatePhone(e)
+            && validateLogin(e)
+            && validateSecondName(e)
+        ) === false
+    ) {
+        validateEmail(e)
+        validateName(e)
+        validatePhone(e)
+        validateLogin(e)
+        validateSecondName(e)
+
+        return false
+    }
+    return true
+}
+
+export function validatePasswordFields(e: Event) {
+    if (
+        (
+            validatePassword(e, newPasswordRow, 'Новый пароль')
+            && validatePassword(e, oldPasswordRow, 'Старый пароль')
+            && validateComparePassword(e)
+        ) === false
+    ) {
+        validatePassword(e, newPasswordRow, 'Новый пароль')
+        validatePassword(e, oldPasswordRow, 'Старый пароль')
+        validateComparePassword(e)
+
+        return false
+    }
+    return true
 }

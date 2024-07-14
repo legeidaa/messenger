@@ -4,7 +4,6 @@ import { BaseURL } from './consts';
 
 const authAPIInstance = new HTTPTransport(BaseURL);
 
-// TODO сделать типы для data
 class AuthAPI {
     public signup(options: IMethodOptions) {
         return authAPIInstance.post('/auth/signup', { ...options })

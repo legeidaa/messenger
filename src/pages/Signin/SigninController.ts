@@ -4,11 +4,7 @@ import { validateSubmit } from "./validation";
 import { inputLogin, inputPassword, signinForm } from "./SigninPage";
 import { router } from "@shared/lib/Router";
 import { PagesPaths } from "@shared/lib/Router/model";
-
-interface LoginError {
-    status: number,
-    reason: string
-}
+import { ApiError } from "shared/api/model";
 
 class SigninController {
     // после приватного роута
@@ -22,7 +18,7 @@ class SigninController {
 
             return true
         } catch (err: unknown) {
-            const error = err as LoginError
+            const error = err as ApiError
             return error.reason
         }
     }
