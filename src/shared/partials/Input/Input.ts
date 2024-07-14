@@ -9,15 +9,16 @@ export class Input extends Block {
             ...props,
             events: {
                 change: (e) => {
-                    const target = e.target as HTMLInputElement
-                    this.setProps({value: target?.value })
+                    if (this.getContent().getAttribute('type') !== 'file') {
+                        const target = e.target as HTMLInputElement
+                        this.setProps({ value: target?.value })
+                    }
                 },
             }
         })
 
 
     }
-
     componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps): boolean {
         return true
     }

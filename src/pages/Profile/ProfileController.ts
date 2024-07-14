@@ -3,6 +3,7 @@ import { userAPI } from "@shared/api/UserApi";
 import { changeDataRow, changePasswordRow, displayNameRow, exitRow, form, loginRow, mailRow, nameRow, newPasswordRow, oldPasswordRow, phoneRow, profileDataInfo, profileDataPass, profilePage, repeatNewPasswordRow, saveButton, secondNameRow } from "./ProfilePage";
 import { IProfilePageState } from "./model";
 import { validateDataFields, validatePasswordFields, } from "./validation";
+import avatarSkeletonSrc from '@assets/avatar-skeleton.svg'
 import { store } from "@shared/Store";
 import { ApiError } from "shared/api/model";
 
@@ -148,6 +149,14 @@ class ProfileController {
             profileFooter: newProfileFooterContent,
             profileFooterError: '',
         })
+    }
+
+    public getAvatarSrc(): string {
+        if (store.getState().user?.avatar) {
+            return store.getState().user?.avatar as string
+        } else {
+            return avatarSkeletonSrc
+        }
     }
 }
 

@@ -31,6 +31,8 @@ export class Block {
 
     private _id: string
 
+    private _isListItem: boolean = false
+
     eventBus: () => EventBus
 
     constructor(propsAndChildren: IBlockProps) {
@@ -73,10 +75,12 @@ export class Block {
         })
 
         Object.entries(this.lists).forEach(([key]) => {
+
             const child = this.lists[key]
             const listCont = document.createElement('template') as HTMLTemplateElement
             child.forEach((item) => {
                 if (item instanceof Block) {
+                    item._isListItem = true
                     listCont.content.append(item.getContent());
                 } else {
                     listCont.content.append(`${item}`);
@@ -122,22 +126,33 @@ export class Block {
         return this._element
     }
 
-    private _componentDidMount(props: IBlockProps) {
-        this.componentDidMount(props)
-        this.dispatchComponentDidMount()
-        Object.values(this.children).forEach((child) => {
-            child.dispatchComponentDidMount()
-        })
-        if (!this.firstRender) {
-            this.firstRender = true
+    private _componentDidMount() {
+
+        this.componentDidMount(this.props);
+        if (this.children) {
+            Object.values(this.children).forEach((child) => {
+                if (!child._isListItem) {
+                    // console.log('Child mounted', child);
+                    child.dispatchComponentDidMount()
+                }
+            });
+        }
+        if (this.lists) {
+            Object.values(this.lists).forEach((list) => {
+                list.forEach((child) => {
+                    if (child instanceof Block) {
+                        // console.log('List item mounted', child);
+
+                        child.dispatchComponentDidMount();
+                    }
+                });
+            });
         }
     }
-
     dispatchComponentDidMount() {
         this.eventBus().emit(Block.EVENTS.FLOW_CDM, this.props);
     }
 
-    // componentDidMount(props: IBlockProps)
     componentDidMount(props: IBlockProps) {
         if (!props) { return false }
         return true
@@ -145,7 +160,7 @@ export class Block {
 
     // вызывается из-за переопределения свойства set в прокси
     private _componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps) {
-        
+
         if (oldProps?.events) {
             const { events } = oldProps
             Object.keys(events).forEach((eventName) => {

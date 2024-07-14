@@ -4,7 +4,7 @@ import { validateSubmit } from "./validation";
 import { inputLogin, inputPassword, signinForm } from "./SigninPage";
 import { router } from "@shared/lib/Router";
 import { PagesPaths } from "@shared/lib/Router/model";
-import { ApiError } from "shared/api/model";
+import { ApiError } from "@shared/api/model";
 
 class SigninController {
     // после приватного роута

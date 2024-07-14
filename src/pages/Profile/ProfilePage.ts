@@ -1,6 +1,4 @@
 import { Avatar, Button, Input, Link, Modal, ProfileDataRow } from '@shared/partials/index.ts'
-import avatarSkeletonSrc from '@assets/avatar-skeleton.svg'
-import { changeAvatarModal } from '@widgets/ChangeAvatarModal/index.ts'
 import { Form } from '@shared/partials/Form/index.ts'
 import type { IFormProps } from '@shared/partials/Form/index.ts'
 import { Block, IBlockProps } from '@shared/lib/Block/index.ts'
@@ -13,6 +11,7 @@ import { connect } from '@shared/Store/Hoc.ts'
 import { store } from '@shared/Store/Store.ts'
 import { profileController } from './ProfileController.ts'
 import { authAPI } from '@shared/api/AuthApi.ts'
+import {  changeAvatarModal } from '@widgets/ChangeAvatarModal/index.ts'
 
 export class ProfilePage extends Block {
     constructor(props: IProfilePageProps) {
@@ -317,7 +316,12 @@ export const profilePage = new connectedProfilePage({
     }),
     avatar: new Avatar({
         profileAvatar: true,
-        src: avatarSkeletonSrc,
+        src: profileController.getAvatarSrc(),
+        events: {
+            click: (e) => {
+                e.preventDefault()
+            },
+        }
     }),
     profileName: display_name === null ? '' : display_name,
     form,
@@ -329,3 +333,4 @@ export const profilePage = new connectedProfilePage({
         content: changeAvatarModal,
     }),
 })
+

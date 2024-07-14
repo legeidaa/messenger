@@ -49,7 +49,8 @@ export class Route {
         }
 
         this._root.insertAdjacentElement('beforeend', this._block.getContent())
-
+        this._block.dispatchComponentDidMount();
+        
         this._block.show();
     }
 }
