@@ -1,17 +1,19 @@
 import { Avatar, Button, Input, Link, Modal, ProfileDataRow } from '@shared/partials/index.ts'
 import { Form } from '@shared/partials/Form/index.ts'
 import type { IFormProps } from '@shared/partials/Form/index.ts'
-import { Block, IBlockProps } from '@shared/lib/Block/index.ts'
+import { Block } from '@shared/lib/Block/index.ts'
 import { router } from '@shared/lib/Router/Router.ts'
 import { PagesPaths } from '@shared/lib/Router/model';
 import ProfileTemplate from './ProfilePage.hbs?raw'
 import { IProfilePageProps, IProfilePageState } from './model.ts'
-import { validateComparePassword, validateDataFields, validateEmail, validateLogin, validateName, validatePassword, validatePasswordFields, validatePhone, validateSecondName } from './validation.ts'
+import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName } from './validation.ts'
 import { connect } from '@shared/Store/Hoc.ts'
 import { store } from '@shared/Store/Store.ts'
 import { profileController } from './ProfileController.ts'
 import { authAPI } from '@shared/api/AuthApi.ts'
-import {  changeAvatarModal } from '@widgets/ChangeAvatarModal/index.ts'
+import { changeAvatarModal } from '@widgets/ChangeAvatarModal/index.ts'
+import { avatarController } from '@shared/partials/Avatar/index.ts'
+import { activateModals } from '@shared/utils/activateModals.ts'
 
 export class ProfilePage extends Block {
     constructor(props: IProfilePageProps) {
@@ -26,6 +28,11 @@ export class ProfilePage extends Block {
         console.log("profile componentDidUpdate", oldProps, newProps, this);
 
         profileController.setProfileFields(oldProps, newProps)
+
+        if (oldProps.user?.avatar !== newProps.user?.avatar) {
+            profilePage.children.avatar.setProps({ src: avatarController.getAvatarSrc() })
+            activateModals()
+        }
 
         return true
     }
@@ -316,7 +323,7 @@ export const profilePage = new connectedProfilePage({
     }),
     avatar: new Avatar({
         profileAvatar: true,
-        src: profileController.getAvatarSrc(),
+        src: avatarController.getAvatarSrc(),
         events: {
             click: (e) => {
                 e.preventDefault()

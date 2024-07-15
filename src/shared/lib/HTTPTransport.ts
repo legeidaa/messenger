@@ -10,7 +10,7 @@ enum METHODS {
 export interface IMethodOptions {
     headers?: { [key: string]: string },
     timeout?: number
-    data?: Record<string, unknown>,
+    data?: Record<string, unknown> | FormData,
     withCredentials?: boolean,
     responseType?: XMLHttpRequestResponseType
     // signal?: AbortSignal

@@ -150,14 +150,6 @@ class ProfileController {
             profileFooterError: '',
         })
     }
-
-    public getAvatarSrc(): string {
-        if (store.getState().user?.avatar) {
-            return store.getState().user?.avatar as string
-        } else {
-            return avatarSkeletonSrc
-        }
-    }
 }
 
 export const profileController = new ProfileController()

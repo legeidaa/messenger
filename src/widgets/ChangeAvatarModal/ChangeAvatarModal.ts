@@ -31,22 +31,18 @@ export const fileInput = new InputField({
 export const button = new Button({
     className: 'modal__form-submit-btn',
     text: 'Поменять',
-    // events: {
-    //     click: (e) => {
-    //         e.preventDefault()
-    //     },
-    // },
+})
+
+export const changeAvatarForm = new ChangeAvatarForm({
+    fileInput,
+    button,
+    modalError: '',
 })
 export const changeAvatarModal = new ChangeAvatarModal({
     modalTitleError: false,
     modalTitle: 'Загрузите файл',
     changeAvatarForm: new Form({
-        formContent: new ChangeAvatarForm({
-            fileInput,
-            button,
-            modalError: 'Нужно выбрать файл',
-
-        }),
+        formContent: changeAvatarForm,
         events: {
             submit: (e) => {
                 e.preventDefault()
