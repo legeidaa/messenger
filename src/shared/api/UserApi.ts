@@ -1,21 +1,22 @@
 
-import { HTTPTransport, IMethodOptions } from '@shared/lib/HTTPTransport';
-import { BaseURL } from './consts';
+import { IMethodOptions } from '@shared/lib/HTTPTransport';
+import { Api } from './Api';
+class UserAPI extends Api{
 
-const userAPIInstance = new HTTPTransport(BaseURL);
-
-class UserAPI {
+    constructor() {
+        super('/user')
+    }
     public changeProfileData(options: IMethodOptions) {
-        return userAPIInstance.put('/user/profile', { ...options })
+        return this.transport.put('/profile', { ...options })
     }
     public changeProfileAvatar(options: IMethodOptions) {
-        return userAPIInstance.put('/user/profile/avatar', { ...options })
+        return this.transport.put('/profile/avatar', { ...options })
     }
     public changeProfilePassword(options: IMethodOptions) {
-        return userAPIInstance.put('/user/password', { ...options });
+        return this.transport.put('/password', { ...options });
     }
     public searchUser(options: IMethodOptions) {
-        return userAPIInstance.post('/user/search', { ...options });
+        return this.transport.post('/search', { ...options });
     }
 }
 

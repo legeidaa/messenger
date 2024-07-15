@@ -25,8 +25,6 @@ export class ProfilePage extends Block {
     }
 
     componentDidUpdate(oldProps: IProfilePageState, newProps: IProfilePageState): boolean {
-        console.log("profile componentDidUpdate", oldProps, newProps, this);
-
         profileController.setProfileFields(oldProps, newProps)
 
         if (oldProps.user?.avatar !== newProps.user?.avatar) {

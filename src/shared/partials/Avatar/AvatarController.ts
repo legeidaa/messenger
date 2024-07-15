@@ -2,12 +2,11 @@ import avatarSkeletonSrc from '@assets/avatar-skeleton.svg'
 import { store } from "@shared/Store";
 
 class AvatarController {
+    public avatarBaseSrc: string = 'https://ya-praktikum.tech/api/v2/resources'
 
     public getAvatarSrc(): string {
-        console.log(store.getState().user?.avatar)
-        
         if (store.getState().user?.avatar) {
-            return store.getState().user?.avatar as string
+            return this.avatarBaseSrc +store.getState().user?.avatar as string
         } else {
             return avatarSkeletonSrc
         }

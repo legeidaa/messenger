@@ -2,7 +2,6 @@ export interface State {
     user: User | null
     [key: string]: any
 }
-
 export interface User {
     id: number | null
     first_name: string
@@ -25,10 +24,7 @@ export const state: State = {
         email: '',
         phone: ''
     },
-    buttonText: 'Сохранить',
 }
-
-
 
 // {
 //     "id": 1248,

@@ -13,8 +13,6 @@ export class Modal extends Block {
     }
 
     componentDidMount() {
-        console.log('modal did mount');
-        
         activateModals()
         return true
     }
