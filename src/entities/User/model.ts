@@ -8,3 +8,14 @@ export interface User {
     email: string
     phone: string
 }
+
+// {
+//     "id": 1248,
+//     "first_name": "Иван",
+//     "second_name": "И",
+//     "display_name": null,
+//     "login": "legeida",
+//     "avatar": null,
+//     "email": "legeida@yandex.ru",
+//     "phone": "+71234567890"
+// }

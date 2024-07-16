@@ -6,15 +6,14 @@ export const reducer: Reducer = (state, action) => {
     let newState = cloneDeep(state) as State
 
     switch (action.type) {
-        // case 'SET_TEXT':
-        //     newState.buttonText = action.buttonText
-        //     break
-
-        // case 'SET_SAMPLE_PROPS':
-        //     newState.sampleProps = action.sampleProps
-        //     break
         case 'SET_USER':
             newState.user = action.user
+            break
+        case 'SET_CHATS':
+            newState.chats = action.chats
+            break
+        case 'SET_CURRENT_CHAT':
+            newState.currentChat = action.currentChat
             break
     }
     state = newState

@@ -1,7 +1,11 @@
-import { User } from "entities/User"
+import { User } from "@entities/User"
+import { Chat, Chats } from "@entities/Chat"
+
 
 export interface State {
     user: User | null
+    chats: Chats | null | []
+    currentChat: Chat | null
     [key: string]: any
 }
 
@@ -16,15 +20,6 @@ export const state: State = {
         email: '',
         phone: ''
     },
+    chats: [],
+    currentChat: null
 }
-
-// {
-//     "id": 1248,
-//     "first_name": "Иван",
-//     "second_name": "И",
-//     "display_name": null,
-//     "login": "legeida",
-//     "avatar": null,
-//     "email": "legeida@yandex.ru",
-//     "phone": "+71234567890"
-// }

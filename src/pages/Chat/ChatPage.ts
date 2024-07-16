@@ -1,19 +1,20 @@
-import { Block } from '@shared/lib/Block/index.ts'
-import { Avatar, Button, Input, InputField, Link, Modal } from '@shared/partials/index.ts';
-import { ChatMessages } from '@widgets/ChatMessages/index.ts';
-import { Message } from '@widgets/Message/index.ts';
-import { ChatDate } from '@shared/partials/ChatDate/index.ts';
-import { Textarea } from '@shared/partials/Textarea/index.ts';
-import { validator } from '@shared/lib/Validator.ts';
-import { Form } from '@shared/partials/Form/index.ts';
-import { MessagesForm } from '@widgets/MessagesForm/index.ts';
-import { router } from '@shared/lib/Router/Router.ts';
+import { Block } from '@shared/lib/Block/index'
+import { Avatar, Button, Input, InputField, Link, Modal } from '@shared/partials/index';
+import { ChatMessages } from '@widgets/ChatMessages/index';
+import { Message } from '@widgets/Message/index';
+import { ChatDate } from '@shared/partials/ChatDate/index';
+import { Textarea } from '@shared/partials/Textarea/index';
+import { validator } from '@shared/lib/Validator';
+import { Form } from '@shared/partials/Form/index';
+import { MessagesForm } from '@widgets/MessagesForm/index';
+import { router } from '@shared/lib/Router/Router';
 import { PagesPaths } from '@shared/lib/Router/model';
 import { DialogItem } from '@widgets/DialogItem';
 import ChatPageTemplate from './ChatPage.hbs?raw';
-import { IChatPageProps } from './model.ts';
+import { IChatPageProps, IChatPageState } from './model';
 import { addUserModal } from '@widgets/AddUserModal';
-import { chatPageController } from './ChatPageController.ts';
+import { chatPageController } from './ChatPageController';
+import { connect } from '@shared/Store';
 
 export class ChatPage extends Block {
     constructor(props: IChatPageProps) {
@@ -24,16 +25,26 @@ export class ChatPage extends Block {
         return this.compile(ChatPageTemplate, this.props);
     }
 
-    componentDidMount(props: IChatPageProps): boolean {
+    componentDidMount(props: IChatPageState): boolean {
         chatPageController.getChats()
+
         return true
     }
 
-    componentDidUpdate(_props: IChatPageProps, _oldProps: IChatPageProps): boolean {
+    componentDidUpdate(oldProps: IChatPageState, newProps: IChatPageState): boolean {
+        console.log("componentDidUpdate", this, this.props, oldProps, newProps);
+
+        if (oldProps.chats !== newProps.chats) {
+
+            chatPage.setProps({ dialogListItems: chatPageController.createDialogsList() })
+        }
         // обновляем список чатов, когда они загрузятся
         return true
     }
 }
+
+const ConnectedChatPage = connect(ChatPage, (state) => ({ chats: state.chats, user: state.user, currentChat: state.currentChat }));
+
 const messages = [
     new ChatDate({
         date: '19 июня',
@@ -127,8 +138,7 @@ function validateMessage(e: Event) {
     return true
 }
 
-export const chatPage = new ChatPage({
-
+export const chatPage = new ConnectedChatPage({
     dialogsHeaderLink: new Link({
         href: PagesPaths.PROFILE,
         text: 'Профиль',
@@ -162,39 +172,39 @@ export const chatPage = new ChatPage({
     }),
     chatPlaceholder: false,
     dialogListItems: [
-        new DialogItem({
-            avatar: new Avatar({
-                src: 'https://via.placeholder.com/50x50',
-            }),
-            name: 'Андрей',
-            message: 'Привет, как дела?',
-            time: '12:00',
-            count: 2,
-            messageByYou: false,
-            selected: false,
-        }),
-        new DialogItem({
-            avatar: new Avatar({
-                src: 'https://via.placeholder.com/50x50',
-            }),
-            name: 'Киноклуб',
-            message: 'Какое-то сообщение',
-            time: '12:00',
-            count: 0,
-            messageByYou: true,
-            selected: false,
-        }),
-        new DialogItem({
-            avatar: new Avatar({
-                src: 'https://via.placeholder.com/50x50',
-            }),
-            name: 'Андрей',
-            message: 'И Human Interface Guidelines и Material Design...',
-            time: '1 Мая 2020',
-            count: 0,
-            messageByYou: false,
-            selected: true,
-        }),
+        // new DialogItem({
+        //     avatar: new Avatar({
+        //         src: 'https://via.placeholder.com/50x50',
+        //     }),
+        //     name: 'Андрей',
+        //     message: 'Привет, как дела?',
+        //     time: '12:00',
+        //     count: 2,
+        //     messageByYou: false,
+        //     selected: false,
+        // }),
+        // new DialogItem({
+        //     avatar: new Avatar({
+        //         src: 'https://via.placeholder.com/50x50',
+        //     }),
+        //     name: 'Киноклуб',
+        //     message: 'Какое-то сообщение',
+        //     time: '12:00',
+        //     count: 0,
+        //     messageByYou: true,
+        //     selected: false,
+        // }),
+        // new DialogItem({
+        //     avatar: new Avatar({
+        //         src: 'https://via.placeholder.com/50x50',
+        //     }),
+        //     name: 'Андрей',
+        //     message: 'И Human Interface Guidelines и Material Design...',
+        //     time: '1 Мая 2020',
+        //     count: 0,
+        //     messageByYou: false,
+        //     selected: true,
+        // }),
     ],
     chat: chatMessages,
     modal: new Modal({

@@ -1,7 +1,7 @@
 import { Avatar, Button } from '@shared/partials/index.ts';
 import { Block, IBlockProps } from '@shared/lib/Block/index.ts';
 import { Form } from '@shared/partials/Form/index.ts';
-import { User } from '@shared/Store/state';
+import { User } from '@entities/User';
 
 export interface IProfilePageProps extends IBlockProps {
     asideButton: Button
