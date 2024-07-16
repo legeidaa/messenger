@@ -1,16 +1,8 @@
+import { User } from "entities/User"
+
 export interface State {
     user: User | null
     [key: string]: any
-}
-export interface User {
-    id: number | null
-    first_name: string
-    second_name: string
-    display_name: string | null   
-    login: string
-    avatar: string | null
-    email: string
-    phone: string
 }
 
 export const state: State = {

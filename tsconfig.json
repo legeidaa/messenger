@@ -47,6 +47,9 @@
             ],
             "@widgets/*": [
                 "./src/widgets/*"
+            ],
+            "@entities/*": [
+                "./src/entities/*"
             ]
         }
     },

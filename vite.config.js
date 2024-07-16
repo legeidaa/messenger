@@ -17,6 +17,7 @@ export default defineConfig({
             { find: '@assets', replacement: fileURLToPath(new URL('./src/shared/assets', import.meta.url)) },
             { find: '@shared', replacement: fileURLToPath(new URL('./src/shared', import.meta.url)) },
             { find: '@widgets', replacement: fileURLToPath(new URL('./src/widgets', import.meta.url)) },
+            { find: '@entities', replacement: fileURLToPath(new URL('./src/entities', import.meta.url)) },
         ],
     },
     server: {

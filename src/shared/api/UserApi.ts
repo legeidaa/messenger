@@ -15,8 +15,8 @@ class UserAPI extends Api{
     public changeProfilePassword(options: IMethodOptions) {
         return this.transport.put('/password', { ...options });
     }
-    public searchUser(options: IMethodOptions) {
-        return this.transport.post('/search', { ...options });
+    public searchUser(login: string) {
+        return this.transport.post('/search', { data: { login } });
     }
 }
 

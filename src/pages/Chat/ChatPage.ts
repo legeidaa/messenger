@@ -1,5 +1,5 @@
 import { Block } from '@shared/lib/Block/index.ts'
-import { Avatar, Button, Input, InputField, Link } from '@shared/partials/index.ts';
+import { Avatar, Button, Input, InputField, Link, Modal } from '@shared/partials/index.ts';
 import { ChatMessages } from '@widgets/ChatMessages/index.ts';
 import { Message } from '@widgets/Message/index.ts';
 import { ChatDate } from '@shared/partials/ChatDate/index.ts';
@@ -9,9 +9,11 @@ import { Form } from '@shared/partials/Form/index.ts';
 import { MessagesForm } from '@widgets/MessagesForm/index.ts';
 import { router } from '@shared/lib/Router/Router.ts';
 import { PagesPaths } from '@shared/lib/Router/model';
-import { DialogItem } from '../../widgets/DialogItem/index.ts';
+import { DialogItem } from '@widgets/DialogItem';
 import ChatPageTemplate from './ChatPage.hbs?raw';
 import { IChatPageProps } from './model.ts';
+import { addUserModal } from '@widgets/AddUserModal';
+import { chatPageController } from './ChatPageController.ts';
 
 export class ChatPage extends Block {
     constructor(props: IChatPageProps) {
@@ -20,6 +22,16 @@ export class ChatPage extends Block {
 
     override render() {
         return this.compile(ChatPageTemplate, this.props);
+    }
+
+    componentDidMount(props: IChatPageProps): boolean {
+        chatPageController.getChats()
+        return true
+    }
+
+    componentDidUpdate(_props: IChatPageProps, _oldProps: IChatPageProps): boolean {
+        // обновляем список чатов, когда они загрузятся
+        return true
     }
 }
 const messages = [
@@ -116,6 +128,7 @@ function validateMessage(e: Event) {
 }
 
 export const chatPage = new ChatPage({
+
     dialogsHeaderLink: new Link({
         href: PagesPaths.PROFILE,
         text: 'Профиль',
@@ -133,6 +146,19 @@ export const chatPage = new ChatPage({
         name: 'dialogs_search',
         className: 'dialogs__search-input',
         placeholder: 'Поиск',
+    }),
+    dialogsFooter: new Button({
+        className: '',
+        text: 'Добавить чат',
+        type: 'button',
+        events: {
+            click: (e) => {
+                e.preventDefault()
+            },
+        },
+        attr: {
+            'data-modal': "add-user",
+        }
     }),
     chatPlaceholder: false,
     dialogListItems: [
@@ -171,4 +197,16 @@ export const chatPage = new ChatPage({
         }),
     ],
     chat: chatMessages,
+    modal: new Modal({
+        className: 'modal_small modal-add-user',
+        dataModalType: 'add-user',
+        content: addUserModal,
+    }),
 })
+
+addUserModal.props.events = {
+    submit: (e: Event) => {
+        e.preventDefault()
+        chatPageController.addChat(e)
+    },
+}
