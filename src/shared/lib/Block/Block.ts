@@ -115,7 +115,7 @@ export class Block {
         if (!nextProps) {
             return;
         }
-        const { props, lists } = this._getChildren(nextProps)
+        const {props, lists } = this._getChildren(nextProps)
 
         Object.assign(this.props, props)
         Object.assign(this.lists, lists)
@@ -209,9 +209,21 @@ export class Block {
         Object.entries(propsAndChildren).forEach(([key, value]) => {
             if (value instanceof Block) {
                 children[key] = value
-            } else if ( Array.isArray(value) ) {
-                // if ( value.every((item) => item instanceof Block)) {
-                //     console.log(value);
+            } else if (Array.isArray(value)) {
+
+                // let valueIsListOfBlocks = true
+
+                // value.forEach((item) => {
+                //     if (!(item instanceof Block)) {
+                //         valueIsListOfBlocks = false
+                //     }
+                // })
+
+                // console.log(key, value, valueIsListOfBlocks, this);
+                
+
+                // if (valueIsListOfBlocks) {
+                //     console.log("valueIsListOfBlocks", value);
                 //     lists[key] = value
                 // }
                 lists[key] = value

@@ -5,7 +5,15 @@ import { ITextareaProps } from './model';
 
 export class Textarea extends Block {
     constructor(props: ITextareaProps) {
-        super(props);
+        super({
+            ...props,
+            events: {
+                change: (e) => {
+                    const target = e.target as HTMLInputElement
+                    this.setProps({ value: target?.value })
+                },
+            }
+        });
     }
 
     render() {

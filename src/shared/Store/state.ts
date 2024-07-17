@@ -21,5 +21,6 @@ export const state: State = {
         phone: ''
     },
     chats: [],
-    currentChat: null
+    currentChat: null,
+    
 }

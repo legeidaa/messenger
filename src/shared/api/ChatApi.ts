@@ -28,6 +28,10 @@ export class ChatAPI extends Api {
         return this.transport.delete('', { data: { chatId } })
     }
 
+    public getChatToken(chatId: number) {
+        return this.transport.post(`/token/${chatId}`, )
+    }
+
     public addUser(chatId: number, userId: number) {
         return this.transport.put('/users', { data: { users: [userId], chatId } })
     }

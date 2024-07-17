@@ -13,11 +13,14 @@ import ChatPageTemplate from './ChatPage.hbs?raw';
 import { IChatPageProps, IChatPageState } from './model';
 import { addChatModal } from '@widgets/AddChatModal';
 import { chatPageController } from './ChatPageController';
-import { connect } from '@shared/Store';
+import { connect, store } from '@shared/Store';
 import { isEqual } from '@shared/utils/isEqual';
 import { addUserModal } from '@widgets/AddUserModal';
 import { activateModals } from '@shared/utils';
 import { validateMessage } from './validation';
+import { chatAPI } from '@shared/api/ChatApi';
+import { WSTransport } from '@shared/lib/WSTransport';
+import { authAPI } from '@shared/api/AuthApi';
 
 export class ChatPage extends Block {
     constructor(props: IChatPageProps) {
@@ -28,8 +31,8 @@ export class ChatPage extends Block {
         return this.compile(ChatPageTemplate, this.props);
     }
 
-    componentDidMount(props: IChatPageState): boolean {
-        chatPageController.getChats()
+    componentDidMount(props: IChatPageState) {
+        chatPageController.getInitialData()
 
         return true
     }
@@ -46,9 +49,12 @@ export class ChatPage extends Block {
 
         if (oldProps.chats && newProps.chats && !isEqual(oldProps.chats, newProps.chats)) {
             // console.log("ChatPage chats updated", oldProps, newProps);
+            console.log(newProps.chats, this);
 
             chatPage.setProps({ dialogListItems: chatPageController.createDialogsList() })
+            chatPageController.createMessagesConnection()
         }
+
         return true
     }
 }
@@ -83,16 +89,16 @@ export const messages = [
 export const footerForm = new Form({
     className: 'chat__footer-form',
     formContent: new MessagesForm({
-        footerAttachInput: new InputField({
-            id: 'chat_attach_file',
-            className: 'input-field__file input-field__file-icon chat__attach-file',
-            label: '',
-            input: new Input({
-                type: 'file',
-                name: 'chat_attach_file',
-                className: 'input-field__element',
-            }),
-        }),
+        // footerAttachInput: new InputField({
+        //     id: 'chat_attach_file',
+        //     className: 'input-field__file input-field__file-icon chat__attach-file',
+        //     label: '',
+        //     input: new Input({
+        //         type: 'file',
+        //         name: 'chat_attach_file',
+        //         className: 'input-field__element',
+        //     }),
+        // }),
         footerTextarea: new Textarea({
             className: 'chat__footer-textarea',
             name: 'message',
@@ -105,6 +111,14 @@ export const footerForm = new Form({
         footerSentBtn: new Button({
             className: 'button_icon button_arrow button_arrow_right',
             type: 'submit',
+            events: {
+                submit: (e: Event) => {
+                    // websokets[chatId].send({
+                        // content: footerForm.children.footerTextarea.props.value,
+                        // type: 'message',
+                    // })
+                }
+            }
         }),
     }),
     events: {
@@ -117,7 +131,7 @@ export const footerForm = new Form({
         },
     },
 })
- export const addUserButton = new Button({
+export const addUserButton = new Button({
     className: 'button_outlined',
     type: 'button',
     text: 'Добавить пользователя',
@@ -126,8 +140,6 @@ export const footerForm = new Form({
     }
 })
 addUserButton.componentDidMount = () => {
-    console.log('addUserButton mounted', addUserButton);
-    
     activateModals()
     return true
 }

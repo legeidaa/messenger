@@ -19,9 +19,11 @@ export class WSTransport extends EventBus {
     }
 
     public send(data: string | number | object) {
+        
         if (!this.socket) {
             throw new Error('Socket is not connected')
         }
+        
         this.socket.send(JSON.stringify(data))
     }
 
@@ -36,6 +38,8 @@ export class WSTransport extends EventBus {
         return new Promise((resolve, reject) => {
             this.on(WSTransportEvents.ERROR, reject)
             this.on(WSTransportEvents.CONNECTED, () => {
+                console.log('Connected');
+                
                 this.off(WSTransportEvents.ERROR, reject)
                 resolve()
             })

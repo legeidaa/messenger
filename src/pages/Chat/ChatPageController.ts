@@ -12,11 +12,18 @@ import { getMessageTime } from "@shared/utils/getMessageTime";
 import { state } from "@shared/Store/state";
 import { chatMessages, chatPage } from "./ChatPage";
 import { addUserForm, addUserModal } from "@widgets/AddUserModal";
+import { WSTransport } from "@shared/lib/WSTransport";
+import { authAPI } from "@shared/api/AuthApi";
 
 export type ChatInfo = {
     id: number
 }
 class ChatPageController {
+    public async getInitialData() {
+        const userData = await authAPI.getUser()
+        store.dispatch({ type: 'SET_USER', user: userData })
+        chatPageController.getChats()
+    }
 
     public async getChats(offset?: number, limit?: number, title?: string) {
         try {
@@ -151,16 +158,50 @@ class ChatPageController {
     public openDialog(dialogListItems: DialogItem[], dialogItem: DialogItem) {
         const currentChat = store.getState().currentChat
         console.log(currentChat);
-        
-        chatMessages.children.headerAvatar.setProps({ 
+
+        chatMessages.children.headerAvatar.setProps({
             src: avatarController.getAvatarSrc(currentChat?.avatar),
         })
-        chatMessages.setProps({ 
-            headerName: currentChat?.title 
+        chatMessages.setProps({
+            headerName: currentChat?.title
         })
         // TODO возможно стоит заменить на смену attr
         dialogListItems.forEach((dialogItem) => { dialogItem.setProps({ selected: false }) })
         dialogItem.setProps({ selected: true })
+    }
+
+    public async createMessagesConnection() {
+        const user = store.getState().user
+        const chats = store.getState().chats
+
+        const connections = []
+        if (user && chats) {
+            chats.forEach(async (chat) => {
+
+                const tokenData = await chatAPI.getChatToken(chat.id) as unknown as { token: string }
+                console.log(tokenData, `wss://ya-praktikum.tech/ws/chats/${user.id}/${chat.id}/${tokenData.token}`);
+
+                const ws = new WSTransport(`wss://ya-praktikum.tech/ws/chats/${user.id}/${chat.id}/${tokenData.token}`)
+                await ws.connect()
+                // setTimeout(() => {
+                //     ws.send({
+                //         content: 'Моё первое сообщение миру!',
+                //         type: 'message',
+                //     });             
+                // }, 1000)
+
+                // ws.on('message', (data) => {
+                //     console.log('message', data);
+                // })
+
+                connections.push({
+                    [chat.id]: ws,
+                })
+                console.log(chats, chatPage.lists.dialogListItems );
+            })
+            // store.dispatch({ type: 'ADD_CHATS_CONNECTIONS', connections })
+        }
+
     }
 
     public createDialogsList() {
