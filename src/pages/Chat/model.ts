@@ -12,7 +12,7 @@ export interface IChatPageProps extends IBlockProps {
     chatPlaceholder: boolean,
     dialogListItems: DialogItem[],
     chat: ChatMessages,
-    modal: Modal
+    modals: Modal[]
 }
 
 export interface IChatPageState extends IChatPageProps {

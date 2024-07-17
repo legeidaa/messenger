@@ -149,6 +149,7 @@ export class Block {
         }
     }
     dispatchComponentDidMount() {
+        this.firstRender = false
         this.eventBus().emit(Block.EVENTS.FLOW_CDM, this.props);
     }
 

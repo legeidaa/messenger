@@ -35,8 +35,10 @@
             margin-right: 10px;
         }
 
-        &-settings {
+        &-buttons {
             margin-left: auto;
+            display: flex;
+            gap: 1rem;
         }
     }
 

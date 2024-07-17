@@ -5,9 +5,7 @@
     <div class="dialog-item__preview">
         <div class="dialog-item__name">{{{name}}}</div>
         <div class="dialog-item__message">
-            {{#if messageByYou}}
-            <div class="dialog-item__message-by-you">Вы:</div>
-            {{/if}}
+            <div class="dialog-item__message-name">{{messageName}}</div>
 
             {{{message}}}
         </div>

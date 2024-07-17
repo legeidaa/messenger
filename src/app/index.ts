@@ -15,13 +15,6 @@ router
     .start()
 
 
-const button = document.createElement('button')
-button.innerText = 'Logout'
-button.addEventListener('click', () => {
-    authAPI.logout()
-})
-document.body.prepend(button)
-
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const userData = await authAPI.getUser()

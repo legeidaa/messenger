@@ -11,10 +11,13 @@ import { router } from '@shared/lib/Router/Router';
 import { PagesPaths } from '@shared/lib/Router/model';
 import ChatPageTemplate from './ChatPage.hbs?raw';
 import { IChatPageProps, IChatPageState } from './model';
-import { addUserModal } from '@widgets/AddUserModal';
+import { addChatModal } from '@widgets/AddChatModal';
 import { chatPageController } from './ChatPageController';
 import { connect } from '@shared/Store';
 import { isEqual } from '@shared/utils/isEqual';
+import { addUserModal } from '@widgets/AddUserModal';
+import { activateModals } from '@shared/utils';
+import { validateMessage } from './validation';
 
 export class ChatPage extends Block {
     constructor(props: IChatPageProps) {
@@ -32,16 +35,17 @@ export class ChatPage extends Block {
     }
 
     componentDidUpdate(oldProps: IChatPageState, newProps: IChatPageState): boolean {
-        
+
         if (oldProps.currentChat?.id !== newProps.currentChat?.id) {
-            console.log("ChatPage currentChat updated", this, oldProps, newProps);
+            // console.log("ChatPage currentChat updated", this, oldProps, newProps);
             if (chatPage.props.chatPlaceholder) {
-                chatPage.setProps({chatPlaceholder: false,})     
+                chatPage.setProps({ chatPlaceholder: false, })
+                chatPage.children.chat.dispatchComponentDidMount()
             }
         }
 
         if (oldProps.chats && newProps.chats && !isEqual(oldProps.chats, newProps.chats)) {
-            console.log("ChatPage chats updated", oldProps, newProps);
+            // console.log("ChatPage chats updated", oldProps, newProps);
 
             chatPage.setProps({ dialogListItems: chatPageController.createDialogsList() })
         }
@@ -55,7 +59,7 @@ const ConnectedChatPage = connect(ChatPage, (state) => ({
     user: state.user
 }))
 
-const messages = [
+export const messages = [
     new ChatDate({
         date: '19 июня',
     }),
@@ -76,7 +80,7 @@ const messages = [
     }),
 ]
 
-const footerForm = new Form({
+export const footerForm = new Form({
     className: 'chat__footer-form',
     formContent: new MessagesForm({
         footerAttachInput: new InputField({
@@ -113,40 +117,45 @@ const footerForm = new Form({
         },
     },
 })
-
-const chatMessages = new ChatMessages({
+ export const addUserButton = new Button({
+    className: 'button_outlined',
+    type: 'button',
+    text: 'Добавить пользователя',
+    attr: {
+        'data-modal': "add-user",
+    }
+})
+addUserButton.componentDidMount = () => {
+    console.log('addUserButton mounted', addUserButton);
+    
+    activateModals()
+    return true
+}
+export const chatMessages = new ChatMessages({
     headerAvatar: new Avatar({
         src: 'https://via.placeholder.com/50x50',
         className: 'chat__header-avatar',
     }),
-    headerName: 'Андрей',
-    headerButton: new Button({
-        className: 'button_icon button_clear button_settings chat__header-settings',
-        type: 'button',
-    }),
+    headerName: '',
+    headerButtons: [
+        addUserButton,
+        new Button({
+            className: 'button_outlined',
+            type: 'button',
+            text: 'Удалить чат',
+            events: {
+                click: (e: Event) => {
+                    e.preventDefault()
+                    chatPageController.deleteChat(e)
+                },
+            }
+        })
+    ],
     messages,
     footerForm,
 
 })
-function validateMessage(e: Event) {
-    e.preventDefault()
-    const textareaComponent = footerForm.children.formContent.children.footerTextarea
-    const textarea = textareaComponent.getContent() as HTMLTextAreaElement
-    const result = validator.checkMessage(textarea.value)
 
-    if (typeof result === 'string') {
-        textareaComponent.setProps({
-            placeholder: 'Сообщение не должно быть пустым',
-            value: '',
-        })
-        return false
-    }
-    textareaComponent.setProps({
-        placeholder: 'Сообщение',
-        value: textarea.value,
-    })
-    return true
-}
 
 export const chatPage = new ConnectedChatPage({
     dialogsHeaderLink: new Link({
@@ -177,56 +186,36 @@ export const chatPage = new ConnectedChatPage({
             },
         },
         attr: {
-            'data-modal': "add-user",
+            'data-modal': "add-chat",
         }
     }),
     chatPlaceholder: true,
-    dialogListItems: [
-        // new DialogItem({
-        //     avatar: new Avatar({
-        //         src: 'https://via.placeholder.com/50x50',
-        //     }),
-        //     name: 'Андрей',
-        //     message: 'Привет, как дела?',
-        //     time: '12:00',
-        //     count: 2,
-        //     messageByYou: false,
-        //     selected: false,
-        // }),
-        // new DialogItem({
-        //     avatar: new Avatar({
-        //         src: 'https://via.placeholder.com/50x50',
-        //     }),
-        //     name: 'Киноклуб',
-        //     message: 'Какое-то сообщение',
-        //     time: '12:00',
-        //     count: 0,
-        //     messageByYou: true,
-        //     selected: false,
-        // }),
-        // new DialogItem({
-        //     avatar: new Avatar({
-        //         src: 'https://via.placeholder.com/50x50',
-        //     }),
-        //     name: 'Андрей',
-        //     message: 'И Human Interface Guidelines и Material Design...',
-        //     time: '1 Мая 2020',
-        //     count: 0,
-        //     messageByYou: false,
-        //     selected: true,
-        // }),
-    ],
+    dialogListItems: [],
     chat: chatMessages,
-    modal: new Modal({
-        className: 'modal_small modal-add-user',
-        dataModalType: 'add-user',
-        content: addUserModal,
-    }),
+    modals: [
+        new Modal({
+            className: 'modal_small modal-add-user',
+            dataModalType: 'add-chat',
+            content: addChatModal,
+        }),
+        new Modal({
+            className: 'modal_small modal-add-user',
+            dataModalType: 'add-user',
+            content: addUserModal,
+        }),
+    ],
 })
+
+addChatModal.props.events = {
+    submit: (e: Event) => {
+        e.preventDefault()
+        chatPageController.addChat(e)
+    },
+}
 
 addUserModal.props.events = {
     submit: (e: Event) => {
         e.preventDefault()
-        chatPageController.addChat(e)
+        chatPageController.addUserToChat(e)
     },
 }

@@ -20,6 +20,13 @@ export class ChatAPI extends Api {
     public addChat(name: string) {
         return this.transport.post('', { data: { title: name } })
     }
+    public addChatAvatar(formData: FormData) {
+        return this.transport.put('/avatar', { data: formData })
+    }
+    
+    public deleteChat(chatId: number) {
+        return this.transport.delete('', { data: { chatId } })
+    }
 
     public addUser(chatId: number, userId: number) {
         return this.transport.put('/users', { data: { users: [userId], chatId } })
@@ -29,7 +36,7 @@ export class ChatAPI extends Api {
         return this.transport.delete('/users', { data: { users: [userId], chatId } })
     }
 
-    public list(){}
+    public list() { }
 }
 
 export const chatAPI = new ChatAPI()
