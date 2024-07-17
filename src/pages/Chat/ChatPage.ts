@@ -9,12 +9,12 @@ import { Form } from '@shared/partials/Form/index';
 import { MessagesForm } from '@widgets/MessagesForm/index';
 import { router } from '@shared/lib/Router/Router';
 import { PagesPaths } from '@shared/lib/Router/model';
-import { DialogItem } from '@widgets/DialogItem';
 import ChatPageTemplate from './ChatPage.hbs?raw';
 import { IChatPageProps, IChatPageState } from './model';
 import { addUserModal } from '@widgets/AddUserModal';
 import { chatPageController } from './ChatPageController';
 import { connect } from '@shared/Store';
+import { isEqual } from '@shared/utils/isEqual';
 
 export class ChatPage extends Block {
     constructor(props: IChatPageProps) {
@@ -32,18 +32,28 @@ export class ChatPage extends Block {
     }
 
     componentDidUpdate(oldProps: IChatPageState, newProps: IChatPageState): boolean {
-        console.log("componentDidUpdate", this, this.props, oldProps, newProps);
+        
+        if (oldProps.currentChat?.id !== newProps.currentChat?.id) {
+            console.log("ChatPage currentChat updated", this, oldProps, newProps);
+            if (chatPage.props.chatPlaceholder) {
+                chatPage.setProps({chatPlaceholder: false,})     
+            }
+        }
 
-        if (oldProps.chats !== newProps.chats) {
+        if (oldProps.chats && newProps.chats && !isEqual(oldProps.chats, newProps.chats)) {
+            console.log("ChatPage chats updated", oldProps, newProps);
 
             chatPage.setProps({ dialogListItems: chatPageController.createDialogsList() })
         }
-        // обновляем список чатов, когда они загрузятся
         return true
     }
 }
 
-const ConnectedChatPage = connect(ChatPage, (state) => ({ chats: state.chats, user: state.user, currentChat: state.currentChat }));
+const ConnectedChatPage = connect(ChatPage, (state) => ({
+    chats: state.chats,
+    currentChat: state.currentChat,
+    user: state.user
+}))
 
 const messages = [
     new ChatDate({
@@ -170,7 +180,7 @@ export const chatPage = new ConnectedChatPage({
             'data-modal': "add-user",
         }
     }),
-    chatPlaceholder: false,
+    chatPlaceholder: true,
     dialogListItems: [
         // new DialogItem({
         //     avatar: new Avatar({

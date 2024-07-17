@@ -2,7 +2,6 @@ import * as Handlebars from 'handlebars'
 import { v4 as makeUUID } from 'uuid';
 import EventBus from '../EventBus.ts';
 import { IBlockProps } from './model.ts';
-
 export class Block {
     public static EVENTS = {
         INIT: 'init',
@@ -160,7 +159,6 @@ export class Block {
 
     // вызывается из-за переопределения свойства set в прокси
     private _componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps) {
-
         if (oldProps?.events) {
             const { events } = oldProps
             Object.keys(events).forEach((eventName) => {
@@ -210,10 +208,14 @@ export class Block {
         Object.entries(propsAndChildren).forEach(([key, value]) => {
             if (value instanceof Block) {
                 children[key] = value
-            } else if (Array.isArray(value)) {
-                lists[key] = value;
+            } else if ( Array.isArray(value) ) {
+                // if ( value.every((item) => item instanceof Block)) {
+                //     console.log(value);
+                //     lists[key] = value
+                // }
+                lists[key] = value
             } else {
-                props[key] = value;
+                props[key] = value
             }
         })
 
@@ -224,8 +226,8 @@ export class Block {
         const { attr = {} } = this.props;
 
         Object.entries(attr).forEach(([key, value]) => {
-            this._element.setAttribute(key, value);
-        });
+            this._element.setAttribute(key, value)
+        })
     }
 
     private _makePropsProxy(props: IBlockProps) {
@@ -235,7 +237,6 @@ export class Block {
                 return typeof value === 'function' ? value.bind(target) : value
             },
             set: (target, prop: string | symbol, value: unknown) => {
-                // TODO заменить спред на deepclone
                 const oldProps = { ...target }
 
                 target[prop as string] = value;

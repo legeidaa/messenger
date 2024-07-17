@@ -15,7 +15,6 @@ export class AddUserModal extends Block {
     }
 
     componentDidMount(props: IBlockProps): boolean {
-        console.log(this)
         return true
     }
 }

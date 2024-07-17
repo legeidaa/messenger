@@ -2,10 +2,8 @@ import '@/app/styles/style.scss'
 import * as Pages from '@pages/index.ts'
 import { router } from '@shared/lib/Router';
 import { PagesPaths } from '@shared/lib/Router/model';
-// import { signinAPI } from '@shared/api/SigninApi';
 import { store } from '@shared/Store';
 import { authAPI } from '@shared/api/AuthApi';
-
 router
     .use(PagesPaths.SIGNIN, Pages.signinPage)
     .use(PagesPaths.MAIN, Pages.mainPage)
@@ -31,6 +29,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         store.dispatch({ type: 'SET_USER', user: userData })
         
     } catch (error) {
+        console.log('Данные юзера не получены', error);
+        
         router.go(PagesPaths.SIGNIN)
     }
 })
+

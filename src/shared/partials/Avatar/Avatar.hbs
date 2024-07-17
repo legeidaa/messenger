@@ -1,5 +1,5 @@
 <div class="avatar {{#if profileAvatar}} avatar-profile{{/if}} {{#if className}} {{className}}{{/if}}">
-    <img src="{{src}}" alt="Аватар.">
+    <img alt="Аватар." src="{{{src}}}" onerror="this.src='{{fallbackSrc}}'">
     {{#if profileAvatar}}
     <div class="avatar-profile__action" data-modal="change-avatar">
         Поменять<br>аватар

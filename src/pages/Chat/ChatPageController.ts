@@ -7,6 +7,9 @@ import { User } from "@entities/User";
 import { DialogItem } from "@widgets/DialogItem";
 import { Avatar } from "@shared/partials";
 import avatarSkeletonSrc from '@assets/avatar-skeleton.svg'
+import { avatarController } from "@shared/partials/Avatar";
+import { getMessageTime } from "@shared/utils/getMessageTime";
+import { state } from "@shared/Store/state";
 
 export type ChatInfo = {
     id: number
@@ -17,7 +20,7 @@ class ChatPageController {
         try {
             const chats = await chatAPI.getChats(offset, limit, title)
             store.dispatch({ type: 'SET_CHATS', chats })
-            console.log("store", store.getState());
+            // console.log("store", store.getState());
             return true
         } catch (err) {
             const error = err as ApiError
@@ -28,11 +31,16 @@ class ChatPageController {
     public async addChat(e: Event) {
         e.preventDefault()
         const input = addUserForm.children.input.children.input
+        const chats = store.getState().chats
         addUserModal.setProps({ modalTitleError: false, modalTitle: "Добавить пользователя" })
 
         try {
-
-            // TODO сделать проерку на уже существующий с этим юзером чат
+            if (chats?.length) {
+                const chat = chats.filter(c => c.title === input.props.value)[0]
+                if (chat) {
+                    throw new Error('Чат с пользователем уже существует')
+                }
+            }
 
             const users = await userAPI.searchUser(input.props.value as string) as unknown as User[] // возвращает массив совпадений по юзерам
             if (!users.length) {
@@ -48,12 +56,12 @@ class ChatPageController {
             );
 
             await chatAPI.addUser(chatInfo.id, user.id as number)
-            addUserModal.setProps({  modalTitle: "Чат добавлен" })
+            addUserModal.setProps({ modalTitle: "Чат добавлен" })
 
-            // const chatUsers = await chatAPI.getChatUsers(chatInfo.id)
-            // TODO обновляем список чатов
+            this.getChats()
 
             return true
+
         } catch (err) {
             const error = err as ApiError
 
@@ -68,23 +76,57 @@ class ChatPageController {
 
     public createDialogsList() {
         let dialogListItems: DialogItem[] = []
-
+        
+        // console.log(store.getState());
+        
         store.getState().chats?.map((chat) => {
-            // chat.
+            
+            let avatarSrc = avatarSkeletonSrc
+            let dialogName = chat.title
+            let lastMessage = ''
+            let lastMessageTime = ''
+            let messageByYou = false
+
+            if (chat.last_message) {
+        
+                avatarSrc = avatarController.getAvatarSrc(chat.last_message.user.avatar)
+                dialogName = chat.last_message.user.display_name
+                    ? chat.last_message.user.display_name
+                    : chat.last_message.user.first_name + ' ' + chat.last_message.user.second_name
+                lastMessage = chat.last_message.content
+                lastMessageTime = getMessageTime(chat.last_message.time)
+
+                if (chat.last_message.user.login === store.getState().user?.login) {
+                    messageByYou = true
+                }
+            }
+
             const dialogItem = new DialogItem({
                 avatar: new Avatar({
-                    src: avatarSkeletonSrc // или chat.last_message.user.avatar
+                    src: avatarSrc
                 }),
-                name: chat.title, // или chat.last_message.user.first_name
-                message: 'Привет, как дела?',
-                time: '12:00',
-                count: 2,
-                messageByYou: false,
+                name: dialogName,
+                message: lastMessage,
+                time: lastMessageTime,
+                count: chat.unread_count,
+                messageByYou,
                 selected: false,
-            })
+                events: {
+                    click: (e) => {
+                        e.preventDefault()
+                        if (!dialogItem.props.selected) {
+                            store.dispatch({ type: 'SET_CURRENT_CHAT', currentChat: chat })
 
+                            // TODO возможно стоит заменить на смену attr
+                            dialogListItems.forEach((dialogItem) => { dialogItem.setProps({ selected: false }) })
+                            dialogItem.setProps({ selected: true })    
+                        }
+                    }
+                }
+            })
             dialogListItems.push(dialogItem)
         })
+        
         return dialogListItems
     }
 }

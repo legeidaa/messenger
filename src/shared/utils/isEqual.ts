@@ -16,6 +16,10 @@ function isArrayOrObject(value: unknown): value is [] | Indexed {
 }
 
 export function isEqual(lhs: Indexed, rhs: Indexed) {
+    if (!lhs || !rhs) {
+        throw new Error("Параметры isEqual не могут быть пустыми");
+    }
+    
     if (Object.keys(lhs).length !== Object.keys(rhs).length) {
         return false;
     }

@@ -105,27 +105,32 @@ class ProfileController {
     }
 
     public async saveData(e: Event) {
-        if (form.props.canChangePassword && validatePasswordFields(e) === false) {
-            return
-        } else {
-            const passwordResult = await this.changePassword()
-            if (typeof passwordResult === 'string') {
-                profilePage.setProps({ profileFooterError: passwordResult })
-                return
-            }
 
-            oldPasswordRow.children.input.props.value = '***'
-            newPasswordRow.children.input.props.value = '****'
-            repeatNewPasswordRow.children.input.props.value = '****'
+        if (form.props.canChangePassword) {
+            if (validatePasswordFields(e) === false) {
+                return
+            } else {
+                const passwordResult = await this.changePassword()
+                if (typeof passwordResult === 'string') {
+                    profilePage.setProps({ profileFooterError: passwordResult })
+                    return
+                }
+
+                oldPasswordRow.children.input.props.value = '***'
+                newPasswordRow.children.input.props.value = '****'
+                repeatNewPasswordRow.children.input.props.value = '****'
+            }
         }
 
-        if (form.props.canChangeData && validateDataFields(e) === false) {
-            return
-        } else {
-            const dataResult = await this.changeProfileData()
-            if (typeof dataResult === 'string') {
-                profilePage.setProps({ profileFooterError: dataResult })
+        if (form.props.canChangeData) {
+            if (validateDataFields(e) === false) {
                 return
+            } else {
+                const dataResult = await this.changeProfileData()
+                if (typeof dataResult === 'string') {
+                    profilePage.setProps({ profileFooterError: dataResult })
+                    return
+                }
             }
         }
 

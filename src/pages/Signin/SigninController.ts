@@ -12,7 +12,7 @@ class SigninController {
         try {
             await authAPI.signin({ data: signinData })
             console.log('Успешный логин');
-            
+
             const userData = await authAPI.getUser()
             store.dispatch({ type: 'SET_USER', user: userData })
 
@@ -24,15 +24,16 @@ class SigninController {
     }
 
     public async submit(e: Event) {
+        e.preventDefault()
         if (validateSubmit(e)) {
             signinForm.props.error = ''
-            
+
             const signinResult = await signinController.signin({
                 login: inputLogin.children.input.props.value as string,
                 password: inputPassword.children.input.props.value as string
             })
 
-            console.log(signinResult);
+            // console.log(signinResult);
             if (typeof signinResult === 'string') {
                 signinForm.props.error = signinResult
             } else {

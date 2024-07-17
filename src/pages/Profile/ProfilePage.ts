@@ -28,7 +28,7 @@ export class ProfilePage extends Block {
         profileController.setProfileFields(oldProps, newProps)
 
         if (oldProps.user?.avatar !== newProps.user?.avatar) {
-            profilePage.children.avatar.setProps({ src: avatarController.getAvatarSrc() })
+            profilePage.children.avatar.setProps({ src: avatarController.getUserAvatarSrc() })
             activateModals()
         }
 
@@ -321,7 +321,7 @@ export const profilePage = new connectedProfilePage({
     }),
     avatar: new Avatar({
         profileAvatar: true,
-        src: avatarController.getAvatarSrc(),
+        src: avatarController.getUserAvatarSrc(),
         events: {
             click: (e) => {
                 e.preventDefault()
