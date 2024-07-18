@@ -4,7 +4,6 @@ import { ChatMessages } from '@widgets/ChatMessages/index';
 import { Message } from '@widgets/Message/index';
 import { ChatDate } from '@shared/partials/ChatDate/index';
 import { Textarea } from '@shared/partials/Textarea/index';
-import { validator } from '@shared/lib/Validator';
 import { Form } from '@shared/partials/Form/index';
 import { MessagesForm } from '@widgets/MessagesForm/index';
 import { router } from '@shared/lib/Router/Router';
@@ -18,9 +17,7 @@ import { isEqual } from '@shared/utils/isEqual';
 import { addUserModal } from '@widgets/AddUserModal';
 import { activateModals } from '@shared/utils';
 import { validateMessage } from './validation';
-import { chatAPI } from '@shared/api/ChatApi';
-import { WSTransport } from '@shared/lib/WSTransport';
-import { authAPI } from '@shared/api/AuthApi';
+let firstDialogListCreation = false
 
 export class ChatPage extends Block {
     constructor(props: IChatPageProps) {
@@ -49,12 +46,15 @@ export class ChatPage extends Block {
 
         if (oldProps.chats && newProps.chats && !isEqual(oldProps.chats, newProps.chats)) {
             // console.log("ChatPage chats updated", oldProps, newProps);
-            console.log(newProps.chats, this);
 
-            chatPageController.createDialogsList().then((dialogsList) => {
-                console.log(dialogsList);
-                chatPage.setProps({ dialogListItems: dialogsList })
-            })
+            if (!firstDialogListCreation) {
+                firstDialogListCreation = true
+                console.log("firstDialogListCreation", firstDialogListCreation);
+                
+                chatPageController.createDialogsList().then((dialogsList) => {
+                    chatPage.setProps({ dialogListItems: dialogsList })
+                })
+            }
         }
 
         return true
@@ -88,6 +88,21 @@ export const messages = [
     }),
 ]
 
+export const footerTextarea = new Textarea({
+    className: 'chat__footer-textarea',
+    name: 'message',
+    id: 'message',
+    placeholder: 'Сообщение',
+    events: {
+        blur: validateMessage,
+    }
+})
+
+export const footerSentBtn = new Button({
+    className: 'button_icon button_arrow button_arrow_right',
+    type: 'submit',
+})
+
 export const footerForm = new Form({
     className: 'chat__footer-form',
     formContent: new MessagesForm({
@@ -101,37 +116,18 @@ export const footerForm = new Form({
         //         className: 'input-field__element',
         //     }),
         // }),
-        footerTextarea: new Textarea({
-            className: 'chat__footer-textarea',
-            name: 'message',
-            id: 'message',
-            placeholder: 'Сообщение',
-            events: {
-                blur: validateMessage,
-            },
-        }),
-        footerSentBtn: new Button({
-            className: 'button_icon button_arrow button_arrow_right',
-            type: 'submit',
-            events: {
-                submit: (e: Event) => {
-                    // websokets[chatId].send({
-                        // content: footerForm.children.footerTextarea.props.value,
-                        // type: 'message',
-                    // })
-                }
-            }
-        }),
+        footerTextarea,
+        footerSentBtn
     }),
-    events: {
-        submit: (e: Event) => {
-            validateMessage(e)
+    // events: {
+    //     submit: (e: Event) => {
+    //         validateMessage(e)
 
-            const data = new FormData(e.target as HTMLFormElement)
-            const formDataObj = Object.fromEntries(data.entries())
-            console.log(formDataObj)
-        },
-    },
+    //         const data = new FormData(e.target as HTMLFormElement)
+    //         const formDataObj = Object.fromEntries(data.entries())
+    //         console.log(formDataObj)
+    //     },
+    // },
 })
 export const addUserButton = new Button({
     className: 'button_outlined',

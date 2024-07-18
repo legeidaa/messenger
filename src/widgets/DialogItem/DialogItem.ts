@@ -1,4 +1,4 @@
-import { Block } from '@shared/lib/Block'
+import { Block, IBlockProps } from '@shared/lib/Block'
 import DialogItemTemplate from './DialogItem.hbs?raw';
 import { IDialogItemProps } from './model';
 
@@ -8,6 +8,7 @@ export class DialogItem extends Block {
     }
 
     render() {
+        
         return this.compile(DialogItemTemplate, this.props);
     }
 }

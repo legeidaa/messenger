@@ -9,10 +9,11 @@ import { Avatar } from "@shared/partials";
 import { avatarController } from "@shared/partials/Avatar";
 import { getMessageTime } from "@shared/utils/getMessageTime";
 import { state } from "@shared/Store/state";
-import { chatMessages, chatPage } from "./ChatPage";
+import { chatMessages, chatPage, footerForm, footerSentBtn, footerTextarea } from "./ChatPage";
 import { addUserForm, addUserModal } from "@widgets/AddUserModal";
 import { authAPI } from "@shared/api/AuthApi";
 import { chatController } from "@entities/Chat";
+import { validateMessage } from "./validation";
 
 export type ChatInfo = {
     id: number
@@ -21,19 +22,7 @@ class ChatPageController {
     public async getInitialData() {
         const userData = await authAPI.getUser()
         store.dispatch({ type: 'SET_USER', user: userData })
-        chatPageController.getChats()
-    }
-
-    public async getChats(offset?: number, limit?: number, title?: string) {
-        try {
-            const chats = await chatAPI.getChats(offset, limit, title)
-            store.dispatch({ type: 'SET_CHATS', chats })
-
-            return true
-        } catch (err) {
-            const error = err as ApiError
-            return error.reason
-        }
+        chatController.getChats()
     }
 
     public async addChat(e: Event) {
@@ -66,7 +55,11 @@ class ChatPageController {
             addChatModal.setProps({ modalTitle: "Чат добавлен" })
             input.props.value = ''
 
-            this.getChats()
+            chatController.getChats()
+
+            chatPageController.createDialogsList().then((dialogsList) => {
+                chatPage.setProps({ dialogListItems: dialogsList })
+            })
 
             return true
 
@@ -94,7 +87,11 @@ class ChatPageController {
         try {
             const deletedChatInfo = await chatAPI.deleteChat(currentChat?.id)
 
-            this.getChats()
+            chatController.getChats()
+            chatPageController.createDialogsList().then((dialogsList) => {
+                chatPage.setProps({ dialogListItems: dialogsList })
+            })
+
             store.dispatch({ type: 'SET_CURRENT_CHAT', currentChat: null })
             chatPage.setProps({ dialogListItems: chatPageController.createDialogsList() })
             chatPage.setProps({ chatPlaceholder: true, })
@@ -155,8 +152,35 @@ class ChatPageController {
     }
 
     public openDialog(dialogListItems: DialogItem[], dialogItem: DialogItem) {
+
+        // начинаем грузить сообщения 
+
         const currentChat = store.getState().currentChat
         console.log(currentChat);
+        if (currentChat) {
+            const connection = chatController.getConnectionById(currentChat.id)
+            footerForm.props.events = {
+                submit: (e: Event) => {
+                    validateMessage(e)
+                    console.log(footerTextarea.props.value)
+
+
+                    const data = new FormData(e.target as HTMLFormElement)
+                    const formDataObj = Object.fromEntries(data.entries())
+                    console.log(formDataObj)
+
+                    connection?.send({
+                        content: formDataObj.message,
+                        type: 'message',
+                    })
+
+                    footerTextarea.props.value = ''
+                    // TODO при открытии чата сбрасывать unread_message_count
+                    // TODO исправить вывод времени
+                },
+            }
+
+        }
 
         chatMessages.children.headerAvatar.setProps({
             src: avatarController.getAvatarSrc(currentChat?.avatar),
@@ -179,25 +203,25 @@ class ChatPageController {
         if (user && dialogs) {
             await chatController.createMessagesConnections(user, dialogs)
             console.log("createMessagesConnections", chatController.WSConnections, chatController.WSConnections.length)
-    
+
             dialogs.map((chat) => {
-    
+
                 let avatarSrc = avatarController.getAvatarSrc(chat.avatar)
-    
+
                 let dialogName = chat.title
                 let lastMessage = ''
                 let lastMessageTime = ''
                 let messageName = ''
-    
+
                 if (chat.last_message) {
                     lastMessage = chat.last_message.content
                     lastMessageTime = getMessageTime(chat.last_message.time)
-    
+
                     messageName = chat.last_message.user.display_name
-                            ? chat.last_message.user.display_name + ': '
-                            : chat.last_message.user.first_name + ': '
+                        ? chat.last_message.user.display_name + ': '
+                        : chat.last_message.user.first_name + ': '
                 }
-    
+
                 const dialogItem = new DialogItem({
                     avatar: new Avatar({
                         src: avatarSrc

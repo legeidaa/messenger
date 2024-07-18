@@ -18,6 +18,8 @@ export type Chat = {
 export type Chats = Chat[]
 
 export type WSConnection = Record<Chat['id'], WSTransport>
+
+export type WSMessage = {type: string, content: string}
 // [
 //     {
 //         "id": 7332,
