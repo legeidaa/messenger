@@ -6,14 +6,13 @@ import { ApiError } from "@shared/api/model";
 import { User } from "@entities/User";
 import { DialogItem } from "@widgets/DialogItem";
 import { Avatar } from "@shared/partials";
-import avatarSkeletonSrc from '@assets/avatar-skeleton.svg'
 import { avatarController } from "@shared/partials/Avatar";
 import { getMessageTime } from "@shared/utils/getMessageTime";
 import { state } from "@shared/Store/state";
 import { chatMessages, chatPage } from "./ChatPage";
 import { addUserForm, addUserModal } from "@widgets/AddUserModal";
-import { WSTransport } from "@shared/lib/WSTransport";
 import { authAPI } from "@shared/api/AuthApi";
+import { chatController } from "@entities/Chat";
 
 export type ChatInfo = {
     id: number
@@ -170,91 +169,62 @@ class ChatPageController {
         dialogItem.setProps({ selected: true })
     }
 
-    public async createMessagesConnection() {
-        const user = store.getState().user
-        const chats = store.getState().chats
-
-        const connections = []
-        if (user && chats) {
-            chats.forEach(async (chat) => {
-
-                const tokenData = await chatAPI.getChatToken(chat.id) as unknown as { token: string }
-                console.log(tokenData, `wss://ya-praktikum.tech/ws/chats/${user.id}/${chat.id}/${tokenData.token}`);
-
-                const ws = new WSTransport(`wss://ya-praktikum.tech/ws/chats/${user.id}/${chat.id}/${tokenData.token}`)
-                await ws.connect()
-                // setTimeout(() => {
-                //     ws.send({
-                //         content: 'Моё первое сообщение миру!',
-                //         type: 'message',
-                //     });             
-                // }, 1000)
-
-                // ws.on('message', (data) => {
-                //     console.log('message', data);
-                // })
-
-                connections.push({
-                    [chat.id]: ws,
-                })
-                console.log(chats, chatPage.lists.dialogListItems );
-            })
-            // store.dispatch({ type: 'ADD_CHATS_CONNECTIONS', connections })
-        }
-
-    }
-
-    public createDialogsList() {
+    public async createDialogsList() {
         let dialogListItems: DialogItem[] = []
 
+
+        const user = store.getState().user
         const dialogs = store.getState().chats
 
-        dialogs?.map((chat) => {
-
-            let avatarSrc = avatarController.getAvatarSrc(chat.avatar)
-
-            let dialogName = chat.title
-            let lastMessage = ''
-            let lastMessageTime = ''
-            let messageName = ''
-
-            if (chat.last_message) {
-                lastMessage = chat.last_message.content
-                lastMessageTime = getMessageTime(chat.last_message.time)
-
-                if (chat.last_message.user.login === store.getState().user?.login) {
-                    messageName = 'Вы: '
-                } else {
+        if (user && dialogs) {
+            await chatController.createMessagesConnections(user, dialogs)
+            console.log("createMessagesConnections", chatController.WSConnections, chatController.WSConnections.length)
+    
+            dialogs.map((chat) => {
+    
+                let avatarSrc = avatarController.getAvatarSrc(chat.avatar)
+    
+                let dialogName = chat.title
+                let lastMessage = ''
+                let lastMessageTime = ''
+                let messageName = ''
+    
+                if (chat.last_message) {
+                    lastMessage = chat.last_message.content
+                    lastMessageTime = getMessageTime(chat.last_message.time)
+    
                     messageName = chat.last_message.user.display_name
-                        ? chat.last_message.user.display_name + ': '
-                        : chat.last_message.user.first_name + ': '
+                            ? chat.last_message.user.display_name + ': '
+                            : chat.last_message.user.first_name + ': '
                 }
-            }
-
-            const dialogItem = new DialogItem({
-                avatar: new Avatar({
-                    src: avatarSrc
-                }),
-                name: dialogName,
-                message: lastMessage,
-                time: lastMessageTime,
-                count: chat.unread_count,
-                messageName,
-                selected: false,
-                events: {
-                    click: (e) => {
-                        e.preventDefault()
-                        if (!dialogItem.props.selected) {
-                            store.dispatch({ type: 'SET_CURRENT_CHAT', currentChat: chat })
-                            this.openDialog(dialogListItems, dialogItem)
+    
+                const dialogItem = new DialogItem({
+                    avatar: new Avatar({
+                        src: avatarSrc
+                    }),
+                    name: dialogName,
+                    message: lastMessage,
+                    time: lastMessageTime,
+                    count: chat.unread_count,
+                    messageName,
+                    selected: false,
+                    events: {
+                        click: (e) => {
+                            e.preventDefault()
+                            if (!dialogItem.props.selected) {
+                                store.dispatch({ type: 'SET_CURRENT_CHAT', currentChat: chat })
+                                this.openDialog(dialogListItems, dialogItem)
+                            }
                         }
                     }
-                }
-            })
-            dialogListItems.push(dialogItem)
-        })
+                })
 
-        return dialogListItems
+                chatController.updateDialogsListItem(chat, dialogItem)
+                dialogListItems.push(dialogItem)
+            })
+            return dialogListItems
+        }
+        return new Error('Не удалось создать список диалогов')
     }
 }
 

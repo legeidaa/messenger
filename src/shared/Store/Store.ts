@@ -15,7 +15,7 @@ const createStore = (reducer: Reducer, initialState: State) => {
         },
         dispatch: (action: Action) => {
             currentState = reducer(currentState, action)
-            console.log("currentState: ", currentState);
+            // console.log("currentState: ", currentState);
             
 
             subscribers.forEach(fn => fn(currentState))

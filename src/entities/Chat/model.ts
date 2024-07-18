@@ -1,4 +1,5 @@
 import { User } from "@entities/User"
+import { WSTransport } from "@shared/lib/WSTransport"
 
 export type Chat = {
     id: number
@@ -15,6 +16,8 @@ export type Chat = {
 }
 
 export type Chats = Chat[]
+
+export type WSConnection = Record<Chat['id'], WSTransport>
 // [
 //     {
 //         "id": 7332,

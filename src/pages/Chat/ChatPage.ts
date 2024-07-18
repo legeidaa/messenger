@@ -51,8 +51,10 @@ export class ChatPage extends Block {
             // console.log("ChatPage chats updated", oldProps, newProps);
             console.log(newProps.chats, this);
 
-            chatPage.setProps({ dialogListItems: chatPageController.createDialogsList() })
-            chatPageController.createMessagesConnection()
+            chatPageController.createDialogsList().then((dialogsList) => {
+                console.log(dialogsList);
+                chatPage.setProps({ dialogListItems: dialogsList })
+            })
         }
 
         return true
