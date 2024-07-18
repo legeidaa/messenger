@@ -9,11 +9,12 @@
         position: relative;
         max-width: 45%;
         margin-bottom: 10px;
+        min-width: 100px;
 
         &-info {
             position: absolute;
             right: 9px;
-            bottom: 9px;
+            bottom: 6px;
             display: flex;
             align-items: center;
         }

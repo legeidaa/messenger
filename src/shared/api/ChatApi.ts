@@ -17,6 +17,10 @@ export class ChatAPI extends Api {
         return this.transport.get(`/${chatId}/users`, { data: { offset, limit, name, email } })
     }
 
+    public getUnreadMessagesCount(chatId: number) {
+        return this.transport.get(`/new/${chatId}`)
+    }
+
     public addChat(name: string) {
         return this.transport.post('', { data: { title: name } })
     }

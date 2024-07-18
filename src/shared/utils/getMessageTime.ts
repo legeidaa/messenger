@@ -16,7 +16,7 @@ export function getMessageTime(timestamp: string) {
     const testDate = new Date(date)
     const testCurrentDate = new Date(currentDate)
     if (testDate.setHours(0, 0, 0, 0) === testCurrentDate.setHours(0, 0, 0, 0)) {
-        resultTime = date.getHours() + ':' + date.getMinutes()
+        resultTime = date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
     }
 
     return resultTime

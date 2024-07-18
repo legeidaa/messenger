@@ -9,11 +9,14 @@ import { Avatar } from "@shared/partials";
 import { avatarController } from "@shared/partials/Avatar";
 import { getMessageTime } from "@shared/utils/getMessageTime";
 import { state } from "@shared/Store/state";
-import { chatMessages, chatPage, footerForm, footerSentBtn, footerTextarea } from "./ChatPage";
+import { chatMessages, chatPage, footerForm, footerSentBtn, footerTextarea, messages } from "./ChatPage";
 import { addUserForm, addUserModal } from "@widgets/AddUserModal";
 import { authAPI } from "@shared/api/AuthApi";
-import { chatController } from "@entities/Chat";
+import { chatController, WSMessage, WSMessageData } from "@entities/Chat";
 import { validateMessage } from "./validation";
+import { Message } from "@widgets/Message";
+import { ChatDate } from "@shared/partials/ChatDate";
+import { WSTransportEvents } from "@shared/lib/WSTransport";
 
 export type ChatInfo = {
     id: number
@@ -151,35 +154,95 @@ class ChatPageController {
         return false
     }
 
+    public updateMessages() {
+
+    }
+
     public openDialog(dialogListItems: DialogItem[], dialogItem: DialogItem) {
 
-        // начинаем грузить сообщения 
-
         const currentChat = store.getState().currentChat
-        console.log(currentChat);
+        const user = store.getState().user
+
+        function scrollMessagesListToBottom() {
+            const messagesScrollList = chatMessages.getContent().querySelector('.chat__messages')
+            if (messagesScrollList) {
+                setTimeout(() => {
+                    messagesScrollList.scrollTop = 1000000
+                    console.log("messagesScrollList.scrollTop", messagesScrollList.scrollTop);
+
+                })
+            }
+        }
+
+
         if (currentChat) {
             const connection = chatController.getConnectionById(currentChat.id)
+            let oldMessages: Message[] = []
+
+            connection?.send({
+                content: '0',
+                type: 'get old',
+            })
+
+            connection?.on(WSTransportEvents.MESSAGE, (messages: WSMessageData[] | WSMessageData) => {
+                // если получили список сообщений
+                if (Array.isArray(messages)) {
+                    if (messages.length && messages[0].type === 'message') {
+                        oldMessages.length = 0
+                        messages.forEach((message) => {
+
+                            oldMessages.push(
+                                new Message({
+                                    text: message.content,
+                                    time: getMessageTime(message.time),
+                                    isOut: Number(message.user_id) === user?.id,
+                                })
+                            )
+                        })
+                        chatMessages.setProps({ messages: oldMessages.reverse() })
+                        scrollMessagesListToBottom()
+                    }
+                } else if (messages.type === 'message' && Number(messages.user_id) !== user?.id) {
+                    // обновляем список только если пришло новое сообщение, а не отправили мы
+                    console.log("Получено новое сообщение", messages, oldMessages);
+                    
+                    connection?.send({
+                        content: '0',
+                        type: 'get old',
+                    })
+                }
+
+            })
+
             footerForm.props.events = {
                 submit: (e: Event) => {
                     validateMessage(e)
-                    console.log(footerTextarea.props.value)
+                    if (validateMessage(e)) {
+                        console.log(footerTextarea.props.value)
 
+                        const data = new FormData(e.target as HTMLFormElement)
+                        const formDataObj = Object.fromEntries(data.entries())
+                        console.log(formDataObj)
 
-                    const data = new FormData(e.target as HTMLFormElement)
-                    const formDataObj = Object.fromEntries(data.entries())
-                    console.log(formDataObj)
+                        connection?.send({
+                            content: formDataObj.message,
+                            type: 'message',
+                        })
 
-                    connection?.send({
-                        content: formDataObj.message,
-                        type: 'message',
-                    })
+                        oldMessages.push(
+                            new Message({
+                                text: formDataObj.message as string,
+                                time: getMessageTime(new Date().toString()),
+                                isOut: true,
+                            })
+                        )
+                        chatMessages.setProps({ messages: oldMessages })
+                        scrollMessagesListToBottom()
 
-                    footerTextarea.props.value = ''
-                    // TODO при открытии чата сбрасывать unread_message_count
-                    // TODO исправить вывод времени
+                        footerTextarea.props.value = ''
+                    }
                 },
             }
-
         }
 
         chatMessages.children.headerAvatar.setProps({

@@ -1,5 +1,5 @@
 import { store } from "@shared/Store"
-import { chatAPI } from "@shared/api/ChatApi"
+import { ChatAPI, chatAPI } from "@shared/api/ChatApi"
 import { WSTransport, WSTransportEvents } from "@shared/lib/WSTransport"
 import { Chat, WSConnection, WSMessage } from "../model"
 import { User } from "@entities/User"
@@ -62,24 +62,29 @@ class ChatController {
 
         connection?.on(WSTransportEvents.MESSAGE, async (data: WSMessage) => {
             const newChats = await this.getChats()
-            console.log("Получено сообщение для чата ", chat.title, data, newChats);
-
-            Array.isArray(newChats) && newChats.forEach((newChat) => {
-                if (newChat.id === chatId) {
-                    const messageName = newChat.last_message.user.display_name
-                        ? newChat.last_message.user.display_name + ': '
-                        : newChat.last_message.user.first_name + ': '
-
-                    dialogItem.setProps({
-                        message: newChat.last_message.content,
-                        time: getMessageTime(newChat.last_message.time),
-                        count: newChat.unread_count,
-                        messageName
-
-                    })
-                }
-            })
+            // console.log("Получено сообщение для чата ", chat.title, data, newChats);
+            if(data.type === 'message') {
+                Array.isArray(newChats) && newChats.forEach(async (newChat) => {
+                    if (newChat.id === chatId) {
+                        const unreadCount = await chatAPI.getUnreadMessagesCount(chatId) as unknown as { unread_count: number }
+                        const messageName = newChat.last_message.user.display_name
+                            ? newChat.last_message.user.display_name + ': '
+                            : newChat.last_message.user.first_name + ': '
+    
+                        dialogItem.setProps({
+                            message: newChat.last_message.content,
+                            time: getMessageTime(newChat.last_message.time),
+                            count: unreadCount.unread_count,
+                            messageName
+                        })
+                    }
+                })
+            }
         })
+    }
+
+    public async getOldMessages (){
+
     }
 }
 

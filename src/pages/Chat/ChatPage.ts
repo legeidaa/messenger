@@ -50,7 +50,7 @@ export class ChatPage extends Block {
             if (!firstDialogListCreation) {
                 firstDialogListCreation = true
                 console.log("firstDialogListCreation", firstDialogListCreation);
-                
+
                 chatPageController.createDialogsList().then((dialogsList) => {
                     chatPage.setProps({ dialogListItems: dialogsList })
                 })
@@ -67,19 +67,19 @@ const ConnectedChatPage = connect(ChatPage, (state) => ({
     user: state.user
 }))
 
-export const messages = [
-    new ChatDate({
-        date: '19 июня',
-    }),
-    new Message({
-        // eslint-disable-next-line max-len
-        text: 'Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой. Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.',
-        time: '10:56',
-    }),
-    new Message({
-        attachedImgSrc: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D',
-        time: '10:57',
-    }),
+export const messages: (Message | ChatDate)[] = [
+    // new ChatDate({
+    //     date: '19 июня',
+    // }),
+    // new Message({
+    //     // eslint-disable-next-line max-len
+    //     text: 'Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой. Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.',
+    //     time: '10:56',
+    // }),
+    // new Message({
+    //     attachedImgSrc: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D',
+    //     time: '10:57',
+    // }),
     new Message({
         text: 'Сообщение получено.',
         time: '10:57',
@@ -119,15 +119,7 @@ export const footerForm = new Form({
         footerTextarea,
         footerSentBtn
     }),
-    // events: {
-    //     submit: (e: Event) => {
-    //         validateMessage(e)
 
-    //         const data = new FormData(e.target as HTMLFormElement)
-    //         const formDataObj = Object.fromEntries(data.entries())
-    //         console.log(formDataObj)
-    //     },
-    // },
 })
 export const addUserButton = new Button({
     className: 'button_outlined',
@@ -163,8 +155,18 @@ export const chatMessages = new ChatMessages({
     ],
     messages,
     footerForm,
-
 })
+
+// chatMessages.componentDidUpdate = (oldProps: IBlockProps, newProps: IBlockProps): boolean => {
+//     const messagesScrollList = chatMessages.getContent().querySelector('.chat__messages')
+//     console.log(messagesScrollList);
+    
+//     if (messagesScrollList) {
+//         console.log('ASDAASDASDDSA', messagesScrollList?.scrollHeight, messagesScrollList.scrollTop);
+//         messagesScrollList.scrollTop = 100
+//     }
+//     return true
+// }
 
 
 export const chatPage = new ConnectedChatPage({
