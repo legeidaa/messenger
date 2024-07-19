@@ -53,7 +53,7 @@ export class HTTPTransport {
         } = options
 
         return new Promise((resolve, reject) => {
-            console.log(url);
+            // console.log(url);
             url = this._baseURL + url
             const xhr = new XMLHttpRequest()
             xhr.open(method as unknown as string, url)

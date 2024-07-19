@@ -1,4 +1,4 @@
-import { Block } from '@shared/lib/Block/index'
+import { Block, IBlockProps } from '@shared/lib/Block/index'
 import { Avatar, Button, Input, InputField, Link, Modal } from '@shared/partials/index';
 import { ChatMessages } from '@widgets/ChatMessages/index';
 import { Message } from '@widgets/Message/index';
@@ -17,7 +17,8 @@ import { isEqual } from '@shared/utils/isEqual';
 import { addUserModal } from '@widgets/AddUserModal';
 import { activateModals } from '@shared/utils';
 import { validateMessage } from './validation';
-let firstDialogListCreation = false
+
+// let firstDialogListCreation = false
 
 export class ChatPage extends Block {
     constructor(props: IChatPageProps) {
@@ -33,9 +34,12 @@ export class ChatPage extends Block {
 
         return true
     }
+    componentDidUnmount(props: IBlockProps): boolean {
+        chatPage.children.chat.dispatchComponentDidUnmount()
+        return true
+    }
 
     componentDidUpdate(oldProps: IChatPageState, newProps: IChatPageState): boolean {
-
         if (oldProps.currentChat?.id !== newProps.currentChat?.id) {
             // console.log("ChatPage currentChat updated", this, oldProps, newProps);
             if (chatPage.props.chatPlaceholder) {
@@ -45,16 +49,14 @@ export class ChatPage extends Block {
         }
 
         if (oldProps.chats && newProps.chats && !isEqual(oldProps.chats, newProps.chats)) {
-            // console.log("ChatPage chats updated", oldProps, newProps);
 
-            if (!firstDialogListCreation) {
-                firstDialogListCreation = true
-                console.log("firstDialogListCreation", firstDialogListCreation);
+            // if (!firstDialogListCreation) {
+                // firstDialogListCreation = true
 
                 chatPageController.createDialogsList().then((dialogsList) => {
                     chatPage.setProps({ dialogListItems: dialogsList })
                 })
-            }
+            // }
         }
 
         return true
@@ -67,26 +69,7 @@ const ConnectedChatPage = connect(ChatPage, (state) => ({
     user: state.user
 }))
 
-export const messages: (Message | ChatDate)[] = [
-    // new ChatDate({
-    //     date: '19 июня',
-    // }),
-    // new Message({
-    //     // eslint-disable-next-line max-len
-    //     text: 'Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой. Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.',
-    //     time: '10:56',
-    // }),
-    // new Message({
-    //     attachedImgSrc: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D',
-    //     time: '10:57',
-    // }),
-    new Message({
-        text: 'Сообщение получено.',
-        time: '10:57',
-        isOut: true,
-        status: 'sent',
-    }),
-]
+export const messages: (Message | ChatDate)[] = []
 
 export const footerTextarea = new Textarea({
     className: 'chat__footer-textarea',
@@ -160,7 +143,7 @@ export const chatMessages = new ChatMessages({
 // chatMessages.componentDidUpdate = (oldProps: IBlockProps, newProps: IBlockProps): boolean => {
 //     const messagesScrollList = chatMessages.getContent().querySelector('.chat__messages')
 //     console.log(messagesScrollList);
-    
+
 //     if (messagesScrollList) {
 //         console.log('ASDAASDASDDSA', messagesScrollList?.scrollHeight, messagesScrollList.scrollTop);
 //         messagesScrollList.scrollTop = 100

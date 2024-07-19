@@ -7,6 +7,7 @@ export class Block {
         INIT: 'init',
         FLOW_CDM: 'flow:component-did-mount',
         FLOW_CDU: 'flow:component-did-update',
+        FLOW_CDUM: 'flow:component-did-unmount',
         FLOW_RENDER: 'flow:render',
     }
 
@@ -148,12 +149,46 @@ export class Block {
             });
         }
     }
+
     dispatchComponentDidMount() {
         this.firstRender = false
         this.eventBus().emit(Block.EVENTS.FLOW_CDM, this.props);
     }
 
     componentDidMount(props: IBlockProps) {
+        if (!props) { return false }
+        return true
+    }
+
+    private _componentDidUnmount() {
+
+        this.componentDidUnmount(this.props);
+        if (this.children) {
+            Object.values(this.children).forEach((child) => {
+                if (!child._isListItem) {
+                    // console.log('Child mounted', child);
+                    child.dispatchComponentDidUnmount()
+                }
+            });
+        }
+        if (this.lists) {
+            Object.values(this.lists).forEach((list) => {
+                list.forEach((child) => {
+                    if (child instanceof Block) {
+                        // console.log('List item mounted', child);
+
+                        child.dispatchComponentDidUnmount();
+                    }
+                });
+            });
+        }
+    }
+
+    dispatchComponentDidUnmount() {
+        this.eventBus().emit(Block.EVENTS.FLOW_CDUM, this.props);
+    }
+
+    componentDidUnmount(props: IBlockProps) {
         if (!props) { return false }
         return true
     }
@@ -190,6 +225,7 @@ export class Block {
         eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
         eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
         eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+        eventBus.on(Block.EVENTS.FLOW_CDUM, this._componentDidUnmount.bind(this));
         eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
     }
 

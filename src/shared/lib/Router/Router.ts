@@ -27,6 +27,15 @@ export class Router {
         return this
     }
 
+    async guard(redirectTo: PagesPaths, callback: () => boolean | Promise<boolean>) {
+        const result = await callback()
+
+        if (!result) {
+            this.go(redirectTo)
+        }
+        return this
+    }
+
     start() {
         window.onpopstate = ((event) => {
             const currentWindow = event.currentTarget as Window;

@@ -1,4 +1,3 @@
-import avatarSkeletonSrc from '@assets/avatar-skeleton.svg'
 import { store } from "@shared/Store";
 
 class AvatarController {
@@ -15,7 +14,7 @@ class AvatarController {
         if (store.getState().user?.avatar) {
             return this.avatarBaseSrc + store.getState().user?.avatar as string
         } else {
-            return avatarSkeletonSrc
+            return '/assets/images/avatar-skeleton.svg'
         }
     }
 }

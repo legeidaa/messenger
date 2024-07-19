@@ -31,6 +31,7 @@ export class Route {
     leave() {
         if (this._root) {
             this._root.innerHTML = ''   
+            this._block?.dispatchComponentDidUnmount()
         } else {
             throw new Error('Root not found')
         }

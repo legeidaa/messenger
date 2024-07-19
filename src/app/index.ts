@@ -15,16 +15,16 @@ router
     .start()
 
 
-document.addEventListener('DOMContentLoaded', async () => {
+async function isUserLoaded() {
     try {
         const userData = await authAPI.getUser()
         console.log('Данные юзера получены');
         store.dispatch({ type: 'SET_USER', user: userData })
-        
+        return true
     } catch (error) {
         console.log('Данные юзера не получены', error);
-        
-        router.go(PagesPaths.SIGNIN)
+        return false
     }
-})
+}
 
+router.guard(PagesPaths.SIGNIN, isUserLoaded)

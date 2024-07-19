@@ -38,7 +38,7 @@ export class WSTransport extends EventBus {
         return new Promise((resolve, reject) => {
             this.on(WSTransportEvents.ERROR, reject)
             this.on(WSTransportEvents.CONNECTED, () => {
-                console.log('Connected');
+                // console.log('Connected');
                 
                 this.off(WSTransportEvents.ERROR, reject)
                 resolve()

@@ -22,6 +22,9 @@ export type ChatInfo = {
     id: number
 }
 class ChatPageController {
+
+    public messagesList: Message[] = []
+
     public async getInitialData() {
         const userData = await authAPI.getUser()
         store.dispatch({ type: 'SET_USER', user: userData })
@@ -91,12 +94,9 @@ class ChatPageController {
             const deletedChatInfo = await chatAPI.deleteChat(currentChat?.id)
 
             chatController.getChats()
-            chatPageController.createDialogsList().then((dialogsList) => {
-                chatPage.setProps({ dialogListItems: dialogsList })
-            })
-
+            
             store.dispatch({ type: 'SET_CURRENT_CHAT', currentChat: null })
-            chatPage.setProps({ dialogListItems: chatPageController.createDialogsList() })
+            // chatPage.setProps({ dialogListItems: chatPageController.createDialogsList() })
             chatPage.setProps({ chatPlaceholder: true, })
 
             return deletedChatInfo
@@ -168,30 +168,28 @@ class ChatPageController {
             if (messagesScrollList) {
                 setTimeout(() => {
                     messagesScrollList.scrollTop = 1000000
-                    console.log("messagesScrollList.scrollTop", messagesScrollList.scrollTop);
-
+                    // console.log("messagesScrollList.scrollTop", messagesScrollList.scrollTop);
                 })
             }
         }
 
-
         if (currentChat) {
             const connection = chatController.getConnectionById(currentChat.id)
-            let oldMessages: Message[] = []
+
+            this.messagesList.length = 0
 
             connection?.send({
                 content: '0',
                 type: 'get old',
             })
 
-            connection?.on(WSTransportEvents.MESSAGE, (messages: WSMessageData[] | WSMessageData) => {
+            connection?.on(WSTransportEvents.MESSAGE, (data: WSMessageData[] | WSMessageData) => {
                 // если получили список сообщений
-                if (Array.isArray(messages)) {
-                    if (messages.length && messages[0].type === 'message') {
-                        oldMessages.length = 0
-                        messages.forEach((message) => {
+                if (Array.isArray(data)) {
+                    if (data.length && data[0].type === 'message') {
+                        data.forEach((message) => {
 
-                            oldMessages.push(
+                            this.messagesList.push(
                                 new Message({
                                     text: message.content,
                                     time: getMessageTime(message.time),
@@ -199,17 +197,21 @@ class ChatPageController {
                                 })
                             )
                         })
-                        chatMessages.setProps({ messages: oldMessages.reverse() })
+                        chatMessages.setProps({ messages: this.messagesList.reverse() })
                         scrollMessagesListToBottom()
                     }
-                } else if (messages.type === 'message' && Number(messages.user_id) !== user?.id) {
+                } else if (data.type === 'message' && Number(data.user_id) !== user?.id) {
                     // обновляем список только если пришло новое сообщение, а не отправили мы
-                    console.log("Получено новое сообщение", messages, oldMessages);
-                    
-                    connection?.send({
-                        content: '0',
-                        type: 'get old',
-                    })
+                    this.messagesList.push(
+                        new Message({
+                            text: data.content,
+                            time: getMessageTime(data.time),
+                            isOut: Number(data.user_id) === user?.id,
+                        })
+
+                    )
+                    chatMessages.setProps({ messages: this.messagesList })
+                    scrollMessagesListToBottom()
                 }
 
             })
@@ -229,14 +231,14 @@ class ChatPageController {
                             type: 'message',
                         })
 
-                        oldMessages.push(
+                        this.messagesList.push(
                             new Message({
                                 text: formDataObj.message as string,
                                 time: getMessageTime(new Date().toString()),
                                 isOut: true,
                             })
                         )
-                        chatMessages.setProps({ messages: oldMessages })
+                        chatMessages.setProps({ messages: this.messagesList })
                         scrollMessagesListToBottom()
 
                         footerTextarea.props.value = ''
@@ -253,7 +255,10 @@ class ChatPageController {
         })
         // TODO возможно стоит заменить на смену attr
         dialogListItems.forEach((dialogItem) => { dialogItem.setProps({ selected: false }) })
-        dialogItem.setProps({ selected: true })
+        dialogItem.setProps({
+            selected: true,
+            count: 0
+        })
     }
 
     public async createDialogsList() {
@@ -265,7 +270,6 @@ class ChatPageController {
 
         if (user && dialogs) {
             await chatController.createMessagesConnections(user, dialogs)
-            console.log("createMessagesConnections", chatController.WSConnections, chatController.WSConnections.length)
 
             dialogs.map((chat) => {
 

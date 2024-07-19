@@ -19,6 +19,7 @@ class SigninController {
             return true
         } catch (err: unknown) {
             const error = err as ApiError
+            if(error.reason) return router.go(PagesPaths.CHAT)
             return error.reason
         }
     }
