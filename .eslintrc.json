@@ -36,8 +36,6 @@
             4
         ],
         "no-use-before-define": "off",
-        "@typescript-eslint/no-use-before-define": "warn",
-        "class-methods-use-this": "warn",
         "import/no-unresolved": "off",
         "import/prefer-default-export": "off",
         "no-unused-vars": "off",
@@ -64,8 +62,6 @@
                 "code": 200
             }
         ],
-        "no-param-reassign": "warn",
-        "no-undef": "warn",
         "no-useless-constructor": "off",
         "no-constructor-return": "off",
         "consistent-return": "warn",
@@ -73,7 +69,13 @@
         "no-continue": "off",
         "no-return-assign": "off",
         "prefer-promise-reject-errors": "warn",
-        "camelcase": "off"
-    
+        "camelcase": "off",
+        "no-path-concat": "error",
+        "prefer-template": "error",
+        "no-console": "warn",
+        "class-methods-use-this": "warn",
+        "@typescript-eslint/no-use-before-define": "warn",
+        "no-param-reassign": "warn",
+        "no-undef": "warn"
     }
 }
