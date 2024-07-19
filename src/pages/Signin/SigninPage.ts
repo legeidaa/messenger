@@ -11,7 +11,6 @@ import { store, connect } from '@shared/Store';
 import SigninPageTemplate from './SigninPage.hbs?raw';
 import { ISigninPageProps } from './model.ts';
 import { validateLogin, validatePassword } from './validation.ts';
-// import { signinAPI } from '@shared/api/SigninApi.ts';
 import { signinController } from './SigninController.ts';
 
 class SigninPage extends Block {
