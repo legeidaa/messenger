@@ -1,4 +1,4 @@
-import { Indexed } from "@shared/models/common";
+import { Indexed } from '@shared/models/common';
 
 function isPlainObject(value: unknown): value is Indexed {
     return typeof value === 'object'
@@ -17,9 +17,9 @@ function isArrayOrObject(value: unknown): value is [] | Indexed {
 
 export function isEqual(lhs: Indexed, rhs: Indexed) {
     if (!lhs || !rhs) {
-        throw new Error("Параметры isEqual не могут быть пустыми");
+        throw new Error('Параметры isEqual не могут быть пустыми');
     }
-    
+
     if (Object.keys(lhs).length !== Object.keys(rhs).length) {
         return false;
     }

@@ -1,5 +1,4 @@
-
-import { HTTPTransport, IMethodOptions } from '@shared/lib/HTTPTransport';
+import { HTTPTransport } from '@shared/lib/HTTPTransport';
 import { BaseURL } from './consts';
 
 export class Api {
@@ -9,7 +8,6 @@ export class Api {
         this._transport = new HTTPTransport(BaseURL + urlPart)
     }
 
-    
     public get transport(): HTTPTransport {
         return this._transport
     }

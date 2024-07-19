@@ -7,11 +7,11 @@ import { SignupForm } from '@widgets/SignupForm/index.ts';
 import { Form } from '@shared/partials/Form/index.ts';
 import { router } from '@shared/lib/Router/Router.ts';
 import { PagesPaths } from '@shared/lib/Router/model';
+import { store, connect } from '@shared/Store';
 import SigninPageTemplate from './SignupPage.hbs?raw';
 import { ISignupPageProps } from './model.ts';
-import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName, validateSubmit } from './validation.ts';
+import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName } from './validation.ts';
 import { signupController } from './SignupController.ts';
-import { store, connect } from '@shared/Store';
 
 class SignupPage extends Block {
     constructor(props: ISignupPageProps) {
@@ -23,17 +23,17 @@ class SignupPage extends Block {
     }
 
     componentDidMount(props: IBlockProps): boolean {
-        console.log("componentDidMount", props, store.getState());
+        console.log('componentDidMount', props, store.getState());
         return true
     }
 
-    componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps): boolean {
-        console.log("signup componentDidUpdate", this, store.getState());
+    componentDidUpdate(): boolean {
+        console.log('signup componentDidUpdate', this, store.getState());
         return true
     }
 }
 
-const connectedSignunPage = connect(SignupPage, (state) => ({ sampleProps: state.sampleProps }))
+const ConnectedSignunPage = connect(SignupPage, (state) => ({ sampleProps: state.sampleProps }))
 
 export const inputEmail = new InputField({
     className: 'login-page__input',
@@ -193,6 +193,6 @@ export const form = new Form({
     },
 })
 
-export const signupPage = new connectedSignunPage({
+export const signupPage = new ConnectedSignunPage({
     form,
 })

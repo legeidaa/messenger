@@ -7,9 +7,13 @@ interface IRouteProps {
 
 export class Route {
     private _pathname: PagesPaths
+
     private _blockClass: Block;
+
     private _block: null | Block;
+
     private _props: IRouteProps;
+
     private _root: HTMLElement | null;
 
     constructor(pathname: PagesPaths, view: Block, props: IRouteProps) {
@@ -30,7 +34,7 @@ export class Route {
 
     leave() {
         if (this._root) {
-            this._root.innerHTML = ''   
+            this._root.innerHTML = ''
             this._block?.dispatchComponentDidUnmount()
         } else {
             throw new Error('Root not found')
@@ -51,7 +55,7 @@ export class Route {
 
         this._root.insertAdjacentElement('beforeend', this._block.getContent())
         this._block.dispatchComponentDidMount();
-        
+
         this._block.show();
     }
 }

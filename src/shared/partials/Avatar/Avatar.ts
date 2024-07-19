@@ -6,7 +6,7 @@ export class Avatar extends Block {
     constructor(props: IAvatarProps) {
         super({
             ...props,
-            fallbackSrc: '/assets/images/avatar-skeleton.svg'
+            fallbackSrc: '/assets/images/avatar-skeleton.svg',
         })
     }
 

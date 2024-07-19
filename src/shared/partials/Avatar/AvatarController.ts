@@ -1,4 +1,4 @@
-import { store } from "@shared/Store";
+import { store } from '@shared/Store';
 
 class AvatarController {
     public avatarBaseSrc: string = 'https://ya-praktikum.tech/api/v2/resources'
@@ -12,10 +12,9 @@ class AvatarController {
 
     public getUserAvatarSrc(): string {
         if (store.getState().user?.avatar) {
-            return this.avatarBaseSrc + store.getState().user?.avatar as string
-        } else {
-            return '/assets/images/avatar-skeleton.svg'
+            return this.avatarBaseSrc + (store.getState().user?.avatar ?? '') as string
         }
+        return '/assets/images/avatar-skeleton.svg'
     }
 }
 

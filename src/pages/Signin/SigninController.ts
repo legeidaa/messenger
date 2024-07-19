@@ -1,10 +1,10 @@
-import { authAPI } from "@shared/api/AuthApi";
-import { store } from "@shared/Store";
-import { validateSubmit } from "./validation";
-import { inputLogin, inputPassword, signinForm } from "./SigninPage";
-import { router } from "@shared/lib/Router";
-import { PagesPaths } from "@shared/lib/Router/model";
-import { ApiError } from "@shared/api/model";
+import { authAPI } from '@shared/api/AuthApi';
+import { store } from '@shared/Store';
+import { router } from '@shared/lib/Router';
+import { PagesPaths } from '@shared/lib/Router/model';
+import { ApiError } from '@shared/api/model';
+import { inputLogin, inputPassword, signinForm } from './SigninPage';
+import { validateSubmit } from './validation';
 
 class SigninController {
     // после приватного роута
@@ -19,7 +19,7 @@ class SigninController {
             return true
         } catch (err: unknown) {
             const error = err as ApiError
-            if(error.reason) return router.go(PagesPaths.CHAT)
+            if (error.reason) return router.go(PagesPaths.CHAT)
             return error.reason
         }
     }
@@ -31,7 +31,7 @@ class SigninController {
 
             const signinResult = await signinController.signin({
                 login: inputLogin.children.input.props.value as string,
-                password: inputPassword.children.input.props.value as string
+                password: inputPassword.children.input.props.value as string,
             })
 
             // console.log(signinResult);

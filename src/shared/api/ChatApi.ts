@@ -1,7 +1,6 @@
 import { User } from 'entities/User';
 import { Api } from './Api';
 
-
 type Name = `${User['first_name']}  ${User['second_name']}`
 
 export class ChatAPI extends Api {
@@ -24,16 +23,17 @@ export class ChatAPI extends Api {
     public addChat(name: string) {
         return this.transport.post('', { data: { title: name } })
     }
+
     public addChatAvatar(formData: FormData) {
         return this.transport.put('/avatar', { data: formData })
     }
-    
+
     public deleteChat(chatId: number) {
         return this.transport.delete('', { data: { chatId } })
     }
 
     public getChatToken(chatId: number) {
-        return this.transport.post(`/token/${chatId}`, )
+        return this.transport.post(`/token/${chatId}`)
     }
 
     public addUser(chatId: number, userId: number) {

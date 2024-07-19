@@ -2,6 +2,7 @@ import * as Handlebars from 'handlebars'
 import { v4 as makeUUID } from 'uuid';
 import EventBus from '../EventBus.ts';
 import { IBlockProps } from './model.ts';
+
 export class Block {
     public static EVENTS = {
         INIT: 'init',
@@ -75,7 +76,6 @@ export class Block {
         })
 
         Object.entries(this.lists).forEach(([key]) => {
-
             const child = this.lists[key]
             const listCont = document.createElement('template') as HTMLTemplateElement
             child.forEach((item) => {
@@ -116,7 +116,7 @@ export class Block {
         if (!nextProps) {
             return;
         }
-        const {props, lists } = this._getChildren(nextProps)
+        const { props, lists } = this._getChildren(nextProps)
 
         Object.assign(this.props, props)
         Object.assign(this.lists, lists)
@@ -127,7 +127,6 @@ export class Block {
     }
 
     private _componentDidMount() {
-
         this.componentDidMount(this.props);
         if (this.children) {
             Object.values(this.children).forEach((child) => {
@@ -161,7 +160,6 @@ export class Block {
     }
 
     private _componentDidUnmount() {
-
         this.componentDidUnmount(this.props);
         if (this.children) {
             Object.values(this.children).forEach((child) => {
@@ -246,7 +244,6 @@ export class Block {
             if (value instanceof Block) {
                 children[key] = value
             } else if (Array.isArray(value)) {
-
                 // let valueIsListOfBlocks = true
 
                 // value.forEach((item) => {
@@ -256,7 +253,6 @@ export class Block {
                 // })
 
                 // console.log(key, value, valueIsListOfBlocks, this);
-                
 
                 // if (valueIsListOfBlocks) {
                 //     console.log("valueIsListOfBlocks", value);

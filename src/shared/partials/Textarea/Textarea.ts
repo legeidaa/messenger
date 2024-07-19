@@ -12,7 +12,7 @@ export class Textarea extends Block {
                     const target = e.target as HTMLInputElement
                     this.setProps({ value: target?.value })
                 },
-            }
+            },
         });
     }
 

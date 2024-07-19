@@ -1,10 +1,10 @@
-import { authAPI } from "@shared/api/AuthApi";
-import { SignupFormData } from "./model";
-import { store } from "@shared/Store";
-import { validateSubmit } from "./validation";
-import { inputEmail, inputFirstName, inputLogin, inputPassword, inputPhone, inputSecondName, signupForm } from "./SignupPage";
-import { router } from "@shared/lib/Router";
-import { PagesPaths } from "@shared/lib/Router/model";
+import { authAPI } from '@shared/api/AuthApi';
+import { store } from '@shared/Store';
+import { router } from '@shared/lib/Router';
+import { PagesPaths } from '@shared/lib/Router/model';
+import { SignupFormData } from './model';
+import { validateSubmit } from './validation';
+import { inputEmail, inputFirstName, inputLogin, inputPassword, inputPhone, inputSecondName, signupForm } from './SignupPage';
 
 interface LoginError {
     status: number,
@@ -12,7 +12,6 @@ interface LoginError {
 }
 
 class SignupController {
-
     public async signup(signupData: SignupFormData) {
         try {
             const res = await authAPI.signup({ data: signupData })
@@ -27,6 +26,7 @@ class SignupController {
             return error.reason
         }
     }
+
     public async submit(e: Event) {
         if (validateSubmit(e)) {
             signupForm.props.error = ''

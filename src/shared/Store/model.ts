@@ -1,4 +1,4 @@
-import { State } from "./state"
+import { State } from './state'
 
 export type Subscriber<T> = (state: T) => void
 export type Action = { type: string, [key: string]: any }

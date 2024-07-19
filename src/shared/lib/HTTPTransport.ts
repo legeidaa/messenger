@@ -1,10 +1,10 @@
-import { queryStringify } from "@shared/utils"
+import { queryStringify } from '@shared/utils'
 
 enum METHODS {
-    GET = "GET",
-    POST = "POST",
-    PUT = "PUT",
-    DELETE = "DELETE",
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    DELETE = 'DELETE',
 }
 
 export interface IMethodOptions {
@@ -21,8 +21,9 @@ interface IRequestOptions extends IMethodOptions {
 }
 
 export class HTTPTransport {
-
-    constructor(private _baseURL: string) { }
+    constructor(private _baseURL: string) {
+        this._baseURL = _baseURL
+    }
 
     get(url: string, options: IMethodOptions = {}): Promise<XMLHttpRequest> {
         return this.request(url, { ...options, method: METHODS.GET }, options.timeout)
@@ -49,7 +50,7 @@ export class HTTPTransport {
             withCredentials = true,
             responseType = 'json',
             // signal,
-            method
+            method,
         } = options
 
         return new Promise((resolve, reject) => {
@@ -68,12 +69,12 @@ export class HTTPTransport {
                     resolve(xhr.response)
                 } else {
                     const message = {
-                        '0': 'abort',
-                        '100': 'Information',
-                        '200': 'Ok',
-                        '300': 'Redirect failed',
-                        '400': 'Access error',
-                        '500': 'Internal server error',
+                        0: 'abort',
+                        100: 'Information',
+                        200: 'Ok',
+                        300: 'Redirect failed',
+                        400: 'Access error',
+                        500: 'Internal server error',
                     }[Math.floor(status / 100) * 100]
                     reject({ status, reason: xhr.response?.reason || message })
                 }

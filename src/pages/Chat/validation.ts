@@ -1,5 +1,5 @@
-import { validator } from "@shared/lib/Validator"
-import { footerForm } from "./ChatPage"
+import { validator } from '@shared/lib/Validator'
+import { footerForm } from './ChatPage'
 
 export function validateMessage(e: Event) {
     e.preventDefault()

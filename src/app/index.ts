@@ -4,6 +4,7 @@ import { router } from '@shared/lib/Router';
 import { PagesPaths } from '@shared/lib/Router/model';
 import { store } from '@shared/Store';
 import { authAPI } from '@shared/api/AuthApi';
+
 router
     .use(PagesPaths.SIGNIN, Pages.signinPage)
     .use(PagesPaths.MAIN, Pages.mainPage)
@@ -13,7 +14,6 @@ router
     .use(PagesPaths.ERROR_SERVER, Pages.errorServerPage)
     .use(PagesPaths.CHAT, Pages.chatPage)
     .start()
-
 
 async function isUserLoaded() {
     try {

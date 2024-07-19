@@ -4,9 +4,13 @@ import { Route } from './Route';
 
 export class Router {
     public routes: Route[]
+
     public history: History
+
     private _currentRoute: Route | undefined
+
     private _rootQuery: string
+
     static __instance: Router
 
     constructor(rootQuery: string) {
@@ -51,12 +55,12 @@ export class Router {
         if (!route) {
             route = this.getRoute(PagesPaths.ERROR_CLIENT)
         }
-        if (this._currentRoute && this._currentRoute !== route) {            
+        if (this._currentRoute && this._currentRoute !== route) {
             this._currentRoute.leave()
         }
 
         this._currentRoute = route;
-        
+
         route?.render()
     }
 

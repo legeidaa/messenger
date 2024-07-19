@@ -1,4 +1,4 @@
-import { Indexed } from "@shared/models/common";
+import { Indexed } from '@shared/models/common';
 
 function isPlainObject(value: unknown): value is Indexed {
     return typeof value === 'object'
@@ -38,5 +38,5 @@ export function queryStringify(data: Indexed) {
         throw new Error('input must be an object');
     }
 
-    return '?' + getParams(data).map(arr => arr.join('=')).join('&');
+    return `?${getParams(data).map((arr) => arr.join('=')).join('&')}`;
 }

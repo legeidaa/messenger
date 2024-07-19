@@ -1,6 +1,6 @@
 import './Input.scss'
 import InputTemplate from './Input.hbs?raw';
-import { Block, IBlockProps } from '../../lib/Block';
+import { Block } from '../../lib/Block';
 import { IInputProps } from './model';
 
 export class Input extends Block {
@@ -14,13 +14,8 @@ export class Input extends Block {
                         this.setProps({ value: target?.value })
                     }
                 },
-            }
+            },
         })
-
-
-    }
-    componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps): boolean {
-        return true
     }
 
     render() {

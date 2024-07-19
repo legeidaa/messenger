@@ -1,9 +1,9 @@
-import { Block, IBlockProps } from '@shared/lib/Block'
+import { Block } from '@shared/lib/Block'
 import { Button, Input, InputField } from '@shared/partials';
-import AddChatModalTemplate from './AddChatModal.hbs?raw';
-import { IAddChatModalProps } from './model';
 import { AddChatForm } from '@widgets/AddChatForm';
 import { Form } from '@shared/partials/Form';
+import AddChatModalTemplate from './AddChatModal.hbs?raw';
+import { IAddChatModalProps } from './model';
 
 export class AddChatModal extends Block {
     constructor(props: IAddChatModalProps) {
@@ -12,10 +12,6 @@ export class AddChatModal extends Block {
 
     render() {
         return this.compile(AddChatModalTemplate, this.props);
-    }
-
-    componentDidMount(props: IBlockProps): boolean {
-        return true
     }
 }
 
@@ -59,5 +55,5 @@ export const addChatModal = new AddChatModal({
     modalTitle: 'Добавить чат',
     addUserForm: new Form({
         formContent: addChatForm,
-    })
+    }),
 })

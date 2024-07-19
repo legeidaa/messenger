@@ -1,10 +1,9 @@
-import { userAPI } from "@shared/api/UserApi";
-import { changeAvatarForm, changeAvatarModal, fileInput } from "./ChangeAvatarModal";
-import { store } from "@shared/Store";
-import { ApiError } from "shared/api/model";
+import { userAPI } from '@shared/api/UserApi';
+import { store } from '@shared/Store';
+import { ApiError } from 'shared/api/model';
+import { changeAvatarForm, changeAvatarModal, fileInput } from './ChangeAvatarModal';
 
 class ChangeAvatarModalController {
-
     public async sendAvatar(e: Event) {
         e.preventDefault()
         const input = fileInput.children.input.getContent() as HTMLInputElement
@@ -17,13 +16,13 @@ class ChangeAvatarModalController {
 
             formData.append('avatar', input.files[0])
         }
-        changeAvatarModal.setProps({ modalTitleError: false, modalTitle: "Загрузите файл" })
+        changeAvatarModal.setProps({ modalTitleError: false, modalTitle: 'Загрузите файл' })
         changeAvatarForm.setProps({ modalError: '' })
 
         try {
             const userData = await userAPI.changeProfileAvatar({ data: formData })
             store.dispatch({ type: 'SET_USER', user: userData })
-            changeAvatarModal.setProps({  modalTitle: "Файл загружен" })
+            changeAvatarModal.setProps({ modalTitle: 'Файл загружен' })
 
             return true
         } catch (err) {

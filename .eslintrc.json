@@ -67,6 +67,13 @@
         "no-param-reassign": "warn",
         "no-undef": "warn",
         "no-useless-constructor": "off",
-        "no-constructor-return": false
+        "no-constructor-return": "off",
+        "consistent-return": "warn",
+        "no-restricted-syntax": "off",
+        "no-continue": "off",
+        "no-return-assign": "off",
+        "prefer-promise-reject-errors": "warn",
+        "camelcase": "off"
+    
     }
 }
