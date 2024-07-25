@@ -24,4 +24,5 @@ export function activateModals() {
             }
         })
     })
+    // console.log("modals activated", modals, modalTriggers);
 }

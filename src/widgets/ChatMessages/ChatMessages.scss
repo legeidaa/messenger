@@ -35,8 +35,10 @@
             margin-right: 10px;
         }
 
-        &-settings {
+        &-buttons {
             margin-left: auto;
+            display: flex;
+            gap: 1rem;
         }
     }
 
@@ -57,12 +59,14 @@
         overflow: hidden auto;
         display: flex;
         flex-direction: column;
+        
 
         &-wrapper {
-            height: 100%;
+            // height: 100%;
             display: flex;
             flex-direction: column;
             padding: 20px;
+            align-items: baseline;
 
             &>* {
                 &:first-child {

@@ -1,2 +1,2 @@
-export { Form } from './Form'
-export type { IFormProps } from './model'
+export { Form } from './Form.ts'
+export type { IFormProps } from './model.ts'

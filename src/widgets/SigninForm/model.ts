@@ -4,6 +4,7 @@ import { Button } from '@shared/partials/Button';
 import { Link } from '@shared/partials';
 
 export interface ISigninFormProps extends IBlockProps {
+    error: string,
     inputLogin: InputField;
     inputPassword: InputField;
     footerButtonSubmit: Button;

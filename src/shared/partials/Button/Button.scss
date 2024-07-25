@@ -25,6 +25,20 @@
         background: darken($color: $blue, $amount: 8%);
     }
 
+    &_outlined {
+        background: none;
+        border: 1px solid $border-color;
+        color: $gray-dark-1;
+
+        &:hover {
+            background: $gray-light-3;
+        }
+    
+        &:active {
+            background: $gray-light-2;
+        }
+    }
+
     &_clear {
         background: none;
 

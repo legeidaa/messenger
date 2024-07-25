@@ -5,7 +5,17 @@ import { IInputProps } from './model';
 
 export class Input extends Block {
     constructor(props: IInputProps) {
-        super(props)
+        super({
+            ...props,
+            events: {
+                change: (e) => {
+                    if (this.getContent().getAttribute('type') !== 'file') {
+                        const target = e.target as HTMLInputElement
+                        this.setProps({ value: target?.value })
+                    }
+                },
+            },
+        })
     }
 
     render() {

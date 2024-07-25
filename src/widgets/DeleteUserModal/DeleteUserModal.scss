@@ -1,0 +1,8 @@
+@import '@styles/vars';
+@import '@styles/mixins';
+
+.delete-user-list {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+}

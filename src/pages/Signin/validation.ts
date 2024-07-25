@@ -1,6 +1,6 @@
-import { validator } from '@shared/lib/Validator'
-import { validateHelper } from '@shared/utils/validateHelper'
-import { inputLogin, inputPassword } from './SigninPage'
+import { validator } from '@shared/lib/Validator.ts'
+import { validateHelper } from '@shared/utils/validateHelper.ts'
+import { inputLogin, inputPassword } from './SigninPage.ts'
 
 export function validateLogin(e: Event) {
     e.preventDefault()
@@ -29,6 +29,8 @@ export function validateSubmit(e: Event) {
     validatePassword(e)
 
     if (validateLogin(e) && validatePassword(e)) {
-        window.location.hash = 'chat'
+        // router.go(PagesPaths.CHAT)
+        return true
     }
+    return false
 }

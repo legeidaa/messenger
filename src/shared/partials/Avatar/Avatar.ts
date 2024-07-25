@@ -4,7 +4,10 @@ import { IAvatarProps } from './model';
 
 export class Avatar extends Block {
     constructor(props: IAvatarProps) {
-        super(props)
+        super({
+            ...props,
+            fallbackSrc: '/assets/images/avatar-skeleton.svg',
+        })
     }
 
     render() {

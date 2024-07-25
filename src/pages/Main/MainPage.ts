@@ -1,5 +1,7 @@
-import { Block } from '@shared/lib/Block'
-import { Link } from '@shared/partials/Link';
+import { Block } from '@shared/lib/Block/index.ts'
+import { Link } from '@shared/partials/Link/index.ts';
+import { router } from '@shared/lib/Router';
+import { PagesPaths } from '@shared/lib/Router/model';
 import MainPageTemplate from './MainPage.hbs?raw';
 
 export class MainPage extends Block {
@@ -23,11 +25,65 @@ export class MainPage extends Block {
 
 export const mainPage = new MainPage({
     links: [
-        new Link({ href: '#chat', text: 'Чат' }),
-        new Link({ href: '#signin', text: 'Вход' }),
-        new Link({ href: '#signup', text: 'Регистрация' }),
-        new Link({ href: '#error-client', text: '404 ошибка' }),
-        new Link({ href: '#error-server', text: '500 ошибка' }),
-        new Link({ href: '#profile', text: 'Профиль' }),
+        new Link({
+            href: PagesPaths.CHAT,
+            text: 'Чат',
+            events: {
+                click: (e) => {
+                    e.preventDefault()
+                    router.go(PagesPaths.CHAT)
+                },
+            },
+        }),
+        new Link({
+            href: PagesPaths.SIGNIN,
+            text: 'Вход',
+            events: {
+                click: (e) => {
+                    e.preventDefault()
+                    router.go(PagesPaths.SIGNIN)
+                },
+            },
+        }),
+        new Link({
+            href: PagesPaths.SIGNUP,
+            text: 'Регистрация',
+            events: {
+                click: (e) => {
+                    e.preventDefault()
+                    router.go(PagesPaths.SIGNUP)
+                },
+            },
+        }),
+        new Link({
+            href: PagesPaths.ERROR_CLIENT,
+            text: '404 ошибка',
+            events: {
+                click: (e) => {
+                    e.preventDefault()
+                    router.go(PagesPaths.ERROR_CLIENT)
+                },
+            },
+        }),
+        new Link({
+            href: PagesPaths.ERROR_SERVER,
+            text: '500 ошибка',
+            events: {
+                click: (e) => {
+                    e.preventDefault()
+                    router.go(PagesPaths.ERROR_SERVER)
+                },
+            },
+        }),
+        new Link({
+            href: PagesPaths.PROFILE,
+            text: 'Профиль',
+            events: {
+                click: (e) => {
+                    e.preventDefault()
+                    router.go(PagesPaths.PROFILE)
+                },
+            },
+        }),
     ],
 })

@@ -1,2 +1,2 @@
-export { ErrorClientPage, errorClientPage } from './ErrorClientPage'
-export type { IErrorClientPageProps } from './model'
+export { ErrorClientPage, errorClientPage } from './ErrorClientPage.ts'
+export type { IErrorClientPageProps } from './model.ts'

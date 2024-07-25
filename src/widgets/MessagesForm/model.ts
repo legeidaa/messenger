@@ -4,7 +4,7 @@ import { Button } from '@shared/partials/Button';
 import { Textarea } from 'shared/partials/Textarea';
 
 export interface IMessagesFormProps extends IBlockProps {
-    footerAttachInput: InputField,
+    footerAttachInput?: InputField,
     footerTextarea: Textarea,
     footerSentBtn: Button,
 }

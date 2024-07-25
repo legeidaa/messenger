@@ -1,0 +1,37 @@
+@import '@styles/vars';
+@import '@styles/mixins';
+
+.user-card {
+    padding: 6px 0;
+    display: flex;
+    border-bottom: 1px solid $border-color;
+    min-width: 0;
+    align-items: center;
+    gap: 10px;
+
+    &:last-child {
+        border-bottom: 0;
+    }
+
+    &__avatar {
+        flex-shrink: 0;
+    }
+
+    &__name,
+    &__display-name {
+        @include text-13;
+
+        color: $dark;
+        font-weight: 600;
+        margin-bottom: 4px;
+        word-break: break-word;
+    }
+
+    &__display-name {
+        @include text-11;
+    }
+
+    &__button {
+        margin-left: auto;
+    }
+}

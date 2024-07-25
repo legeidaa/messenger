@@ -1,2 +1,2 @@
-export { Block } from './Block'
-export type { IBlockProps } from './model'
+export { Block } from './Block.ts'
+export type { IBlockProps } from './model.ts'

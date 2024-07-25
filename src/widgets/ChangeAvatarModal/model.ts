@@ -1,9 +1,8 @@
 import { IBlockProps } from '@shared/lib/Block';
-import { Button, InputField } from 'shared/partials';
+import { ChangeAvatarForm } from 'widgets/ChangeAvatarForm';
 
 export interface IChangeAvatarModalProps extends IBlockProps {
-    modalTitle: string
-    fileInput: InputField | string,
-    button: Button | null
-    modalError?: string | null
+    modalTitle: string,
+    modalTitleError: boolean,
+    changeAvatarForm: ChangeAvatarForm
 }

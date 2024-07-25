@@ -1,13 +1,14 @@
 import * as Handlebars from 'handlebars'
 import { v4 as makeUUID } from 'uuid';
-import EventBus from '../EventBus';
-import { IBlockProps } from './model';
+import EventBus from '../EventBus.ts';
+import { IBlockProps } from './model.ts';
 
 export class Block {
     public static EVENTS = {
         INIT: 'init',
         FLOW_CDM: 'flow:component-did-mount',
         FLOW_CDU: 'flow:component-did-update',
+        FLOW_CDUM: 'flow:component-did-unmount',
         FLOW_RENDER: 'flow:render',
     }
 
@@ -31,6 +32,8 @@ export class Block {
 
     private _id: string
 
+    private _isListItem: boolean = false
+
     eventBus: () => EventBus
 
     constructor(propsAndChildren: IBlockProps) {
@@ -50,7 +53,7 @@ export class Block {
     }
 
     // вызывается в методе render
-    compile(template: string, props: IBlockProps) {
+    public compile(template: string, props: IBlockProps) {
         const propsAndStubs = { ...props };
 
         Object.entries(this.children).forEach(([key, child]) => {
@@ -77,6 +80,7 @@ export class Block {
             const listCont = document.createElement('template') as HTMLTemplateElement
             child.forEach((item) => {
                 if (item instanceof Block) {
+                    item._isListItem = true
                     listCont.content.append(item.getContent());
                 } else {
                     listCont.content.append(`${item}`);
@@ -122,22 +126,67 @@ export class Block {
         return this._element
     }
 
-    private _componentDidMount(props: IBlockProps) {
-        this.componentDidMount(props)
-        Object.values(this.children).forEach((child) => {
-            child.dispatchComponentDidMount()
-        })
-        if (!this.firstRender) {
-            this.firstRender = true
+    private _componentDidMount() {
+        this.componentDidMount(this.props);
+        if (this.children) {
+            Object.values(this.children).forEach((child) => {
+                if (!child._isListItem) {
+                    // console.log('Child mounted', child);
+                    child.dispatchComponentDidMount()
+                }
+            });
+        }
+        if (this.lists) {
+            Object.values(this.lists).forEach((list) => {
+                list.forEach((child) => {
+                    if (child instanceof Block) {
+                        // console.log('List item mounted', child);
+
+                        child.dispatchComponentDidMount();
+                    }
+                });
+            });
         }
     }
 
     dispatchComponentDidMount() {
+        this.firstRender = false
         this.eventBus().emit(Block.EVENTS.FLOW_CDM, this.props);
     }
 
-    // componentDidMount(props: IBlockProps)
     componentDidMount(props: IBlockProps) {
+        if (!props) { return false }
+        return true
+    }
+
+    private _componentDidUnmount() {
+        this.componentDidUnmount(this.props);
+        if (this.children) {
+            Object.values(this.children).forEach((child) => {
+                if (!child._isListItem) {
+                    // console.log('Child mounted', child);
+                    child.dispatchComponentDidUnmount()
+                }
+            });
+        }
+        if (this.lists) {
+            Object.values(this.lists).forEach((list) => {
+                list.forEach((child) => {
+                    if (child instanceof Block) {
+                        // console.log('List item mounted', child);
+
+                        child.dispatchComponentDidUnmount();
+                    }
+                });
+            });
+        }
+    }
+
+    dispatchComponentDidUnmount() {
+        this.eventBus().emit(Block.EVENTS.FLOW_CDUM, this.props);
+    }
+
+    componentDidUnmount(props: IBlockProps) {
         if (!props) { return false }
         return true
     }
@@ -174,6 +223,7 @@ export class Block {
         eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
         eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
         eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+        eventBus.on(Block.EVENTS.FLOW_CDUM, this._componentDidUnmount.bind(this));
         eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
     }
 
@@ -194,9 +244,23 @@ export class Block {
             if (value instanceof Block) {
                 children[key] = value
             } else if (Array.isArray(value)) {
-                lists[key] = value;
+                // let valueIsListOfBlocks = true
+
+                // value.forEach((item) => {
+                //     if (!(item instanceof Block)) {
+                //         valueIsListOfBlocks = false
+                //     }
+                // })
+
+                // console.log(key, value, valueIsListOfBlocks, this);
+
+                // if (valueIsListOfBlocks) {
+                //     console.log("valueIsListOfBlocks", value);
+                //     lists[key] = value
+                // }
+                lists[key] = value
             } else {
-                props[key] = value;
+                props[key] = value
             }
         })
 
@@ -207,8 +271,8 @@ export class Block {
         const { attr = {} } = this.props;
 
         Object.entries(attr).forEach(([key, value]) => {
-            this._element.setAttribute(key, value);
-        });
+            this._element.setAttribute(key, value)
+        })
     }
 
     private _makePropsProxy(props: IBlockProps) {
@@ -218,7 +282,6 @@ export class Block {
                 return typeof value === 'function' ? value.bind(target) : value
             },
             set: (target, prop: string | symbol, value: unknown) => {
-                // TODO заменить спред на deepclone
                 const oldProps = { ...target }
 
                 target[prop as string] = value;
@@ -230,5 +293,13 @@ export class Block {
                 throw new Error('Нет доступа')
             },
         });
+    }
+
+    show() {
+        this.getContent().style.display = 'flex'
+    }
+
+    hide() {
+        this.getContent().style.display = 'none'
     }
 }

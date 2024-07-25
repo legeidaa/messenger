@@ -7,6 +7,6 @@ export interface IDialogItemProps extends IBlockProps {
     message: string,
     time: string,
     count: number,
-    messageByYou: boolean,
+    messageName: string,
     selected: boolean
 }

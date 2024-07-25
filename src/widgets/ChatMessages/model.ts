@@ -7,7 +7,7 @@ import { Form } from 'shared/partials/Form';
 export interface IChatMessagesProps extends IBlockProps {
     headerAvatar: Avatar,
     headerName: string,
-    headerButton: Button
+    headerButtons: Button[]
     messages: (Message | ChatDate)[],
     footerForm: Form
 }

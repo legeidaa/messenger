@@ -1,4 +1,4 @@
-import { Block } from './Block'
+import { Block } from './Block.ts'
 
 export interface IBlockProps {
     __id?: string,

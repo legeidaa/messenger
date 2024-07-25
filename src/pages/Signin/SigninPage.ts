@@ -1,15 +1,19 @@
-import { Block } from '@shared/lib/Block'
-import { InputField } from '@shared/partials/InputField';
-import { Input } from '@shared/partials/Input';
-import { Button } from '@shared/partials/Button';
-import { Link } from '@shared/partials';
-import { SigninForm } from '@widgets/SigninForm';
-import { Form } from '@shared/partials/Form';
+import { Block, IBlockProps } from '@shared/lib/Block/index.ts'
+import { InputField } from '@shared/partials/InputField/index.ts';
+import { Input } from '@shared/partials/Input/index.ts';
+import { Button } from '@shared/partials/Button/index.ts';
+import { Link } from '@shared/partials/index.ts';
+import { SigninForm } from '@widgets/SigninForm/index.ts';
+import { Form } from '@shared/partials/Form/index.ts';
+import { router } from '@shared/lib/Router/Router.ts';
+import { PagesPaths } from '@shared/lib/Router/model';
+import { store, connect } from '@shared/Store';
 import SigninPageTemplate from './SigninPage.hbs?raw';
-import { ISigninPageProps } from './model';
-import { validateLogin, validatePassword, validateSubmit } from './validation';
+import { ISigninPageProps } from './model.ts';
+import { validateLogin, validatePassword } from './validation.ts';
+import { signinController } from './SigninController.ts';
 
-export class SigninPage extends Block {
+class SigninPage extends Block {
     constructor(props: ISigninPageProps) {
         super(props)
     }
@@ -17,7 +21,18 @@ export class SigninPage extends Block {
     render() {
         return this.compile(SigninPageTemplate, this.props);
     }
+
+    componentDidUpdate(oldProps: IBlockProps, newProps: IBlockProps): boolean {
+        console.log('signin componentDidUpdate', this, store.getState());
+
+        if (oldProps.buttonText !== newProps.buttonText) {
+            footerButtonSubmit.setProps({ text: newProps.buttonText })
+        }
+        return true
+    }
 }
+
+const ConnectedSigninPage = connect(SigninPage, (state) => ({ buttonText: state.buttonText }))
 
 export const inputLogin = new InputField({
     className: 'login-page__input',
@@ -28,7 +43,7 @@ export const inputLogin = new InputField({
         id: 'login',
         name: 'login',
         className: 'input-field__element',
-        value: 'somelogin',
+        value: 'legeida',
         events: {
             blur: validateLogin,
         },
@@ -43,40 +58,49 @@ export const inputPassword = new InputField({
         id: 'password',
         name: 'password',
         className: 'input-field__element',
-        value: '123',
+        value: 'Aa123456',
         events: {
             blur: validatePassword,
         },
     }),
 })
-const footerButtonSubmit = new Button({
+
+export const footerButtonSubmit = new Button({
     text: 'Вход',
     type: 'submit',
     className: 'login-form__submit-btn',
 })
-const footerLinkSignup = new Link({
+
+export const footerLinkSignup = new Link({
     text: 'Нет аккаунта?',
-    href: '#signup',
+    href: PagesPaths.SIGNUP,
     className: 'login-form__link',
+    events: {
+        click: (e) => {
+            e.preventDefault()
+            router.go(PagesPaths.SIGNUP)
+        },
+    },
 })
 
-const signinForm = new SigninForm({
+export const signinForm = new SigninForm({
+    error: '',
     inputLogin,
     inputPassword,
     footerButtonSubmit,
     footerLinkSignup,
 })
 
-const form = new Form({
+export const form = new Form({
     formContent: signinForm,
     className: 'login-form login-form_signin',
     events: {
-        submit: (e) => {
-            validateSubmit(e)
+        submit: async (e) => {
+            signinController.submit(e)
         },
     },
 })
 
-export const signinPage = new SigninPage({
+export const signinPage = new ConnectedSigninPage({
     form,
 })

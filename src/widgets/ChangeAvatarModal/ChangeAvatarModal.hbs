@@ -1,10 +1,11 @@
 <div>
-    {{{modalTitle}}}
+    <h2 class="modal__title {{#if modalTitleError}}modal__title_error{{/if}}">{{{modalTitle}}}</h2>
     <div class="modal__content">
-        <form action="" class="modal__form">
+        {{{changeAvatarForm}}}
+        {{!-- <form action="" class="modal__form">
             {{{fileInput}}}
             {{{button}}}
-            {{{modalError}}}
-        </form>
+            {{#if modalError}}<div class="modal__form-error">{{{modalError}}}</div>{{/if}}
+        </form> --}}
     </div>
 </div>
