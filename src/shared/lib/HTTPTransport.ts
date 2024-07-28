@@ -1,4 +1,4 @@
-import { queryStringify } from "@shared/utils"
+import { queryStringify } from "../utils"
 
 enum METHODS {
     GET = "GET",
@@ -13,7 +13,6 @@ export interface IMethodOptions {
     data?: Record<string, unknown> | FormData,
     withCredentials?: boolean,
     responseType?: XMLHttpRequestResponseType
-    // signal?: AbortSignal
 }
 
 interface IRequestOptions extends IMethodOptions {
@@ -29,7 +28,6 @@ export class HTTPTransport {
     }
 
     post(url: string, options: IMethodOptions = {}): Promise<XMLHttpRequest> {
-        // console.log(options);
 
         return this.request(url, { ...options, method: METHODS.POST }, options.timeout)
     }
@@ -43,12 +41,12 @@ export class HTTPTransport {
     }
 
     request(url: string, options: IRequestOptions = { method: METHODS.GET }, timeout = 5000): Promise<XMLHttpRequest> {
+        // ...
         const {
             data,
             headers = {},
             withCredentials = true,
             responseType = 'json',
-            // signal,
             method
         } = options
 
@@ -58,9 +56,6 @@ export class HTTPTransport {
             const xhr = new XMLHttpRequest()
             xhr.open(method as unknown as string, url)
 
-            // if(signal) {
-            //     signal.handler = () => xhr.abort()
-            // }
 
             xhr.onload = () => {
                 const status = xhr.status || 0
@@ -87,10 +82,6 @@ export class HTTPTransport {
                 xhr.setRequestHeader(key, headers[key])
             })
 
-            // xhr.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-            // xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type")
-            // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
-
             if (method === METHODS.GET && data) {
                 url += queryStringify(data)
             }
@@ -105,7 +96,6 @@ export class HTTPTransport {
                 xhr.send(data)
             } else {
                 xhr.setRequestHeader('Content-Type', 'application/json')
-                console.log(data);
 
                 xhr.send(JSON.stringify(data))
             }

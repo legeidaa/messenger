@@ -1,7 +1,8 @@
-import * as Handlebars from 'handlebars'
+import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
 import EventBus from '../EventBus.ts';
 import { IBlockProps } from './model.ts';
+
 export class Block {
     public static EVENTS = {
         INIT: 'init',
@@ -88,7 +89,7 @@ export class Block {
             const stub = fragment.content.querySelector(`[data-id="__l_${_tmpId}"]`);
             stub?.replaceWith(listCont.content)
         })
-
+        
         return fragment.content.firstElementChild as HTMLElement
     }
 

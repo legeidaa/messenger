@@ -44,7 +44,10 @@ export class Route {
         if (!this._block) {
             this._block = this._blockClass
         }
+        
         if (!this._root) {
+            // console.log("TESTESTSTSETS",this._props.rootQuery, document.querySelector('body'), document.querySelector('body')?.innerHTML);
+            
             throw new Error('Root element for router not found')
         }
 

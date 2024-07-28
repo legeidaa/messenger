@@ -32,7 +32,7 @@ export class Router {
             const currentWindow = event.currentTarget as Window;
             this._onRoute(currentWindow.location.pathname as PagesPaths)
         })
-
+        
         this._onRoute(window.location.pathname as PagesPaths)
     }
 
@@ -53,6 +53,8 @@ export class Router {
 
     go(pathname: PagesPaths) {
         this.history.pushState({}, '', pathname)
+        // console.log(this.history)
+        
         this._onRoute(pathname)
     }
 

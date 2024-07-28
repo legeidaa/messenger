@@ -315,7 +315,8 @@ export const profilePage = new connectedProfilePage({
         events: {
             click: (e) => {
                 e.preventDefault()
-                router.go(PagesPaths.CHAT)
+                // router.go(PagesPaths.CHAT)
+                router.back()
             },
         },
     }),
