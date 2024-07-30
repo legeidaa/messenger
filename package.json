@@ -17,7 +17,8 @@
     "lint:scss:fix": "npx stylelint \"**/*.scss\" --fix",
     "lint": "lint:ts && lint:scss",
     "lint:fix": "lint:ts:fix && lint:scss:fix",
-    "test": "mocha --es-module-specifier-resolution=node"
+    "test": "mocha --es-module-specifier-resolution=node",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@types/chai": "^4.3.16",
