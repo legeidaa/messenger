@@ -49,7 +49,7 @@ export class HTTPTransport {
             responseType = 'json',
             method
         } = options
-
+        
         return new Promise((resolve, reject) => {
             console.log(url);
             url = this._baseURL + url
@@ -84,6 +84,9 @@ export class HTTPTransport {
 
             if (method === METHODS.GET && data) {
                 url += queryStringify(data)
+
+                console.log("ASDFAFSAFAS", url);
+                
             }
 
             xhr.timeout = timeout

@@ -1,28 +1,103 @@
 // import { expect } from 'chai'
 // import Sinon from "sinon";
-import Sinon, { createSandbox, SinonStub } from 'sinon'
+import Sinon, { createSandbox, SinonFakeXMLHttpRequest, SinonStub } from 'sinon'
 import { HTTPTransport } from './HTTPTransport'
+import { expect } from 'chai'
 
 
 describe('HTTP Transport', () => {
-    const sandbox = createSandbox()
-    let http: HTTPTransport
-    let request: SinonStub<any>
 
+    let xhr: Sinon.SinonFakeXMLHttpRequestStatic
+    let requests: SinonFakeXMLHttpRequest[]
     beforeEach(() => {
-        http = new HTTPTransport('')
-        request = sandbox.stub(http, 'request' as keyof typeof http)
-            .callsFake(() => {
-                return Promise.resolve(new XMLHttpRequest)
-            })
+        xhr = Sinon.useFakeXMLHttpRequest()
+        requests = []
+        xhr.onCreate = (req) => {
+            requests.push(req)
+        }
     })
-    afterEach(() => sandbox.restore())
+
+    afterEach(() => {
+        xhr.restore()
+    })
+
+    it('обработка таймаутов', (done) => {
+        const clock = Sinon.useFakeTimers();
+        const client = new HTTPTransport('https://test.com');
+
+        client.get('/timeout', { timeout: 1000 })
+            .catch((error) => {
+                expect(error).to.be.an('error');
+                expect(error.message).to.equal('Request timeout');
+            })
+            .finally(() => {
+                done()
+            })
+
+        clock.tick(1001)
+        clock.restore()
+    })
+
+    it('отправка GET запроса', (done) => {
+        const client = new HTTPTransport('https://test.com')
+
+        client.get('/data').then(() => {
+            done()
+        })
+
+        expect(requests[0].method).to.equal('GET');
+
+        requests[0].respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({ data: 'test' }))
+    })
+
+    it('отправка POST запроса', (done) => {
+        const client = new HTTPTransport('https://test.com')
+
+        client.post('/data', { data: { a: '1', b: '2' } }).then(() => {
+            // console.log("REQUESTS1", response, requests[0]);
+            done()
+        })
+
+        expect(requests[0].method).to.equal('POST');
+        expect(requests[0].requestBody).to.deep.equal(JSON.stringify({ a: "1", b: "2" }));
+
+        requests[0].respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({ data: 'test' }))
+    })
+
 
     it('метод request вызывется с нужным url', () => {
+        let request: SinonStub<any>
+        let http = new HTTPTransport('')
+        const sandbox = createSandbox()
+        request = sandbox.stub(http, 'request' as keyof typeof http)
+            .callsFake(() => {
+                
+                return Promise.resolve(new XMLHttpRequest)
+            })
+
         http.get('/user', { data: { a: '1', b: '2' } })
 
         Sinon.assert.calledWithMatch(request, '/user')
+        sandbox.restore()
     })
+
+    // it('отправка GET запроса', (done) => {
+    //     const client = new HTTPTransport('https://test.com')
+
+    //     client.get('/data', { data: { a: '1', b: '2' } }).then((response) => {
+    //         console.log("RESPONSE",response, requests[0]);
+
+    //         // expect(response).to.deep.equal({ data: 'test' })
+    //         done()
+    //     })
+    //     // console.log(requests[0])
+
+    //     // expect(requests[0].method).to.equal('GET');
+    //     // ВЫНЕСТИ В метод request вызывется с нужным url
+    //     // expect(requests[0].url).to.equal('https://test.com/data?a=1&b=2');
+
+    //     requests[0].respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({ data: 'test' }))
+    // })
 
     // it('should stringify query object where parameters are string and number', () => {
     //     http.get('', { data: { a: 1, b: 'string' } })
@@ -33,8 +108,8 @@ describe('HTTP Transport', () => {
     //     http.get('', { data: { a: '1+2', b: '2 2' } })
     //     expect(request).calledWithMatch('?a=1%2B2&b=2%202', 'GET')
     // })
-})
 
+})
 
 // describe("HTTPTransport", () => {
 //     const transport = new HTTPTransport("http://example.com")
@@ -189,3 +264,7 @@ describe('HTTP Transport', () => {
 //     }
 // });
 // });
+
+
+
+
