@@ -8,6 +8,7 @@ export default defineConfig({
     build: {
         outDir: resolve(__dirname, 'dist'),
     },
+    publicDir: resolve('./public'),
     resolve: {
         alias: [
             { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },

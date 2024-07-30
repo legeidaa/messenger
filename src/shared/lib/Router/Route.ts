@@ -7,9 +7,13 @@ interface IRouteProps {
 
 export class Route {
     private _pathname: PagesPaths
+
     private _blockClass: Block;
+
     private _block: null | Block;
+
     private _props: IRouteProps;
+
     private _root: HTMLElement | null;
 
     constructor(pathname: PagesPaths, view: Block, props: IRouteProps) {
@@ -30,7 +34,8 @@ export class Route {
 
     leave() {
         if (this._root) {
-            this._root.innerHTML = ''   
+            this._root.innerHTML = ''
+            this._block?.dispatchComponentDidUnmount()
         } else {
             throw new Error('Root not found')
         }
@@ -44,16 +49,13 @@ export class Route {
         if (!this._block) {
             this._block = this._blockClass
         }
-        
         if (!this._root) {
-            // console.log("TESTESTSTSETS",this._props.rootQuery, document.querySelector('body'), document.querySelector('body')?.innerHTML);
-            
             throw new Error('Root element for router not found')
         }
 
         this._root.insertAdjacentElement('beforeend', this._block.getContent())
         this._block.dispatchComponentDidMount();
-        
+
         this._block.show();
     }
 }

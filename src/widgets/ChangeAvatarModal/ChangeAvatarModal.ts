@@ -1,9 +1,9 @@
 import { Block } from '@shared/lib/Block'
 import { Button, Input, InputField } from '@shared/partials';
-import ChangeAvatarModalTemplate from './ChangeAvatarModal.hbs?raw';
-import { IChangeAvatarModalProps } from './model';
 import { ChangeAvatarForm } from '@widgets/ChangeAvatarForm';
 import { Form } from '@shared/partials/Form';
+import ChangeAvatarModalTemplate from './ChangeAvatarModal.hbs?raw';
+import { IChangeAvatarModalProps } from './model';
 import { changeAvatarModalController } from './ChangeAvatarModalController';
 
 export class ChangeAvatarModal extends Block {
@@ -49,5 +49,5 @@ export const changeAvatarModal = new ChangeAvatarModal({
                 changeAvatarModalController.sendAvatar(e)
             },
         },
-    })
+    }),
 })

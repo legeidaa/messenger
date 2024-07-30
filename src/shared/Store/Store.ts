@@ -1,9 +1,8 @@
-import { Action, Reducer, Subscriber } from "./model"
-import { reducer } from "./reducer"
-import { state, State } from "./state"
+import { Action, Reducer, Subscriber } from './model'
+import { reducer } from './reducer'
+import { state, State } from './state'
 
 const createStore = (reducer: Reducer, initialState: State) => {
-
     const subscribers: Subscriber<State>[] = []
     let currentState = initialState
 
@@ -16,9 +15,8 @@ const createStore = (reducer: Reducer, initialState: State) => {
         dispatch: (action: Action) => {
             currentState = reducer(currentState, action)
             // console.log("currentState: ", currentState);
-            
 
-            subscribers.forEach(fn => fn(currentState))
+            subscribers.forEach((fn) => fn(currentState))
         },
     }
 }

@@ -15,8 +15,8 @@
     "lint:ts:fix": "eslint \"**/*.{ts,tsx}\" --fix",
     "lint:scss": "npx stylelint \"**/*.scss\"",
     "lint:scss:fix": "npx stylelint \"**/*.scss\" --fix",
-    "lint": "lint:ts && lint:scss",
-    "lint:fix": "lint:ts:fix && lint:scss:fix",
+    "lint": "npm run lint:ts && npm run lint:scss",
+    "lint:fix": "npm run lint:ts:fix && npm run lint:scss:fix",
     "test": "mocha --es-module-specifier-resolution=node",
     "prepare": "husky"
   },

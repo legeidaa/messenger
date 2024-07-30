@@ -3,6 +3,6 @@ import { InputField } from '@shared/partials/InputField';
 import { Button } from '@shared/partials/Button';
 
 export interface IAddUserFormProps extends IBlockProps {
-    input: InputField ,
-    button: Button 
+    input: InputField,
+    button: Button
 }

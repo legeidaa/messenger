@@ -1,27 +1,29 @@
-import { userAPI } from "@shared/api/UserApi";
-import { store } from "@shared/Store";
-import { addChatForm, addChatModal } from "@widgets/AddChatModal";
-import { chatAPI } from "@shared/api/ChatApi";
-import { ApiError } from "@shared/api/model";
-import { User } from "@entities/User";
-import { DialogItem } from "@widgets/DialogItem";
-import { Avatar } from "@shared/partials";
-import { avatarController } from "@shared/partials/Avatar";
-import { getMessageTime } from "@shared/utils/getMessageTime";
-import { state } from "@shared/Store/state";
-import { chatMessages, chatPage, footerForm, footerSentBtn, footerTextarea, messages } from "./ChatPage";
-import { addUserForm, addUserModal } from "@widgets/AddUserModal";
-import { authAPI } from "@shared/api/AuthApi";
-import { chatController, WSMessage, WSMessageData } from "@entities/Chat";
-import { validateMessage } from "./validation";
-import { Message } from "@widgets/Message";
-import { ChatDate } from "@shared/partials/ChatDate";
-import { WSTransportEvents } from "@shared/lib/WSTransport";
+import { userAPI } from '@shared/api/UserApi';
+import { store } from '@shared/Store';
+import { addChatForm, addChatModal } from '@widgets/AddChatModal';
+import { chatAPI } from '@shared/api/ChatApi';
+import { ApiError } from '@shared/api/model';
+import { User } from '@entities/User';
+import { DialogItem } from '@widgets/DialogItem';
+import { Avatar, Button } from '@shared/partials';
+import { avatarController } from '@shared/partials/Avatar';
+import { getMessageTime } from '@shared/utils/getMessageTime';
+import { addUserForm, addUserModal } from '@widgets/AddUserModal';
+import { authAPI } from '@shared/api/AuthApi';
+import { chatController, WSMessageData } from '@entities/Chat';
+import { Message } from '@widgets/Message';
+import { WSTransportEvents } from '@shared/lib/WSTransport';
+import { UserCard } from '@widgets/UserCard';
+import { deleteUserModal } from '@widgets/DeleteUserModal';
+import { validateMessage } from './validation';
+import { chatMessages, chatPage, footerForm, footerTextarea } from './ChatPage';
 
 export type ChatInfo = {
     id: number
 }
 class ChatPageController {
+    public messagesList: Message[] = []
+
     public async getInitialData() {
         const userData = await authAPI.getUser()
         store.dispatch({ type: 'SET_USER', user: userData })
@@ -30,12 +32,11 @@ class ChatPageController {
 
     public async addChat(e: Event) {
         e.preventDefault()
-        const input = addChatForm.children.input.children.input
+        const { input } = addChatForm.children.input.children
         const fileInput = addChatForm.children.fileInput.children.input.getContent() as HTMLInputElement
-        addChatModal.setProps({ modalTitleError: false, modalTitle: "Добавить чат" })
+        addChatModal.setProps({ modalTitleError: false, modalTitle: 'Добавить чат' })
 
         try {
-
             const chatInfo = await chatAPI.addChat(input.props.value as string) as unknown as ChatInfo // возвращает   {"id": 16399}
 
             const formData = new FormData()
@@ -50,12 +51,12 @@ class ChatPageController {
                 }
             }
             console.log(
-                "Данные чата и юзера: ",
+                'Данные чата и юзера: ',
                 chatInfo,
-                chatAvatar
+                chatAvatar,
             );
 
-            addChatModal.setProps({ modalTitle: "Чат добавлен" })
+            addChatModal.setProps({ modalTitle: 'Чат добавлен' })
             input.props.value = ''
 
             chatController.getChats()
@@ -65,7 +66,6 @@ class ChatPageController {
             })
 
             return true
-
         } catch (err) {
             const error = err as ApiError
 
@@ -81,7 +81,7 @@ class ChatPageController {
     public async deleteChat(e: Event) {
         e.preventDefault()
 
-        const currentChat = store.getState().currentChat
+        const { currentChat } = store.getState()
 
         if (!currentChat) {
             return
@@ -91,13 +91,10 @@ class ChatPageController {
             const deletedChatInfo = await chatAPI.deleteChat(currentChat?.id)
 
             chatController.getChats()
-            chatPageController.createDialogsList().then((dialogsList) => {
-                chatPage.setProps({ dialogListItems: dialogsList })
-            })
 
             store.dispatch({ type: 'SET_CURRENT_CHAT', currentChat: null })
-            chatPage.setProps({ dialogListItems: chatPageController.createDialogsList() })
-            chatPage.setProps({ chatPlaceholder: true, })
+            // chatPage.setProps({ dialogListItems: chatPageController.createDialogsList() })
+            chatPage.setProps({ chatPlaceholder: true })
 
             return deletedChatInfo
         } catch (err) {
@@ -108,20 +105,19 @@ class ChatPageController {
 
     public async addUserToChat(e: Event) {
         e.preventDefault()
-        addUserModal.setProps({ modalTitleError: false, modalTitle: "Добавить пользователя" })
+        addUserModal.setProps({ modalTitleError: false, modalTitle: 'Добавить пользователя' })
 
-        const input = addUserForm.children.input.children.input
-        const currentChat = store.getState().currentChat
+        const { input } = addUserForm.children.input.children
+        const { currentChat } = store.getState()
 
         if (currentChat) {
             try {
-
                 const currentChatUsers = await chatAPI.getChatUsers(currentChat?.id) as unknown as Partial<User>[]
 
-                console.log("currentChatUsers", currentChatUsers);
+                console.log('currentChatUsers', currentChatUsers);
 
                 if (currentChatUsers?.length) {
-                    const user = currentChatUsers.filter(u => u.login === input.props.value)[0]
+                    const user = currentChatUsers.filter((u) => u.login === input.props.value)[0]
                     if (user) {
                         throw new Error('Пользователь уже есть в чате')
                     }
@@ -131,15 +127,14 @@ class ChatPageController {
                 if (!users.length) {
                     throw new Error('Пользователь не найден')
                 }
-                const user = users.filter(u => u.login === input.props.value)[0]
+                const user = users.filter((u) => u.login === input.props.value)[0]
                 await chatAPI.addUser(currentChat.id, user.id as number)
-                addUserModal.setProps({ modalTitle: "Пользователь добавлен" })
+                addUserModal.setProps({ modalTitle: 'Пользователь добавлен' })
 
                 const newChatUsers = await chatAPI.getChatUsers(currentChat?.id) as unknown as Partial<User>[]
-                console.log("newChatUsers", newChatUsers);
+                console.log('newChatUsers', newChatUsers);
 
                 return true
-
             } catch (err) {
                 const error = err as ApiError
 
@@ -154,64 +149,106 @@ class ChatPageController {
         return false
     }
 
-    public updateMessages() {
+    public async fillUsersList() {
+        const { currentChat } = store.getState()
+        const usersList: UserCard[] = []
+        if (currentChat) {
+            const users = await chatAPI.getChatUsers(currentChat.id) as unknown as Partial<User>[]
 
+            for (const user of users) {
+                if (user.id !== store.getState().user?.id) {
+                    usersList.push(new UserCard({
+                        avatar: new Avatar({
+                            src: avatarController.getAvatarSrc(user.avatar),
+                        }),
+                        name: user.first_name as string,
+                        displayName: user.display_name ? user.display_name : '',
+                        button: new Button({
+                            text: 'Удалить',
+                            events: {
+                                click: async (e: Event) => {
+                                    e.preventDefault()
+                                    await chatController.deleteUserFromChat(currentChat.id, user.id as number)
+                                    this.fillUsersList()
+                                },
+                            },
+                        }),
+                    }))
+                }
+            }
+
+            deleteUserModal.setProps({ usersList })
+        }
     }
 
-    public openDialog(dialogListItems: DialogItem[], dialogItem: DialogItem) {
+    // public async deleteUserFromChat(e: Event) {
+    //     e.preventDefault()
+    //     const currentChat = store.getState().currentChat
+    //     const input = deleteUserForm.children.input.children.input
+    //     if (currentChat) {
+    //         try {
+    //             await chatAPI.removeUser(currentChat.id, Number(input.props.value))
+    //             return true
+    //         } catch (err) {
+    //             const error = err as ApiError
+    //             return error.reason
+    //         }
+    //     }
+    // }
 
-        const currentChat = store.getState().currentChat
-        const user = store.getState().user
+    public openDialog(dialogListItems: DialogItem[], dialogItem: DialogItem) {
+        const { currentChat } = store.getState()
+        const { user } = store.getState()
 
         function scrollMessagesListToBottom() {
             const messagesScrollList = chatMessages.getContent().querySelector('.chat__messages')
             if (messagesScrollList) {
                 setTimeout(() => {
                     messagesScrollList.scrollTop = 1000000
-                    console.log("messagesScrollList.scrollTop", messagesScrollList.scrollTop);
-
+                    // console.log("messagesScrollList.scrollTop", messagesScrollList.scrollTop);
                 })
             }
         }
 
-
         if (currentChat) {
             const connection = chatController.getConnectionById(currentChat.id)
-            let oldMessages: Message[] = []
+
+            this.messagesList.length = 0
 
             connection?.send({
                 content: '0',
                 type: 'get old',
             })
 
-            connection?.on(WSTransportEvents.MESSAGE, (messages: WSMessageData[] | WSMessageData) => {
+            connection?.on(WSTransportEvents.MESSAGE, (data: WSMessageData[] | WSMessageData) => {
                 // если получили список сообщений
-                if (Array.isArray(messages)) {
-                    if (messages.length && messages[0].type === 'message') {
-                        oldMessages.length = 0
-                        messages.forEach((message) => {
-
-                            oldMessages.push(
+                if (Array.isArray(data)) {
+                    if (data.length && data[0].type === 'message') {
+                        data.forEach((message) => {
+                            this.messagesList.push(
                                 new Message({
                                     text: message.content,
                                     time: getMessageTime(message.time),
                                     isOut: Number(message.user_id) === user?.id,
-                                })
+                                }),
                             )
                         })
-                        chatMessages.setProps({ messages: oldMessages.reverse() })
+                        chatMessages.setProps({ messages: this.messagesList.reverse() })
                         scrollMessagesListToBottom()
                     }
-                } else if (messages.type === 'message' && Number(messages.user_id) !== user?.id) {
+                } else if (data.type === 'message' && Number(data.user_id) !== user?.id) {
                     // обновляем список только если пришло новое сообщение, а не отправили мы
-                    console.log("Получено новое сообщение", messages, oldMessages);
-                    
-                    connection?.send({
-                        content: '0',
-                        type: 'get old',
-                    })
-                }
+                    this.messagesList.push(
+                        new Message({
+                            text: data.content,
+                            time: getMessageTime(data.time),
+                            isOut: Number(data.user_id) === user?.id,
+                        }),
 
+                    )
+                    chatMessages.setProps({ messages: this.messagesList })
+                    scrollMessagesListToBottom()
+                }
             })
 
             footerForm.props.events = {
@@ -229,14 +266,14 @@ class ChatPageController {
                             type: 'message',
                         })
 
-                        oldMessages.push(
+                        this.messagesList.push(
                             new Message({
                                 text: formDataObj.message as string,
                                 time: getMessageTime(new Date().toString()),
                                 isOut: true,
-                            })
+                            }),
                         )
-                        chatMessages.setProps({ messages: oldMessages })
+                        chatMessages.setProps({ messages: this.messagesList })
                         scrollMessagesListToBottom()
 
                         footerTextarea.props.value = ''
@@ -249,29 +286,31 @@ class ChatPageController {
             src: avatarController.getAvatarSrc(currentChat?.avatar),
         })
         chatMessages.setProps({
-            headerName: currentChat?.title
+            headerName: currentChat?.title,
         })
         // TODO возможно стоит заменить на смену attr
         dialogListItems.forEach((dialogItem) => { dialogItem.setProps({ selected: false }) })
-        dialogItem.setProps({ selected: true })
+        dialogItem.setProps({
+            selected: true,
+            count: 0,
+        })
+
+        this.fillUsersList()
     }
 
     public async createDialogsList() {
-        let dialogListItems: DialogItem[] = []
+        const dialogListItems: DialogItem[] = []
 
-
-        const user = store.getState().user
+        const { user } = store.getState()
         const dialogs = store.getState().chats
 
         if (user && dialogs) {
             await chatController.createMessagesConnections(user, dialogs)
-            console.log("createMessagesConnections", chatController.WSConnections, chatController.WSConnections.length)
 
-            dialogs.map((chat) => {
+            dialogs.forEach((chat) => {
+                const avatarSrc = avatarController.getAvatarSrc(chat.avatar)
 
-                let avatarSrc = avatarController.getAvatarSrc(chat.avatar)
-
-                let dialogName = chat.title
+                const dialogName = chat.title
                 let lastMessage = ''
                 let lastMessageTime = ''
                 let messageName = ''
@@ -281,13 +320,13 @@ class ChatPageController {
                     lastMessageTime = getMessageTime(chat.last_message.time)
 
                     messageName = chat.last_message.user.display_name
-                        ? chat.last_message.user.display_name + ': '
-                        : chat.last_message.user.first_name + ': '
+                        ? `${chat.last_message.user.display_name}: `
+                        : `${chat.last_message.user.first_name}: `
                 }
 
                 const dialogItem = new DialogItem({
                     avatar: new Avatar({
-                        src: avatarSrc
+                        src: avatarSrc,
                     }),
                     name: dialogName,
                     message: lastMessage,
@@ -302,8 +341,8 @@ class ChatPageController {
                                 store.dispatch({ type: 'SET_CURRENT_CHAT', currentChat: chat })
                                 this.openDialog(dialogListItems, dialogItem)
                             }
-                        }
-                    }
+                        },
+                    },
                 })
 
                 chatController.updateDialogsListItem(chat, dialogItem)

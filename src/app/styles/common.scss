@@ -12,10 +12,13 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+
     &__error {
         position: absolute;
         text-align: center;
+
         @include text-13;
+
         color: $red;
         width: 100%;
         margin-top: 10px;

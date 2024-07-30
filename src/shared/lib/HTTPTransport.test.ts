@@ -1,10 +1,8 @@
 import Sinon, { SinonFakeXMLHttpRequest } from 'sinon'
-import { HTTPTransport } from './HTTPTransport'
 import { expect } from 'chai'
-
+import { HTTPTransport } from './HTTPTransport'
 
 describe('HTTP Transport', () => {
-
     let xhr: Sinon.SinonFakeXMLHttpRequestStatic
     let requests: SinonFakeXMLHttpRequest[]
     beforeEach(() => {
@@ -56,7 +54,7 @@ describe('HTTP Transport', () => {
         })
 
         expect(requests[0].method).to.equal('POST');
-        expect(requests[0].requestBody).to.deep.equal(JSON.stringify({ a: "1", b: "2" }));
+        expect(requests[0].requestBody).to.deep.equal(JSON.stringify({ a: '1', b: '2' }));
 
         requests[0].respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({ data: 'test' }))
     })
@@ -81,7 +79,7 @@ describe('HTTP Transport', () => {
             done()
         })
 
-        expect(requests[0].method).to.equal('put');
+        expect(requests[0].method).to.equal('DELETE');
 
         requests[0].respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({ data: 'test' }))
     })

@@ -4,6 +4,7 @@ import { router } from '@shared/lib/Router';
 import { PagesPaths } from '@shared/lib/Router/model';
 import { store } from '@shared/Store';
 import { authAPI } from '@shared/api/AuthApi';
+
 router
     .use(PagesPaths.SIGNIN, Pages.signinPage)
     .use(PagesPaths.MAIN, Pages.mainPage)
@@ -14,16 +15,16 @@ router
     .use(PagesPaths.CHAT, Pages.chatPage)
     .start()
 
-
-document.addEventListener('DOMContentLoaded', async () => {
+async function isUserLoaded() {
     try {
         const userData = await authAPI.getUser()
         console.log('Данные юзера получены');
         store.dispatch({ type: 'SET_USER', user: userData })
-
+        return true
     } catch (error) {
         console.log('Данные юзера не получены', error);
-
-        router.go(PagesPaths.SIGNIN)
+        return false
     }
-})
+}
+
+router.guard(PagesPaths.SIGNIN, isUserLoaded)

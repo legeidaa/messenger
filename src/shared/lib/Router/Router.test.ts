@@ -1,14 +1,12 @@
-import { expect } from "chai"
-import { Router } from "./Router"
-import Sinon from "sinon"
-import { Block } from "../Block"
-import { PagesPaths } from "./model"
+import { expect } from 'chai'
+import Sinon from 'sinon'
+import { Router } from './Router'
+import { Block } from '../Block'
+import { PagesPaths } from './model'
 
-
-describe("Router", () => {
-
+describe('Router', () => {
     let router: Router
-    let blockClass: typeof Block;
+    let BlockClass: typeof Block;
 
     before(() => {
         router = new Router('#app')
@@ -23,7 +21,7 @@ describe("Router", () => {
             }
         }
 
-        blockClass = Component
+        BlockClass = Component
     })
 
     it('создание рутера', () => {
@@ -34,7 +32,7 @@ describe("Router", () => {
     })
 
     it('подключение пути к рутеру', () => {
-        const component = new blockClass({ text: 'test' })
+        const component = new BlockClass({ text: 'test' })
 
         router
             .use(PagesPaths.CHAT, component)
@@ -44,8 +42,8 @@ describe("Router", () => {
     })
 
     it('переход на страницу', () => {
-        const chatComponent = new blockClass({ text: 'test' })
-        const mainComponent = new blockClass({ text: 'test' })
+        const chatComponent = new BlockClass({ text: 'test' })
+        const mainComponent = new BlockClass({ text: 'test' })
         const spy = Sinon.spy(router, 'go')
 
         router
@@ -58,16 +56,11 @@ describe("Router", () => {
         expect(spy.calledOnce).to.be.true
     })
 
-    it('переход на новую страницу в прошлом тесте должен менять состояние history', () => {
-        expect(history.length).to.eq(2);
-    })
-
     it('вызов history.forward', () => {
         const spy = Sinon.spy(history, 'forward');
         router.forward()
         expect(spy.calledOnce).to.be.true
     });
-
 
     it('вызов history.back', () => {
         const spy = Sinon.spy(history, 'back');

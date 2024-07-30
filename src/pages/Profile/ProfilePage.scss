@@ -46,9 +46,12 @@
     &__footer {
         text-align: center;
     }
+
     &__error {
         margin-top: 10px;
+
         @include text-13;
+
         color: $red;
     }
 }

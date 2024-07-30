@@ -1,6 +1,5 @@
-import { User } from "@entities/User"
-import { Chat, Chats } from "@entities/Chat"
-
+import { User } from '@entities/User'
+import { Chat, Chats } from '@entities/Chat'
 
 export interface State {
     user: User | null
@@ -18,9 +17,9 @@ export const state: State = {
         login: '',
         avatar: null,
         email: '',
-        phone: ''
+        phone: '',
     },
     chats: [],
     currentChat: null,
-    
+
 }

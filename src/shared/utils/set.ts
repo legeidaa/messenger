@@ -1,4 +1,4 @@
-import { Indexed } from "@shared/models/common";
+import { Indexed } from '@shared/models/common';
 
 function merge(lhs: Indexed, rhs: Indexed): Indexed {
     Object.keys(rhs).forEach((p) => {

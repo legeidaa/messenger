@@ -4,9 +4,13 @@ import { Route } from './Route';
 
 export class Router {
     public routes: Route[]
+
     public history: History
+
     private _currentRoute: Route | undefined
+
     private _rootQuery: string
+
     static __instance: Router
 
     constructor(rootQuery: string) {
@@ -27,12 +31,21 @@ export class Router {
         return this
     }
 
+    async guard(redirectTo: PagesPaths, callback: () => boolean | Promise<boolean>) {
+        const result = await callback()
+
+        if (!result) {
+            this.go(redirectTo)
+        }
+        return this
+    }
+
     start() {
         window.onpopstate = ((event) => {
             const currentWindow = event.currentTarget as Window;
             this._onRoute(currentWindow.location.pathname as PagesPaths)
         })
-        
+
         this._onRoute(window.location.pathname as PagesPaths)
     }
 
@@ -42,19 +55,17 @@ export class Router {
         if (!route) {
             route = this.getRoute(PagesPaths.ERROR_CLIENT)
         }
-        if (this._currentRoute && this._currentRoute !== route) {            
+        if (this._currentRoute && this._currentRoute !== route) {
             this._currentRoute.leave()
         }
 
         this._currentRoute = route;
-        
+
         route?.render()
     }
 
     go(pathname: PagesPaths) {
         this.history.pushState({}, '', pathname)
-        // console.log(this.history)
-        
         this._onRoute(pathname)
     }
 

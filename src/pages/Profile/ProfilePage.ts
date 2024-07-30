@@ -4,16 +4,16 @@ import type { IFormProps } from '@shared/partials/Form/index.ts'
 import { Block } from '@shared/lib/Block/index.ts'
 import { router } from '@shared/lib/Router/Router.ts'
 import { PagesPaths } from '@shared/lib/Router/model';
-import ProfileTemplate from './ProfilePage.hbs?raw'
-import { IProfilePageProps, IProfilePageState } from './model.ts'
-import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName } from './validation.ts'
 import { connect } from '@shared/Store/Hoc.ts'
 import { store } from '@shared/Store/Store.ts'
-import { profileController } from './ProfileController.ts'
 import { authAPI } from '@shared/api/AuthApi.ts'
 import { changeAvatarModal } from '@widgets/ChangeAvatarModal/index.ts'
 import { avatarController } from '@shared/partials/Avatar/index.ts'
 import { activateModals } from '@shared/utils/activateModals.ts'
+import { profileController } from './ProfileController.ts'
+import { validateComparePassword, validateEmail, validateLogin, validateName, validatePassword, validatePhone, validateSecondName } from './validation.ts'
+import { IProfilePageProps, IProfilePageState } from './model.ts'
+import ProfileTemplate from './ProfilePage.hbs?raw'
 
 export class ProfilePage extends Block {
     constructor(props: IProfilePageProps) {
@@ -36,7 +36,7 @@ export class ProfilePage extends Block {
     }
 }
 
-const connectedProfilePage = connect(ProfilePage, (state) => ({ user: state.user }))
+const ConnectedProfilePage = connect(ProfilePage, (state) => ({ user: state.user }))
 
 export const mailRow = new ProfileDataRow({
     id: 'profile_email',
@@ -257,9 +257,7 @@ export const exitRow = new ProfileDataRow({
                     router.go(PagesPaths.SIGNIN)
                 } catch (e) {
                     console.log('Logout failed', e);
-
                 }
-
             },
         },
     }),
@@ -308,15 +306,14 @@ export const formProps: IProfilePageFormProps = {
 }
 export const form = new Form(formProps)
 
-export const profilePage = new connectedProfilePage({
+export const profilePage = new ConnectedProfilePage({
     asideButton: new Button({
         className: 'button_icon button_arrow button_arrow_left',
         href: '#',
         events: {
             click: (e) => {
                 e.preventDefault()
-                // router.go(PagesPaths.CHAT)
-                router.back()
+                router.go(PagesPaths.CHAT)
             },
         },
     }),
@@ -327,7 +324,7 @@ export const profilePage = new connectedProfilePage({
             click: (e) => {
                 e.preventDefault()
             },
-        }
+        },
     }),
     profileName: display_name === null ? '' : display_name,
     form,
@@ -339,4 +336,3 @@ export const profilePage = new connectedProfilePage({
         content: changeAvatarModal,
     }),
 })
-

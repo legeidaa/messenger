@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars';
+import Handlebars from 'handlebars'
 import { v4 as makeUUID } from 'uuid';
 import EventBus from '../EventBus.ts';
 import { IBlockProps } from './model.ts';
@@ -8,6 +8,7 @@ export class Block {
         INIT: 'init',
         FLOW_CDM: 'flow:component-did-mount',
         FLOW_CDU: 'flow:component-did-update',
+        FLOW_CDUM: 'flow:component-did-unmount',
         FLOW_RENDER: 'flow:render',
     }
 
@@ -75,7 +76,6 @@ export class Block {
         })
 
         Object.entries(this.lists).forEach(([key]) => {
-
             const child = this.lists[key]
             const listCont = document.createElement('template') as HTMLTemplateElement
             child.forEach((item) => {
@@ -89,7 +89,7 @@ export class Block {
             const stub = fragment.content.querySelector(`[data-id="__l_${_tmpId}"]`);
             stub?.replaceWith(listCont.content)
         })
-        
+
         return fragment.content.firstElementChild as HTMLElement
     }
 
@@ -116,7 +116,7 @@ export class Block {
         if (!nextProps) {
             return;
         }
-        const {props, lists } = this._getChildren(nextProps)
+        const { props, lists } = this._getChildren(nextProps)
 
         Object.assign(this.props, props)
         Object.assign(this.lists, lists)
@@ -127,7 +127,6 @@ export class Block {
     }
 
     private _componentDidMount() {
-
         this.componentDidMount(this.props);
         if (this.children) {
             Object.values(this.children).forEach((child) => {
@@ -149,12 +148,45 @@ export class Block {
             });
         }
     }
+
     dispatchComponentDidMount() {
         this.firstRender = false
         this.eventBus().emit(Block.EVENTS.FLOW_CDM, this.props);
     }
 
     componentDidMount(props: IBlockProps) {
+        if (!props) { return false }
+        return true
+    }
+
+    private _componentDidUnmount() {
+        this.componentDidUnmount(this.props);
+        if (this.children) {
+            Object.values(this.children).forEach((child) => {
+                if (!child._isListItem) {
+                    // console.log('Child mounted', child);
+                    child.dispatchComponentDidUnmount()
+                }
+            });
+        }
+        if (this.lists) {
+            Object.values(this.lists).forEach((list) => {
+                list.forEach((child) => {
+                    if (child instanceof Block) {
+                        // console.log('List item mounted', child);
+
+                        child.dispatchComponentDidUnmount();
+                    }
+                });
+            });
+        }
+    }
+
+    dispatchComponentDidUnmount() {
+        this.eventBus().emit(Block.EVENTS.FLOW_CDUM, this.props);
+    }
+
+    componentDidUnmount(props: IBlockProps) {
         if (!props) { return false }
         return true
     }
@@ -191,6 +223,7 @@ export class Block {
         eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
         eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
         eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+        eventBus.on(Block.EVENTS.FLOW_CDUM, this._componentDidUnmount.bind(this));
         eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
     }
 
@@ -211,7 +244,6 @@ export class Block {
             if (value instanceof Block) {
                 children[key] = value
             } else if (Array.isArray(value)) {
-
                 // let valueIsListOfBlocks = true
 
                 // value.forEach((item) => {
@@ -221,7 +253,6 @@ export class Block {
                 // })
 
                 // console.log(key, value, valueIsListOfBlocks, this);
-                
 
                 // if (valueIsListOfBlocks) {
                 //     console.log("valueIsListOfBlocks", value);

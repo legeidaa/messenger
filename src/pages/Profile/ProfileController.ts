@@ -1,13 +1,11 @@
-
-import { userAPI } from "@shared/api/UserApi";
-import { changeDataRow, changePasswordRow, displayNameRow, exitRow, form, loginRow, mailRow, nameRow, newPasswordRow, oldPasswordRow, phoneRow, profileDataInfo, profileDataPass, profilePage, repeatNewPasswordRow, saveButton, secondNameRow } from "./ProfilePage";
-import { IProfilePageState } from "./model";
-import { validateDataFields, validatePasswordFields, } from "./validation";
-import { store } from "@shared/Store";
-import { ApiError } from "shared/api/model";
+import { userAPI } from '@shared/api/UserApi';
+import { store } from '@shared/Store';
+import { ApiError } from 'shared/api/model';
+import { changeDataRow, changePasswordRow, displayNameRow, exitRow, form, loginRow, mailRow, nameRow, newPasswordRow, oldPasswordRow, phoneRow, profileDataInfo, profileDataPass, profilePage, repeatNewPasswordRow, saveButton, secondNameRow } from './ProfilePage';
+import { IProfilePageState } from './model';
+import { validateDataFields, validatePasswordFields } from './validation';
 
 class ProfileController {
-
     public setProfileFields(oldProps: IProfilePageState, newProps: IProfilePageState) {
         if (newProps.user) {
             if (oldProps.user.email !== newProps.user.email) {
@@ -72,13 +70,12 @@ class ProfileController {
                     login: loginRow.children.input.props.value,
                     email: mailRow.children.input.props.value,
                     phone: phoneRow.children.input.props.value,
-                }
+                },
             })
             console.log('Успешная смена данных профиля', newUserData);
 
             store.dispatch({ type: 'SET_USER', user: newUserData })
             return true
-
         } catch (e) {
             console.log('Ошибка при смене данных профиля', e);
             const error = e as ApiError
@@ -92,7 +89,7 @@ class ProfileController {
                 data: {
                     oldPassword: oldPasswordRow.children.input.props.value,
                     newPassword: newPasswordRow.children.input.props.value,
-                }
+                },
             })
             console.log('Успешная смена пароля');
             return true
@@ -104,32 +101,29 @@ class ProfileController {
     }
 
     public async saveData(e: Event) {
-
         if (form.props.canChangePassword) {
             if (validatePasswordFields(e) === false) {
                 return
-            } else {
-                const passwordResult = await this.changePassword()
-                if (typeof passwordResult === 'string') {
-                    profilePage.setProps({ profileFooterError: passwordResult })
-                    return
-                }
-
-                oldPasswordRow.children.input.props.value = '***'
-                newPasswordRow.children.input.props.value = '****'
-                repeatNewPasswordRow.children.input.props.value = '****'
             }
+            const passwordResult = await this.changePassword()
+            if (typeof passwordResult === 'string') {
+                profilePage.setProps({ profileFooterError: passwordResult })
+                return
+            }
+
+            oldPasswordRow.children.input.props.value = '***'
+            newPasswordRow.children.input.props.value = '****'
+            repeatNewPasswordRow.children.input.props.value = '****'
         }
 
         if (form.props.canChangeData) {
             if (validateDataFields(e) === false) {
                 return
-            } else {
-                const dataResult = await this.changeProfileData()
-                if (typeof dataResult === 'string') {
-                    profilePage.setProps({ profileFooterError: dataResult })
-                    return
-                }
+            }
+            const dataResult = await this.changeProfileData()
+            if (typeof dataResult === 'string') {
+                profilePage.setProps({ profileFooterError: dataResult })
+                return
             }
         }
 

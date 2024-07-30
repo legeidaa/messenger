@@ -1,5 +1,5 @@
-import { User } from "@entities/User"
-import { WSTransport } from "@shared/lib/WSTransport"
+import { User } from '@entities/User'
+import { WSTransport } from '@shared/lib/WSTransport'
 
 export type Chat = {
     id: number
@@ -35,9 +35,8 @@ export type WSMessageData ={
         content_type: string,
         content_size: number,
         upload_date: string,
-    }           
+    }
 }
-
 
 // [
 //     {

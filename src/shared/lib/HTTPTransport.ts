@@ -1,10 +1,10 @@
-import { queryStringify } from "../utils"
+import { queryStringify } from '../utils'
 
 enum METHODS {
-    GET = "GET",
-    POST = "POST",
-    PUT = "PUT",
-    DELETE = "DELETE",
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    DELETE = 'DELETE',
 }
 
 export interface IMethodOptions {
@@ -13,6 +13,7 @@ export interface IMethodOptions {
     data?: Record<string, unknown> | FormData,
     withCredentials?: boolean,
     responseType?: XMLHttpRequestResponseType
+    // signal?: AbortSignal
 }
 
 interface IRequestOptions extends IMethodOptions {
@@ -20,14 +21,16 @@ interface IRequestOptions extends IMethodOptions {
 }
 
 export class HTTPTransport {
-
-    constructor(private _baseURL: string) { }
+    constructor(private _baseURL: string) {
+        this._baseURL = _baseURL
+    }
 
     get(url: string, options: IMethodOptions = {}): Promise<XMLHttpRequest> {
         return this.request(url, { ...options, method: METHODS.GET }, options.timeout)
     }
 
     post(url: string, options: IMethodOptions = {}): Promise<XMLHttpRequest> {
+        // console.log(options);
 
         return this.request(url, { ...options, method: METHODS.POST }, options.timeout)
     }
@@ -41,21 +44,24 @@ export class HTTPTransport {
     }
 
     request(url: string, options: IRequestOptions = { method: METHODS.GET }, timeout = 5000): Promise<XMLHttpRequest> {
-        // ...
         const {
             data,
             headers = {},
             withCredentials = true,
             responseType = 'json',
-            method
+            // signal,
+            method,
         } = options
-        
+
         return new Promise((resolve, reject) => {
-            console.log(url);
+            // console.log(url);
             url = this._baseURL + url
             const xhr = new XMLHttpRequest()
             xhr.open(method as unknown as string, url)
 
+            // if(signal) {
+            //     signal.handler = () => xhr.abort()
+            // }
 
             xhr.onload = () => {
                 const status = xhr.status || 0
@@ -63,12 +69,12 @@ export class HTTPTransport {
                     resolve(xhr.response)
                 } else {
                     const message = {
-                        '0': 'abort',
-                        '100': 'Information',
-                        '200': 'Ok',
-                        '300': 'Redirect failed',
-                        '400': 'Access error',
-                        '500': 'Internal server error',
+                        0: 'abort',
+                        100: 'Information',
+                        200: 'Ok',
+                        300: 'Redirect failed',
+                        400: 'Access error',
+                        500: 'Internal server error',
                     }[Math.floor(status / 100) * 100]
                     reject({ status, reason: xhr.response?.reason || message })
                 }
@@ -82,11 +88,12 @@ export class HTTPTransport {
                 xhr.setRequestHeader(key, headers[key])
             })
 
+            // xhr.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+            // xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type")
+            // xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
+
             if (method === METHODS.GET && data) {
                 url += queryStringify(data)
-
-                console.log("ASDFAFSAFAS", url);
-                
             }
 
             xhr.timeout = timeout
@@ -99,6 +106,7 @@ export class HTTPTransport {
                 xhr.send(data)
             } else {
                 xhr.setRequestHeader('Content-Type', 'application/json')
+                console.log(data);
 
                 xhr.send(JSON.stringify(data))
             }

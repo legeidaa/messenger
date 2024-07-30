@@ -1,9 +1,9 @@
-import { Block, IBlockProps } from '@shared/lib/Block'
+import { Block } from '@shared/lib/Block'
 import { Button, Input, InputField } from '@shared/partials';
-import AddUserModalTemplate from './AddUserModal.hbs?raw';
-import { IAddUserModalProps } from './model';
 import { AddUserForm } from '@widgets/AddUserForm';
 import { Form } from '@shared/partials/Form';
+import AddUserModalTemplate from './AddUserModal.hbs?raw';
+import { IAddUserModalProps } from './model';
 
 export class AddUserModal extends Block {
     constructor(props: IAddUserModalProps) {
@@ -12,10 +12,6 @@ export class AddUserModal extends Block {
 
     render() {
         return this.compile(AddUserModalTemplate, this.props);
-    }
-
-    componentDidMount(props: IBlockProps): boolean {
-        return true
     }
 }
 
@@ -33,7 +29,7 @@ export const loginInput = new InputField({
 
 export const button = new Button({
     className: 'modal__form-submit-btn',
-    text: 'Поменять',
+    text: 'Добавить',
 })
 
 export const addUserForm = new AddUserForm({
@@ -46,5 +42,5 @@ export const addUserModal = new AddUserModal({
     modalTitle: 'Добавить пользователя',
     addUserForm: new Form({
         formContent: addUserForm,
-    })
+    }),
 })

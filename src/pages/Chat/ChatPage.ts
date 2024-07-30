@@ -1,5 +1,5 @@
 import { Block } from '@shared/lib/Block/index'
-import { Avatar, Button, Input, InputField, Link, Modal } from '@shared/partials/index';
+import { Avatar, Button, Input, Link, Modal } from '@shared/partials/index';
 import { ChatMessages } from '@widgets/ChatMessages/index';
 import { Message } from '@widgets/Message/index';
 import { ChatDate } from '@shared/partials/ChatDate/index';
@@ -8,16 +8,16 @@ import { Form } from '@shared/partials/Form/index';
 import { MessagesForm } from '@widgets/MessagesForm/index';
 import { router } from '@shared/lib/Router/Router';
 import { PagesPaths } from '@shared/lib/Router/model';
-import ChatPageTemplate from './ChatPage.hbs?raw';
-import { IChatPageProps, IChatPageState } from './model';
 import { addChatModal } from '@widgets/AddChatModal';
-import { chatPageController } from './ChatPageController';
-import { connect, store } from '@shared/Store';
+import { connect } from '@shared/Store';
 import { isEqual } from '@shared/utils/isEqual';
 import { addUserModal } from '@widgets/AddUserModal';
 import { activateModals } from '@shared/utils';
+import { deleteUserModal } from '@widgets/DeleteUserModal';
 import { validateMessage } from './validation';
-let firstDialogListCreation = false
+import { chatPageController } from './ChatPageController';
+import { IChatPageProps, IChatPageState } from './model';
+import ChatPageTemplate from './ChatPage.hbs?raw';
 
 export class ChatPage extends Block {
     constructor(props: IChatPageProps) {
@@ -28,33 +28,29 @@ export class ChatPage extends Block {
         return this.compile(ChatPageTemplate, this.props);
     }
 
-    componentDidMount(props: IChatPageState) {
+    componentDidMount() {
         chatPageController.getInitialData()
 
         return true
     }
 
-    componentDidUpdate(oldProps: IChatPageState, newProps: IChatPageState): boolean {
+    componentDidUnmount(): boolean {
+        chatPage.children.chat.dispatchComponentDidUnmount()
+        return true
+    }
 
+    componentDidUpdate(oldProps: IChatPageState, newProps: IChatPageState): boolean {
         if (oldProps.currentChat?.id !== newProps.currentChat?.id) {
-            // console.log("ChatPage currentChat updated", this, oldProps, newProps);
             if (chatPage.props.chatPlaceholder) {
-                chatPage.setProps({ chatPlaceholder: false, })
+                chatPage.setProps({ chatPlaceholder: false })
                 chatPage.children.chat.dispatchComponentDidMount()
             }
         }
 
         if (oldProps.chats && newProps.chats && !isEqual(oldProps.chats, newProps.chats)) {
-            // console.log("ChatPage chats updated", oldProps, newProps);
-
-            if (!firstDialogListCreation) {
-                firstDialogListCreation = true
-                console.log("firstDialogListCreation", firstDialogListCreation);
-
-                chatPageController.createDialogsList().then((dialogsList) => {
-                    chatPage.setProps({ dialogListItems: dialogsList })
-                })
-            }
+            chatPageController.createDialogsList().then((dialogsList) => {
+                chatPage.setProps({ dialogListItems: dialogsList })
+            })
         }
 
         return true
@@ -64,29 +60,10 @@ export class ChatPage extends Block {
 const ConnectedChatPage = connect(ChatPage, (state) => ({
     chats: state.chats,
     currentChat: state.currentChat,
-    user: state.user
+    user: state.user,
 }))
 
-export const messages: (Message | ChatDate)[] = [
-    // new ChatDate({
-    //     date: '19 июня',
-    // }),
-    // new Message({
-    //     // eslint-disable-next-line max-len
-    //     text: 'Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой. Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.',
-    //     time: '10:56',
-    // }),
-    // new Message({
-    //     attachedImgSrc: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D',
-    //     time: '10:57',
-    // }),
-    new Message({
-        text: 'Сообщение получено.',
-        time: '10:57',
-        isOut: true,
-        status: 'sent',
-    }),
-]
+export const messages: (Message | ChatDate)[] = []
 
 export const footerTextarea = new Textarea({
     className: 'chat__footer-textarea',
@@ -95,7 +72,7 @@ export const footerTextarea = new Textarea({
     placeholder: 'Сообщение',
     events: {
         blur: validateMessage,
-    }
+    },
 })
 
 export const footerSentBtn = new Button({
@@ -117,7 +94,7 @@ export const footerForm = new Form({
         //     }),
         // }),
         footerTextarea,
-        footerSentBtn
+        footerSentBtn,
     }),
 
 })
@@ -126,10 +103,23 @@ export const addUserButton = new Button({
     type: 'button',
     text: 'Добавить пользователя',
     attr: {
-        'data-modal': "add-user",
-    }
+        'data-modal': 'add-user',
+    },
 })
 addUserButton.componentDidMount = () => {
+    activateModals()
+    return true
+}
+
+export const deleteUserButton = new Button({
+    className: 'button_outlined',
+    type: 'button',
+    text: 'Удалить пользователя',
+    attr: {
+        'data-modal': 'delete-user',
+    },
+})
+deleteUserButton.componentDidMount = () => {
     activateModals()
     return true
 }
@@ -141,6 +131,7 @@ export const chatMessages = new ChatMessages({
     headerName: '',
     headerButtons: [
         addUserButton,
+        deleteUserButton,
         new Button({
             className: 'button_outlined',
             type: 'button',
@@ -150,8 +141,8 @@ export const chatMessages = new ChatMessages({
                     e.preventDefault()
                     chatPageController.deleteChat(e)
                 },
-            }
-        })
+            },
+        }),
     ],
     messages,
     footerForm,
@@ -160,14 +151,13 @@ export const chatMessages = new ChatMessages({
 // chatMessages.componentDidUpdate = (oldProps: IBlockProps, newProps: IBlockProps): boolean => {
 //     const messagesScrollList = chatMessages.getContent().querySelector('.chat__messages')
 //     console.log(messagesScrollList);
-    
+
 //     if (messagesScrollList) {
 //         console.log('ASDAASDASDDSA', messagesScrollList?.scrollHeight, messagesScrollList.scrollTop);
 //         messagesScrollList.scrollTop = 100
 //     }
 //     return true
 // }
-
 
 export const chatPage = new ConnectedChatPage({
     dialogsHeaderLink: new Link({
@@ -198,8 +188,8 @@ export const chatPage = new ConnectedChatPage({
             },
         },
         attr: {
-            'data-modal': "add-chat",
-        }
+            'data-modal': 'add-chat',
+        },
     }),
     chatPlaceholder: true,
     dialogListItems: [],
@@ -214,6 +204,11 @@ export const chatPage = new ConnectedChatPage({
             className: 'modal_small modal-add-user',
             dataModalType: 'add-user',
             content: addUserModal,
+        }),
+        new Modal({
+            className: 'modal_small modal-add-user',
+            dataModalType: 'delete-user',
+            content: deleteUserModal,
         }),
     ],
 })
