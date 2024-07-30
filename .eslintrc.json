@@ -33,7 +33,10 @@
         "@typescript-eslint/semi": "off",
         "indent": [
             "error",
-            4
+            4,
+            {
+                "SwitchCase": 1
+            }
         ],
         "no-use-before-define": "off",
         "import/no-unresolved": "off",
@@ -76,6 +79,9 @@
         "class-methods-use-this": "warn",
         "@typescript-eslint/no-use-before-define": "warn",
         "no-param-reassign": "warn",
-        "no-undef": "warn"
+        "no-undef": "warn",
+        "no-restricted-globals": "warn",
+        "no-unused-expressions": "warn",
+        "arrow-body-style": "off"
     }
 }

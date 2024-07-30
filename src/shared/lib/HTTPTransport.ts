@@ -1,4 +1,4 @@
-import { queryStringify } from '@shared/utils'
+import { queryStringify } from '../utils'
 
 enum METHODS {
     GET = 'GET',
@@ -7,13 +7,14 @@ enum METHODS {
     DELETE = 'DELETE',
 }
 
+type HTTPTransportMethod = (url: string, options?: IMethodOptions) => Promise<XMLHttpRequest>
+
 export interface IMethodOptions {
     headers?: { [key: string]: string },
     timeout?: number
     data?: Record<string, unknown> | FormData,
     withCredentials?: boolean,
     responseType?: XMLHttpRequestResponseType
-    // signal?: AbortSignal
 }
 
 interface IRequestOptions extends IMethodOptions {
@@ -25,21 +26,19 @@ export class HTTPTransport {
         this._baseURL = _baseURL
     }
 
-    get(url: string, options: IMethodOptions = {}): Promise<XMLHttpRequest> {
+    get: HTTPTransportMethod = (url, options = {}) => {
         return this.request(url, { ...options, method: METHODS.GET }, options.timeout)
     }
 
-    post(url: string, options: IMethodOptions = {}): Promise<XMLHttpRequest> {
-        // console.log(options);
-
+    post: HTTPTransportMethod = (url, options = {}) => {
         return this.request(url, { ...options, method: METHODS.POST }, options.timeout)
     }
 
-    put(url: string, options: IMethodOptions = {}): Promise<XMLHttpRequest> {
+    put: HTTPTransportMethod = (url, options = {}) => {
         return this.request(url, { ...options, method: METHODS.PUT }, options.timeout)
     }
 
-    delete(url: string, options: IMethodOptions = {}): Promise<XMLHttpRequest> {
+    delete: HTTPTransportMethod = (url, options = {}) => {
         return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout)
     }
 
@@ -49,19 +48,13 @@ export class HTTPTransport {
             headers = {},
             withCredentials = true,
             responseType = 'json',
-            // signal,
             method,
         } = options
 
         return new Promise((resolve, reject) => {
-            // console.log(url);
             url = this._baseURL + url
             const xhr = new XMLHttpRequest()
             xhr.open(method as unknown as string, url)
-
-            // if(signal) {
-            //     signal.handler = () => xhr.abort()
-            // }
 
             xhr.onload = () => {
                 const status = xhr.status || 0

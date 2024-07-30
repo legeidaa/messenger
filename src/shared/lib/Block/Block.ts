@@ -1,4 +1,4 @@
-import * as Handlebars from 'handlebars'
+import Handlebars from 'handlebars'
 import { v4 as makeUUID } from 'uuid';
 import EventBus from '../EventBus.ts';
 import { IBlockProps } from './model.ts';
