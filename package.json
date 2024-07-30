@@ -18,7 +18,7 @@
         "lint": "npm run lint:ts && npm run lint:scss",
         "lint:fix": "npm run lint:ts:fix && npm run lint:scss:fix",
         "test": "mocha --es-module-specifier-resolution=node",
-        "prepare": "husky"
+        "prepare": "husky install"
     },
     "devDependencies": {
         "@types/chai": "^4.3.16",
