@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 
-const jsdom = new JSDOM(`<!DOCTYPE html><body id="app">JSDOM</body>`, {
+const jsdom = new JSDOM('<!DOCTYPE html><body id="app">JSDOM</body>', {
     url: 'http://localhost/3000',
     referrer: 'http://localhost/3000',
 })
